@@ -20,11 +20,6 @@ export class UsersService {
     fieldToFilter: string | null = null,
     term: string | null = null,
   ): Promise<[User[], number]> {
-    const data = await this.http.request('post', '/objd', {
-      names: 'karel',
-      email: 'karelpuerto@gmail.com',
-    });
-    console.log(data);
     const options: FindManyOptions<User> = {
       order: {
         created_at: 'ASC',
@@ -73,7 +68,9 @@ export class UsersService {
   }
 
   async create(userData: UserCreateDto): Promise<User> {
-    userData.status = userData.status || true;
+    userData.is_active = userData.is_active || true;
+    userData['created_at'] = new Date();
+    userData['updated_at'] = new Date();
     if (userData.password) {
       userData.password = await bcrypt.hash(userData.password, 10);
     }
@@ -81,6 +78,7 @@ export class UsersService {
   }
 
   async update(userData: UserUpdateDto): Promise<User> {
+    userData['updated_at'] = new Date();
     if (userData.password) {
       userData.password = await bcrypt.hash(userData.password, 10);
     }

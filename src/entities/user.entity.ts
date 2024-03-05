@@ -3,13 +3,18 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column()
+  username: string;
+
+  @Column()
+  code: string;
 
   @Column()
   names: string;
@@ -23,22 +28,21 @@ export class User {
   password: string;
 
   @Column()
-  status: boolean;
+  role_id: string;
 
-  @Column({ nullable: true })
-  token: string;
+  @Column()
+  is_staff: boolean;
 
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
+  @Column()
+  is_active: boolean;
+
+  @Column()
+  boss_id: string;
+
+  @CreateDateColumn()
   public created_at: Date;
 
-  @UpdateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
+  @Column()
   public updated_at: Date;
   constructor(partial: User) {
     Object.assign(this, partial);

@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { UserLoginDto } from '../dtos/user.dto';
+import { UserDto, UserLoginDto } from '../dtos/user.dto';
 import { UsersService } from './users.service';
 
 @Injectable()
@@ -23,9 +23,10 @@ export class AuthService {
     if (!isSamePassword) {
       throw new UnauthorizedException();
     }
-    const payload = { sub: user.id, username: user.names };
+    const payload = { userId: user.id, names: user.names };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      token: await this.jwtService.signAsync(payload),
+      user: new UserDto(user),
     };
   }
 }

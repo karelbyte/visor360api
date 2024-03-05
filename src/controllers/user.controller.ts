@@ -23,7 +23,6 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Get()
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
   async getAllUsers(@Query() params: any): Promise<IGetUsersResponse> {
     const { page, limit, fieldToFilter, term } = params;
     const [result, total] = await this.usersService.getAll(
@@ -41,7 +40,6 @@ export class UsersController {
 
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
   async getUserById(@Query() params: any): Promise<UserDto> {
     const { id } = params;
     const user = await this.usersService.findOneById(id);
@@ -50,7 +48,6 @@ export class UsersController {
 
   @Post()
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
   async createUser(@Body() createUserDto: UserCreateDto): Promise<UserDto> {
     const user = await this.usersService.create(createUserDto);
     return new UserDto(user);
