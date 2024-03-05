@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('rols')
-export class User {
+export class Rol {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -18,7 +18,7 @@ export class User {
 
   @Column()
   public updated_at: Date;
-  constructor(partial: User) {
+  constructor(partial: Rol) {
     Object.assign(this, partial);
   }
 }

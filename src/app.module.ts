@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './modules/users.module';
 import { AuthModule } from './modules/auth.module';
 import { GlobalHttpModule } from './modules/http.module';
+import { SubordinateModule } from './modules/subordinate.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { GlobalHttpModule } from './modules/http.module';
     }),
     UsersModule,
     AuthModule,
+    SubordinateModule,
     GlobalHttpModule,
   ],
   controllers: [AppController],

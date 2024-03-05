@@ -3,7 +3,7 @@ import {
   Controller,
   Get,
   HttpCode,
-  HttpStatus,
+  HttpStatus, Param,
   Post,
   Put,
   Query,
@@ -40,8 +40,7 @@ export class UsersController {
 
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
-  async getUserById(@Query() params: any): Promise<UserDto> {
-    const { id } = params;
+  async getUserById(@Param('id') id: string): Promise<UserDto> {
     const user = await this.usersService.findOneById(id);
     return new UserDto(user);
   }

@@ -3,7 +3,9 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Subordinate } from './subordinate.entity';
 
 @Entity('users')
 export class User {
@@ -44,6 +46,9 @@ export class User {
 
   @Column()
   public updated_at: Date;
+
+  @OneToMany(() => Subordinate, (subordinate) => subordinate.user)
+  subordinates: Subordinate[];
   constructor(partial: User) {
     Object.assign(this, partial);
   }

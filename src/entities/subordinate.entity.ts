@@ -1,7 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { User } from './user.entity';
 
 @Entity('subordinates')
-export class User {
+export class Subordinate {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -9,14 +16,18 @@ export class User {
   boss_id: string;
 
   @Column()
-  subordinate_id: string;
+  user_id: string;
 
   @Column()
   public created_at: Date;
 
   @Column()
   public updated_at: Date;
-  constructor(partial: User) {
+
+  @ManyToOne(() => User, (user) => user.subordinates)
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+  constructor(partial: Subordinate) {
     Object.assign(this, partial);
   }
 }
