@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber } from 'class-validator';
 
 export class SubordinateCreateDto {
   @IsNotEmpty()
@@ -10,8 +10,8 @@ export class SubordinateCreateDto {
 
 export class SubordinateUpdateDto {
   @IsNotEmpty()
-  @IsString()
-  id: string;
+  @IsNumber()
+  id: number;
 
   @IsNotEmpty()
   boss_id: string;
@@ -21,16 +21,16 @@ export class SubordinateUpdateDto {
 }
 
 interface ISubordinateDto {
-  id: string;
-  boss_id: string;
+  id: number;
   user_id: string;
+  boss_id: string;
   created_at: Date;
   updated_at: Date;
 }
 export class SubordinateDto {
-  id: string;
-  boss_id: string;
+  id: number;
   user_id: string;
+  boss_id: string;
   created_at: Date;
   updated_at: Date;
   constructor({

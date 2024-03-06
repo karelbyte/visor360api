@@ -9,8 +9,8 @@ import { User } from './user.entity';
 
 @Entity('subordinates')
 export class Subordinate {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   boss_id: string;

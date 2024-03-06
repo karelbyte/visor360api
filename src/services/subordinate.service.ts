@@ -7,13 +7,13 @@ import {
   SubordinateCreateDto,
   SubordinateUpdateDto,
 } from '../dtos/subordinate.dto';
+import { UserDto } from '../dtos/user.dto';
 
 @Injectable()
 export class SubordinatesService {
   constructor(
     @InjectRepository(Subordinate)
     private subordinateRepository: Repository<Subordinate>,
-    private http: HttpRequestService,
   ) {}
 
   async getAll(
@@ -21,10 +21,13 @@ export class SubordinatesService {
     limit: number | null = null,
     fieldToFilter: string | null = null,
     term: string | null = null,
-  ): Promise<[Subordinate[], number]> {
+  ): Promise<[any[], number]> {
     const options: FindManyOptions<Subordinate> = {
       order: {
         created_at: 'ASC',
+      },
+      relations: {
+        user: true,
       },
     };
 
@@ -38,13 +41,21 @@ export class SubordinatesService {
         [fieldToFilter]: Like('%' + term + '%'),
       };
     }
-    return await this.subordinateRepository.findAndCount(options);
+    const [result, count] =
+      await this.subordinateRepository.findAndCount(options);
+
+    const hierarchy = this.generateHierarchy(result);
+
+    return [this.mapperHierarchyForSubordinate(hierarchy), count];
   }
 
-  async findOneById(userId: string): Promise<Subordinate> {
+  async findOneById(subordinateId: number): Promise<Subordinate> {
     return await this.subordinateRepository.findOne({
       where: {
-        id: userId,
+        id: subordinateId,
+      },
+      relations: {
+        user: true,
       },
     });
   }
@@ -79,7 +90,7 @@ export class SubordinatesService {
     const subordinates = data.filter((subordinate) =>
       subordinateIds.includes(subordinate.user_id),
     );
-    return subordinates.map((subordinate) => subordinate.user.names);
+    return subordinates.map((subordinate) => subordinate.user.code);
   };
   async getSubordinatesByBoss(boss_id: string): Promise<string[]> {
     const allData = await this.subordinateRepository.find({
@@ -88,5 +99,56 @@ export class SubordinatesService {
       },
     });
     return this.getSubordinateIds(boss_id, allData);
+  }
+
+  generateHierarchy(data: Subordinate[]) {
+    const hierarchy = {};
+
+    data.forEach((user: Subordinate) => {
+      const userId = user.user_id;
+      hierarchy[userId] = { user, subordinates: [] };
+    });
+
+    data.forEach((user) => {
+      const bossId: string = user.boss_id || null;
+      if (bossId !== null) {
+        hierarchy[bossId].subordinates.push(hierarchy[user.user_id]);
+      }
+    });
+
+    const topLevel = Object.values(hierarchy).filter(
+      (entry) => entry['user'].boss_id === null,
+    );
+
+    const flattenedHierarchy = [];
+
+    function flatten(entry: any) {
+      const copy = { user: entry.user, subordinates: [] };
+      flattenedHierarchy.push(copy);
+
+      entry.subordinates.forEach((subordinate: any) => {
+        flatten(subordinate);
+        copy.subordinates.push(subordinate.user);
+      });
+    }
+
+    topLevel.forEach((entry) => flatten(entry));
+
+    return flattenedHierarchy;
+  }
+
+  mapperHierarchyForSubordinate(data: any[]) {
+    return data.map((item) => {
+      return {
+        ...new UserDto(item.user.user),
+        boss_id: item.user.boss_id,
+        subordinates: item.subordinates.map((subordinate: any) => {
+          return {
+            ...new UserDto(subordinate.user),
+            boss_id: subordinate.boss_id,
+          };
+        }),
+      };
+    });
   }
 }

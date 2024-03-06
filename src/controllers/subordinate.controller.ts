@@ -12,8 +12,12 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '../guards/auth.guard';
 import { SubordinatesService } from '../services/subordinate.service';
-import { SubordinateDto, SubordinateUpdateDto } from '../dtos/subordinate.dto';
-import { Subordinate } from '../entities/subordinate.entity';
+import {
+  SubordinateCreateDto,
+  SubordinateDto,
+  SubordinateUpdateDto,
+} from '../dtos/subordinate.dto';
+
 export interface IGetUsersResponse {
   data: SubordinateDto[];
   pages: number;
@@ -35,9 +39,7 @@ export class SubordinateController {
       term,
     );
     return {
-      data: result.map(
-        (subordinate: Subordinate) => new SubordinateDto(subordinate),
-      ),
+      data: result,
       pages: Math.ceil(total / limit) || 1,
       count: total,
     };
@@ -46,7 +48,7 @@ export class SubordinateController {
   @Post()
   @HttpCode(HttpStatus.OK)
   async createSubordinate(
-    @Body() createSubordinateDto: SubordinateDto,
+    @Body() createSubordinateDto: SubordinateCreateDto,
   ): Promise<SubordinateDto> {
     const subordinate =
       await this.subordinateService.create(createSubordinateDto);

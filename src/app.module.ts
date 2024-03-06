@@ -10,6 +10,7 @@ import { UsersModule } from './modules/users.module';
 import { AuthModule } from './modules/auth.module';
 import { GlobalHttpModule } from './modules/http.module';
 import { SubordinateModule } from './modules/subordinate.module';
+import { Visor360Module } from './modules/visor360.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { SubordinateModule } from './modules/subordinate.module';
       inject: [ConfigService],
     }),
     UsersModule,
+    Visor360Module,
     AuthModule,
     SubordinateModule,
     GlobalHttpModule,
