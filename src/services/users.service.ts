@@ -77,7 +77,7 @@ export class UsersService {
     return await this.usersRepository.save(userData);
   }
 
-  async update(userData: UserUpdateDto): Promise<User> {
+  async update(userData: Partial<UserUpdateDto>): Promise<User> {
     userData['updated_at'] = new Date();
     if (userData.password) {
       userData.password = await bcrypt.hash(userData.password, 10);

@@ -76,6 +76,7 @@ export class UserUpdateDto {
   @IsUserAlreadyExist('id', {
     message: 'Existe un usurio con este email.',
   })
+  @IsOptional()
   email: string;
 
   @IsString()

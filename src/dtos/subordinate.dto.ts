@@ -1,7 +1,8 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class SubordinateCreateDto {
-  @IsNotEmpty()
+  @IsString()
+  @IsOptional()
   boss_id: string;
 
   @IsNotEmpty()
@@ -13,7 +14,8 @@ export class SubordinateUpdateDto {
   @IsNumber()
   id: number;
 
-  @IsNotEmpty()
+  @IsString()
+  @IsOptional()
   boss_id: string;
 
   @IsNotEmpty()

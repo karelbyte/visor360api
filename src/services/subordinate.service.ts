@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository, FindManyOptions } from 'typeorm';
-import { HttpRequestService } from './http.service';
+import {Like, Repository, FindManyOptions, DeleteResult} from 'typeorm';
 import { Subordinate } from '../entities/subordinate.entity';
 import {
   SubordinateCreateDto,
@@ -49,6 +48,17 @@ export class SubordinatesService {
     return [this.mapperHierarchyForSubordinate(hierarchy), count];
   }
 
+  async findByUserId(user_id: string): Promise<UserDto[]> {
+    const data = await this.subordinateRepository.find({
+      where: {
+        boss_id: user_id,
+      },
+      relations: {
+        user: true,
+      },
+    });
+    return data.map((item) => new UserDto(item.user));
+  }
   async findOneById(subordinateId: number): Promise<Subordinate> {
     return await this.subordinateRepository.findOne({
       where: {
@@ -60,6 +70,9 @@ export class SubordinatesService {
     });
   }
 
+  async delete(subordinateData: SubordinateCreateDto): Promise<DeleteResult> {
+    return await this.subordinateRepository.delete(subordinateData);
+  }
   async create(subordinateData: SubordinateCreateDto): Promise<Subordinate> {
     subordinateData['created_at'] = new Date();
     subordinateData['updated_at'] = new Date();
@@ -90,7 +103,7 @@ export class SubordinatesService {
     const subordinates = data.filter((subordinate) =>
       subordinateIds.includes(subordinate.user_id),
     );
-    return subordinates.map((subordinate) => subordinate.user.code);
+    return subordinates.map((subordinate) => subordinate.user.names);
   };
   async getSubordinatesByBoss(boss_id: string): Promise<string[]> {
     const allData = await this.subordinateRepository.find({

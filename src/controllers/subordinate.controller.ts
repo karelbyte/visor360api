@@ -17,6 +17,9 @@ import {
   SubordinateDto,
   SubordinateUpdateDto,
 } from '../dtos/subordinate.dto';
+import { UserDto } from '../dtos/user.dto';
+import { UsersService } from '../services/users.service';
+import { DeleteResult } from 'typeorm';
 
 export interface IGetUsersResponse {
   data: SubordinateDto[];
@@ -25,7 +28,10 @@ export interface IGetUsersResponse {
 }
 @Controller('subordinates')
 export class SubordinateController {
-  constructor(private readonly subordinateService: SubordinatesService) {}
+  constructor(
+    private readonly subordinateService: SubordinatesService,
+    private readonly userService: UsersService,
+  ) {}
   @Get()
   @HttpCode(HttpStatus.OK)
   async getAllUsersAndSubordinates(
@@ -52,7 +58,26 @@ export class SubordinateController {
   ): Promise<SubordinateDto> {
     const subordinate =
       await this.subordinateService.create(createSubordinateDto);
+    const userUpdate: { id: string; boss_id: string } = {
+      id: createSubordinateDto.user_id,
+      boss_id: createSubordinateDto.boss_id,
+    };
+    await this.userService.update(userUpdate);
     return new SubordinateDto(subordinate);
+  }
+
+  @Post('delete')
+  @HttpCode(HttpStatus.OK)
+  async deleteSubordinate(
+    @Body() createSubordinateDto: SubordinateCreateDto,
+  ): Promise<DeleteResult> {
+    const result = await this.subordinateService.delete(createSubordinateDto);
+    const userUpdate: { id: string; boss_id: string } = {
+      id: createSubordinateDto.user_id,
+      boss_id: null,
+    };
+    await this.userService.update(userUpdate);
+    return result;
   }
 
   @Put()
@@ -66,15 +91,20 @@ export class SubordinateController {
     return new SubordinateDto(subordinate);
   }
 
-  @Get('/get-subordinate/:id')
+  @Get('/get-subordinate-codes/:id')
   async getSubordinates(@Param('id') id: string): Promise<string[]> {
     return await this.subordinateService.getSubordinatesByBoss(id);
   }
 
+  @Get('/get-subordinate/:id')
+  @HttpCode(HttpStatus.OK)
+  async findByUserId(@Param('id') id: string): Promise<UserDto[]> {
+    return await this.subordinateService.findByUserId(id);
+  }
+
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
-  async getSubordinateById(@Query() params: any): Promise<SubordinateDto> {
-    const { id } = params;
+  async getSubordinateById(@Param('id') id: number): Promise<SubordinateDto> {
     const subordinate = await this.subordinateService.findOneById(id);
     return new SubordinateDto(subordinate);
   }
