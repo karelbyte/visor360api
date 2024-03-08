@@ -1,9 +1,14 @@
-Servicio Principal Visor360 (Parametro de Busqueda: Numero de Cliente IBS) = http://10.232.4.26:11200/public/api/v1/Visor360
+Servicio Principal Visor360 (Parametro de Busqueda: Numero de Cliente IBS) 
+url: http://10.232.4.26:11200/public/api/v1/Visor360
   - Endpoints: 
-      1. buscador_info_cliente_base64 == Parametro: search_param
-      2. consolidate_position_base64 == Parametro: num_cliente_ibs
+      1. search_client_info_base64 == Parametro: search_param == RS04LTEzMzEzNQ== 
+      2. consolidate_position_base64 == Parametro: num_cliente_ibs == MTAwMzkyMTc=
+      3. PQR_petition_single_param == Parametro: num_cliente_ibs == MTAwMzkyMTc=
+      4. PQR_claim_single_param == Parametro: num_cliente_ibs == "MTAwMzkyMTc=
+      5. PQR_reclamo_single_param == Parametro: num_cliente_ibs == "MTAwMzkyMTc=
 
-Servicio Principal SIGC_Panama (Parametro de Busqueda: Codigo de Oficial en caso de Comerciales o Array (Lista) de Oficiales en caso de que maneje cartera de Comerciales) = 
+Servicio Principal SIGC_Panama (Parametro de Busqueda: Codigo de Oficial en caso de Comerciales o Array (Lista) de Oficiales en caso de que maneje cartera de Comerciales)
+url: 
   - Endpoints: 
       1.
       2.
