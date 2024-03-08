@@ -12,7 +12,7 @@ export class Visor360Service {
     try {
       return await this.httpService.request(
         'post',
-        '/visor360/search_client_info_base64/run',
+        '/Visor360/search_client_info_base64/run',
         customParam,
       );
     } catch (e) {
