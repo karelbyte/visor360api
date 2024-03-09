@@ -1,12 +1,16 @@
 import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
+import { SeederOptions } from 'typeorm-extension';
+import { DataSourceOptions } from 'typeorm/data-source';
 import { config } from 'dotenv';
 
 config();
 
 const configService = new ConfigService();
 
-const dataSource = new DataSource({
+import InitSeeder from './init.seeder';
+
+const options = {
   type: 'mssql',
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT, 10) || 1433,
@@ -21,6 +25,9 @@ const dataSource = new DataSource({
   logging: true,
   entities: [`${__dirname}/../src/**/*.entity{.ts,.js}`],
   migrations: [`${__dirname}/migrations/*{.ts,.js}`],
-});
+  seeds: [InitSeeder],
+};
+
+const dataSource = new DataSource(options as DataSourceOptions & SeederOptions);
 
 export default dataSource;

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {Like, Repository, FindManyOptions, DeleteResult} from 'typeorm';
+import { Like, Repository, FindManyOptions, DeleteResult } from 'typeorm';
 import { Subordinate } from '../entities/subordinate.entity';
 import {
   SubordinateCreateDto,

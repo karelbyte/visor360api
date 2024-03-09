@@ -10,7 +10,7 @@ export class User1709649399644 implements MigrationInterface {
               [names] nvarchar(255) NOT NULL,
               [email] nvarchar(255) NOT NULL,
               [password] nvarchar(255) NULL,
-              [role_id] uniqueidentifier NULL,
+              [rol_id] uniqueidentifier NULL,
               [is_staff] bit NOT NULL,
               [is_active] bit NOT NULL,
               [boss_id] uniqueidentifier NULL,

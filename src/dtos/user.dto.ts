@@ -45,7 +45,7 @@ export class UserCreateDto {
 
   @IsString()
   @IsOptional()
-  role_id: string;
+  rol_id: string;
 
   @IsBoolean()
   @IsOptional()
@@ -89,7 +89,7 @@ export class UserUpdateDto {
 
   @IsString()
   @IsOptional()
-  role_id: string;
+  rol_id: string;
 
   @IsBoolean()
   @IsOptional()
@@ -106,7 +106,7 @@ interface IUserDto {
   username: string;
   names: string;
   email: string;
-  role_id: string;
+  rol_id: string;
   is_active: boolean;
   is_staff: boolean;
   boss_id: string;
@@ -119,7 +119,7 @@ export class UserDto {
   username: string;
   names: string;
   email: string;
-  role_id: string;
+  rol_id: string;
   is_active: boolean;
   is_staff: boolean;
   boss_id: string;
@@ -131,7 +131,7 @@ export class UserDto {
     username,
     names,
     email,
-    role_id,
+    rol_id,
     is_active,
     is_staff,
     boss_id,
@@ -143,7 +143,7 @@ export class UserDto {
     this.username = username;
     this.names = names;
     this.email = email;
-    this.role_id = role_id;
+    this.rol_id = rol_id;
     this.is_active = is_active;
     this.is_staff = is_staff;
     this.boss_id = boss_id;

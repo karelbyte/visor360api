@@ -17,6 +17,38 @@ export class Visor360Controller {
   @Get('/client_info/:search')
   @UseGuards(AuthGuard)
   async getClientInfo(@Param('search') search: string): Promise<any> {
-    return await this.visor360Service.ClientInfo(search);
+    return await this.visor360Service.clientInfo(search);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/consolidate_position/:search')
+  @UseGuards(AuthGuard)
+  async getConsolidatePosition(@Param('search') search: string): Promise<any> {
+    return await this.visor360Service.consolidatePosition(search);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/pqr_petition_single_param/:search')
+  @UseGuards(AuthGuard)
+  async getPqrPetitionSingleParam(
+    @Param('search') search: string,
+  ): Promise<any> {
+    return await this.visor360Service.pqrPetitionSingleParam(search);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/pqr_claim_single_param/:search')
+  @UseGuards(AuthGuard)
+  async getPqrClaimSingleParam(@Param('search') search: string): Promise<any> {
+    return await this.visor360Service.pqrClaimSingleParam(search);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/pqr_complaint_single_param/:search')
+  @UseGuards(AuthGuard)
+  async getPqrComplaintSingleParam(
+    @Param('search') search: string,
+  ): Promise<any> {
+    return await this.visor360Service.pqrComplaintSingleParam(search);
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository, FindManyOptions, Not } from 'typeorm';
+import { Like, Repository, FindManyOptions, Not, IsNull } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from '../entities/user.entity';
 import { UserCreateDto, UserUpdateDto } from '../dtos/user.dto';
@@ -21,9 +21,13 @@ export class UsersService {
     term: string | null = null,
   ): Promise<[User[], number]> {
     const options: FindManyOptions<User> = {
+      relations: {
+        rol: true,
+      },
       order: {
         created_at: 'ASC',
       },
+      where: {},
     };
 
     if (page && limit) {
@@ -35,6 +39,36 @@ export class UsersService {
       options['where'] = {
         [fieldToFilter]: Like('%' + term + '%'),
       };
+    }
+    return await this.usersRepository.findAndCount(options);
+  }
+
+  async getAllWithLeader(
+    page: number | null = null,
+    limit: number | null = null,
+    fieldToFilter: string | null = null,
+    term: string | null = null,
+    withLeader: boolean = true,
+  ): Promise<[User[], number]> {
+    const options: FindManyOptions<User> = {
+      relations: {
+        rol: true,
+      },
+      order: {
+        created_at: 'ASC',
+      },
+      where: {
+        boss_id: withLeader ? Not(IsNull()) : IsNull(),
+      },
+    };
+
+    if (page && limit) {
+      options['take'] = limit;
+      options['skip'] = (page - 1) * limit;
+    }
+
+    if (fieldToFilter && term) {
+      options['where'][fieldToFilter] = Like('%' + term + '%');
     }
     return await this.usersRepository.findAndCount(options);
   }
@@ -51,6 +85,9 @@ export class UsersService {
     return await this.usersRepository.findOne({
       where: {
         email: email,
+      },
+      relations: {
+        rol: true,
       },
     });
   }

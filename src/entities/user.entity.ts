@@ -4,8 +4,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   OneToMany,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { Subordinate } from './subordinate.entity';
+import { Rol } from './rol.entity';
 
 @Entity('users')
 export class User {
@@ -30,7 +33,7 @@ export class User {
   password: string;
 
   @Column()
-  role_id: string;
+  rol_id: string;
 
   @Column()
   is_staff: boolean;
@@ -46,6 +49,12 @@ export class User {
 
   @Column()
   public updated_at: Date;
+
+  @OneToOne(() => Rol)
+  @JoinColumn({
+    name: 'rol_id',
+  })
+  rol: Rol;
 
   @OneToMany(() => Subordinate, (subordinate) => subordinate.user)
   subordinates: Subordinate[];
