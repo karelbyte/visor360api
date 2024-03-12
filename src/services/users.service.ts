@@ -78,6 +78,9 @@ export class UsersService {
       where: {
         id: userId,
       },
+      relations: {
+        rol: true,
+      },
     });
   }
 
@@ -119,6 +122,11 @@ export class UsersService {
     if (userData.password) {
       userData.password = await bcrypt.hash(userData.password, 10);
     }
+
+    if (userData.rol_id === '') {
+      userData.rol_id = null;
+    }
+
     await this.usersRepository.update(userData.id, userData);
     return await this.findOneById(userData.id);
   }

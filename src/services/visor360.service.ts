@@ -26,7 +26,7 @@ export class Visor360Service {
 
   async consolidatePosition(param: string) {
     const customParam = {
-      num_cliente_ibs: param,
+      num_client_ibs: param,
     };
     try {
       return await this.httpService.request(
@@ -45,7 +45,7 @@ export class Visor360Service {
 
   async pqrPetitionSingleParam(param: string) {
     const customParam = {
-      num_cliente_ibs: param,
+      num_client_ibs: param,
     };
     try {
       return await this.httpService.request(
@@ -64,7 +64,7 @@ export class Visor360Service {
 
   async pqrClaimSingleParam(param: string) {
     const customParam = {
-      num_cliente_ibs: param,
+      num_client_ibs: param,
     };
     try {
       return await this.httpService.request(
@@ -83,7 +83,7 @@ export class Visor360Service {
 
   async pqrComplaintSingleParam(param: string) {
     const customParam = {
-      num_cliente_ibs: param,
+      num_client_ibs: param,
     };
     try {
       return await this.httpService.request(

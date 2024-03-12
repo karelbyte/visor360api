@@ -11,6 +11,7 @@ import { AuthModule } from './modules/auth.module';
 import { GlobalHttpModule } from './modules/http.module';
 import { SubordinateModule } from './modules/subordinate.module';
 import { Visor360Module } from './modules/visor360.module';
+import { RolModule } from './modules/rol.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { Visor360Module } from './modules/visor360.module';
     UsersModule,
     Visor360Module,
     AuthModule,
+    RolModule,
     SubordinateModule,
     GlobalHttpModule,
   ],

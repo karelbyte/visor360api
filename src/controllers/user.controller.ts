@@ -19,6 +19,7 @@ export interface IGetUsersResponse {
   pages: number;
   count: number;
 }
+
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -93,8 +94,13 @@ export class UsersController {
   @Put()
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  async updateUser(@Body() updateUserDto: UserUpdateDto): Promise<UserDto> {
+  async updateUser(
+    @Body() updateUserDto: UserUpdateDto,
+  ): Promise<UserDto & { rol_description: string }> {
     const user = await this.usersService.update(updateUserDto);
-    return new UserDto(user);
+    return {
+      ...new UserDto(user),
+      rol_description: user.rol ? user.rol.description : '',
+    };
   }
 }
