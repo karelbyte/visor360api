@@ -56,6 +56,12 @@ export class User {
   })
   rol: Rol;
 
+  @OneToOne(() => User)
+  @JoinColumn({
+    name: 'boss_id',
+  })
+  leader: User;
+
   @OneToMany(() => Subordinate, (subordinate) => subordinate.user)
   subordinates: Subordinate[];
   constructor(partial: User) {

@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
@@ -25,17 +26,20 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   formatResponse(result, total, limit) {
+    const dataMapping = result.map((user: User) => {
+      const { leader, ...partialUser } = user;
+      const leaderMapped = leader ? new UserDto(leader) : null;
+      return new UserDto({ ...partialUser, leader: leaderMapped });
+    });
     return {
-      data: result.map((user: User) => ({
-        ...new UserDto(user),
-        rol_description: user.rol ? user.rol.description : '',
-      })),
+      data: dataMapping,
       pages: Math.ceil(total / limit) || 1,
       count: total,
     };
   }
   @Get()
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
   async getAllUsers(@Query() params: any): Promise<IGetUsersResponse> {
     const { page, limit, fieldToFilter, term } = params;
     const [result, total] = await this.usersService.getAll(
@@ -49,7 +53,12 @@ export class UsersController {
 
   @Get('/free')
   @HttpCode(HttpStatus.OK)
-  async getAllUsersFree(@Query() params: any): Promise<IGetUsersResponse> {
+  @UseGuards(AuthGuard)
+  async getAllUsersFree(
+    @Query() params: any,
+    @Req() request: Request,
+  ): Promise<IGetUsersResponse> {
+    console.log('el usuario', request['user']);
     const { page, limit, fieldToFilter, term } = params;
     const [result, total] = await this.usersService.getAllWithLeader(
       page,
@@ -63,6 +72,7 @@ export class UsersController {
 
   @Get('/with_leader')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
   async getAllUsersWithLeader(
     @Query() params: any,
   ): Promise<IGetUsersResponse> {
@@ -76,9 +86,18 @@ export class UsersController {
     );
     return this.formatResponse(result, total, limit);
   }
+  @Get('/leaders')
+  @HttpCode(HttpStatus.OK)
+  async getAllLeaders(): Promise<UserDto[]> {
+    const leaders = await this.usersService.getAllLeaders();
+    return leaders.map((user: User) => ({
+      ...new UserDto(user),
+    }));
+  }
 
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
   async getUserById(@Param('id') id: string): Promise<UserDto> {
     const user = await this.usersService.findOneById(id);
     return new UserDto(user);
@@ -86,6 +105,7 @@ export class UsersController {
 
   @Post()
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
   async createUser(@Body() createUserDto: UserCreateDto): Promise<UserDto> {
     const user = await this.usersService.create(createUserDto);
     return new UserDto(user);
@@ -94,13 +114,10 @@ export class UsersController {
   @Put()
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  async updateUser(
-    @Body() updateUserDto: UserUpdateDto,
-  ): Promise<UserDto & { rol_description: string }> {
+  async updateUser(@Body() updateUserDto: UserUpdateDto): Promise<UserDto> {
     const user = await this.usersService.update(updateUserDto);
-    return {
-      ...new UserDto(user),
-      rol_description: user.rol ? user.rol.description : '',
-    };
+    const { leader, ...partialUser } = user;
+    const leaderMapped = leader ? new UserDto(leader) : null;
+    return new UserDto({ ...partialUser, leader: leaderMapped });
   }
 }

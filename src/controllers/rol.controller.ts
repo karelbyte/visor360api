@@ -1,6 +1,13 @@
-import {Controller, Get, HttpCode, HttpStatus, Post} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
 import { RolService } from '../services/rol.service';
 import { Rol } from '../entities/rol.entity';
+import { AuthGuard } from '../guards/auth.guard';
 
 @Controller('rols')
 export class RolController {
@@ -8,7 +15,8 @@ export class RolController {
 
   @HttpCode(HttpStatus.OK)
   @Get('/')
-  async login(): Promise<Rol | any> {
+  @UseGuards(AuthGuard)
+  async getAllRols(): Promise<Rol | any> {
     return await this.rolService.getAll();
   }
 }

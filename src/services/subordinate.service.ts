@@ -53,9 +53,7 @@ export class SubordinatesService {
       where: {
         boss_id: user_id,
       },
-      relations: {
-        user: true,
-      },
+      relations: ['user', 'user.rol'],
     });
     return data.map((item) => new UserDto(item.user));
   }
@@ -76,11 +74,30 @@ export class SubordinatesService {
   async create(subordinateData: SubordinateCreateDto): Promise<Subordinate> {
     subordinateData['created_at'] = new Date();
     subordinateData['updated_at'] = new Date();
+    if (subordinateData.boss_id === '') {
+      subordinateData.boss_id = null;
+    }
     return await this.subordinateRepository.save(subordinateData);
   }
 
+  async updateByUserId(updateData: SubordinateCreateDto) {
+    updateData['updated_at'] = new Date();
+    if (updateData.boss_id === '') {
+      updateData.boss_id = null;
+    }
+    await this.subordinateRepository.update(
+      { user_id: updateData.user_id },
+      updateData,
+    );
+    return await this.subordinateRepository.findOne({
+      where: { user_id: updateData.user_id },
+    });
+  }
   async update(subordinateData: SubordinateUpdateDto): Promise<Subordinate> {
     subordinateData['updated_at'] = new Date();
+    if (subordinateData.boss_id === '') {
+      subordinateData.boss_id = null;
+    }
     await this.subordinateRepository.update(
       subordinateData.id,
       subordinateData,

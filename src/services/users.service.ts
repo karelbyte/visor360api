@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository, FindManyOptions, Not, IsNull } from 'typeorm';
+import { Like, Repository, FindManyOptions, Not, IsNull, In } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from '../entities/user.entity';
 import { UserCreateDto, UserUpdateDto } from '../dtos/user.dto';
@@ -53,6 +53,7 @@ export class UsersService {
     const options: FindManyOptions<User> = {
       relations: {
         rol: true,
+        leader: true,
       },
       order: {
         created_at: 'ASC',
@@ -73,6 +74,18 @@ export class UsersService {
     return await this.usersRepository.findAndCount(options);
   }
 
+  async getAllLeaders(): Promise<User[]> {
+    return await this.usersRepository.find({
+      relations: {
+        rol: true,
+      },
+      where: {
+        rol: {
+          code: In(['manager', 'commercial_boss', 'sponsors']),
+        },
+      },
+    });
+  }
   async findOneById(userId: string): Promise<User> {
     return await this.usersRepository.findOne({
       where: {
@@ -80,6 +93,7 @@ export class UsersService {
       },
       relations: {
         rol: true,
+        leader: true,
       },
     });
   }
@@ -91,6 +105,7 @@ export class UsersService {
       },
       relations: {
         rol: true,
+        leader: true,
       },
     });
   }
@@ -123,7 +138,7 @@ export class UsersService {
       userData.password = await bcrypt.hash(userData.password, 10);
     }
 
-    if (userData.rol_id === '') {
+    if (userData.rol_id && userData.rol_id === '') {
       userData.rol_id = null;
     }
 

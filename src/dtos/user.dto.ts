@@ -6,6 +6,7 @@ import {
   IsString,
 } from 'class-validator';
 import { IsUserAlreadyExist } from '../decorators/IsUserAlreadyExist';
+import { RolDto } from './rol.dto';
 
 export class UserLoginDto {
   @IsEmail(undefined, {
@@ -110,6 +111,8 @@ interface IUserDto {
   is_active: boolean;
   is_staff: boolean;
   boss_id: string;
+  rol: RolDto;
+  leader: UserDto;
   created_at: Date;
   updated_at: Date;
 }
@@ -123,6 +126,8 @@ export class UserDto {
   is_active: boolean;
   is_staff: boolean;
   boss_id: string;
+  rol: RolDto;
+  leader: UserDto;
   created_at: Date;
   updated_at: Date;
   constructor({
@@ -135,6 +140,8 @@ export class UserDto {
     is_active,
     is_staff,
     boss_id,
+    rol,
+    leader,
     created_at,
     updated_at,
   }: IUserDto) {
@@ -147,6 +154,8 @@ export class UserDto {
     this.is_active = is_active;
     this.is_staff = is_staff;
     this.boss_id = boss_id;
+    this.rol = rol;
+    this.leader = leader;
     this.created_at = created_at;
     this.updated_at = updated_at;
   }

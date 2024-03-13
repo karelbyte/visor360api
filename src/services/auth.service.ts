@@ -13,7 +13,7 @@ export class AuthService {
 
   async login(userData: UserLoginDto) {
     const user = await this.usersService.findOneByEmail(userData.email);
-    if (!user || user.password === null) {
+    if (!user || user.password === null || !user.is_active) {
       throw new UnauthorizedException();
     }
     const isSamePassword = await bcrypt.compare(
@@ -23,7 +23,7 @@ export class AuthService {
     if (!isSamePassword) {
       throw new UnauthorizedException();
     }
-    const payload = { userId: user.id, names: user.names };
+    const payload = { userId: user.id, names: user.names, rol: user.rol.code };
     return {
       token: await this.jwtService.signAsync(payload),
       ...new UserDto(user),
