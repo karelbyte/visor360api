@@ -56,7 +56,9 @@ export class UsersService {
         leader: true,
       },
       order: {
-        created_at: 'ASC',
+        rol: {
+          id: 'ASC',
+        },
       },
       where: {
         boss_id: withLeader ? Not(IsNull()) : IsNull(),

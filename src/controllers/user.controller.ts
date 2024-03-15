@@ -37,6 +37,15 @@ export class UsersController {
       count: total,
     };
   }
+
+  /*  orderByDictionary(data: User[], dictionary: string[]) {
+    return data.sort((a: User, b: User) => {
+      const indexA = dictionary.indexOf(a.rol?.code || null);
+      const indexB = dictionary.indexOf(b.rol?.code || null);
+      console.log(indexA, indexB)
+      return indexA - indexB;
+    });
+  }*/
   @Get()
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
@@ -54,11 +63,16 @@ export class UsersController {
   @Get('/free')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  async getAllUsersFree(
-    @Query() params: any,
-    @Req() request: Request,
-  ): Promise<IGetUsersResponse> {
-    console.log('el usuario', request['user']);
+  async getAllUsersFree(@Query() params: any): Promise<IGetUsersResponse> {
+    /*  const dictionary = [
+      'admin',
+      'manager',
+      'commercial_boss',
+      'sponsors',
+      'commercial',
+      'segit',
+      null,
+    ];*/
     const { page, limit, fieldToFilter, term } = params;
     const [result, total] = await this.usersService.getAllWithLeader(
       page,
@@ -67,6 +81,7 @@ export class UsersController {
       term,
       false,
     );
+
     return this.formatResponse(result, total, limit);
   }
 
@@ -105,7 +120,6 @@ export class UsersController {
 
   @Post()
   @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
   async createUser(@Body() createUserDto: UserCreateDto): Promise<UserDto> {
     const user = await this.usersService.create(createUserDto);
     return new UserDto(user);

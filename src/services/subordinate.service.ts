@@ -7,6 +7,7 @@ import {
   SubordinateUpdateDto,
 } from '../dtos/subordinate.dto';
 import { UserDto } from '../dtos/user.dto';
+import {User} from "../entities/user.entity";
 
 @Injectable()
 export class SubordinatesService {
@@ -105,7 +106,11 @@ export class SubordinatesService {
     return await this.findOneById(subordinateData.id);
   }
 
-  getSubordinateIds = (bossId: string, data: Subordinate[]) => {
+  getSubordinateByTerm = (
+    bossId: string,
+    mapper: (a: any) => any,
+    data: Subordinate[],
+  ) => {
     const subordinateIds = [];
     function getSubordinatesRecursively(bossId: string) {
       const directSubordinates = data
@@ -120,15 +125,36 @@ export class SubordinatesService {
     const subordinates = data.filter((subordinate) =>
       subordinateIds.includes(subordinate.user_id),
     );
-    return subordinates.map((subordinate) => subordinate.user.names);
+    return subordinates.map(mapper);
   };
-  async getSubordinatesByBoss(boss_id: string): Promise<string[]> {
+
+  async getSubordinatesByBoss(boss_id: string): Promise<User[]> {
+    const allData = await this.subordinateRepository.find({
+      relations: {
+        user: {
+          rol: true,
+          leader: true,
+        },
+      },
+    });
+    return this.getSubordinateByTerm(
+      boss_id,
+      (subordinate: Subordinate) => subordinate.user,
+      allData,
+    );
+  }
+
+  async getSubordinatesByBossOnlyCodes(boss_id: string): Promise<string[]> {
     const allData = await this.subordinateRepository.find({
       relations: {
         user: true,
       },
     });
-    return this.getSubordinateIds(boss_id, allData);
+    return this.getSubordinateByTerm(
+      boss_id,
+      (subordinate) => subordinate.user.code,
+      allData,
+    );
   }
 
   generateHierarchy(data: Subordinate[]) {

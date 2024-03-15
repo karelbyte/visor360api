@@ -117,14 +117,14 @@ export class SubordinateController {
 
   @Get('/get-subordinate-codes/:id')
   async getSubordinates(@Param('id') id: string): Promise<string[]> {
-    return await this.subordinateService.getSubordinatesByBoss(id);
+    return await this.subordinateService.getSubordinatesByBossOnlyCodes(id);
   }
 
   @Get('/get-subordinate/:id')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
   async findByUserId(@Param('id') id: string): Promise<UserDto[]> {
-    return await this.subordinateService.findByUserId(id);
+    return await this.subordinateService.getSubordinatesByBoss(id);
   }
 
   @Get('/:id')
