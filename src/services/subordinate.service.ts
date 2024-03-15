@@ -7,7 +7,7 @@ import {
   SubordinateUpdateDto,
 } from '../dtos/subordinate.dto';
 import { UserDto } from '../dtos/user.dto';
-import {User} from "../entities/user.entity";
+import { User } from '../entities/user.entity';
 
 @Injectable()
 export class SubordinatesService {
@@ -128,7 +128,13 @@ export class SubordinatesService {
     return subordinates.map(mapper);
   };
 
-  async getSubordinatesByBoss(boss_id: string): Promise<User[]> {
+  async getSubordinatesByBoss(
+    id: string,
+    page: number | null = null,
+    limit: number | null = null,
+    fieldToFilter: string | null = null,
+    term: string | null = null,
+  ): Promise<[any[], number]> {
     const allData = await this.subordinateRepository.find({
       relations: {
         user: {
@@ -137,11 +143,26 @@ export class SubordinatesService {
         },
       },
     });
-    return this.getSubordinateByTerm(
-      boss_id,
+    let data = this.getSubordinateByTerm(
+      id,
       (subordinate: Subordinate) => subordinate.user,
       allData,
     );
+
+    const init = (page - 1) * limit;
+    const end = page * limit;
+
+    if (fieldToFilter && term) {
+      data = data.filter((dat: any) =>
+        dat[fieldToFilter].toLowerCase().includes(term.toLowerCase()),
+      );
+    }
+
+    if (page && limit) {
+      data = data.slice(init, end);
+    }
+
+    return [data, data.length];
   }
 
   async getSubordinatesByBossOnlyCodes(boss_id: string): Promise<string[]> {

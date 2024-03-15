@@ -8,7 +8,6 @@ import {
   Post,
   Put,
   Query,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
@@ -25,7 +24,7 @@ export interface IGetUsersResponse {
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  formatResponse(result, total, limit) {
+  formatResponse(result: User[], total: number, limit: number) {
     const dataMapping = result.map((user: User) => {
       const { leader, ...partialUser } = user;
       const leaderMapped = leader ? new UserDto(leader) : null;
@@ -38,14 +37,6 @@ export class UsersController {
     };
   }
 
-  /*  orderByDictionary(data: User[], dictionary: string[]) {
-    return data.sort((a: User, b: User) => {
-      const indexA = dictionary.indexOf(a.rol?.code || null);
-      const indexB = dictionary.indexOf(b.rol?.code || null);
-      console.log(indexA, indexB)
-      return indexA - indexB;
-    });
-  }*/
   @Get()
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
@@ -64,15 +55,6 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
   async getAllUsersFree(@Query() params: any): Promise<IGetUsersResponse> {
-    /*  const dictionary = [
-      'admin',
-      'manager',
-      'commercial_boss',
-      'sponsors',
-      'commercial',
-      'segit',
-      null,
-    ];*/
     const { page, limit, fieldToFilter, term } = params;
     const [result, total] = await this.usersService.getAllWithLeader(
       page,

@@ -22,11 +22,12 @@ import { UsersService } from '../services/users.service';
 import { DeleteResult } from 'typeorm';
 
 export interface IGetUsersResponse {
-  data: SubordinateDto[];
+  data: any[];
   pages: number;
   count: number;
 }
 @Controller('subordinates')
+@UseGuards(AuthGuard)
 export class SubordinateController {
   constructor(
     private readonly subordinateService: SubordinatesService,
@@ -116,15 +117,28 @@ export class SubordinateController {
   }
 
   @Get('/get-subordinate-codes/:id')
+  @UseGuards(AuthGuard)
   async getSubordinates(@Param('id') id: string): Promise<string[]> {
     return await this.subordinateService.getSubordinatesByBossOnlyCodes(id);
   }
 
-  @Get('/get-subordinate/:id')
+  @Get('/get-subordinate')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  async findByUserId(@Param('id') id: string): Promise<UserDto[]> {
-    return await this.subordinateService.getSubordinatesByBoss(id);
+  async findByUserId(@Query() params: any): Promise<IGetUsersResponse> {
+    const { id, page, limit, fieldToFilter, term } = params;
+    const [result, total] = await this.subordinateService.getSubordinatesByBoss(
+      id,
+      page,
+      limit,
+      fieldToFilter,
+      term,
+    );
+    return {
+      data: result,
+      pages: Math.ceil(total / limit) || 1,
+      count: total,
+    };
   }
 
   @Get('/:id')
