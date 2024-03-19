@@ -7,7 +7,6 @@ import {
   SubordinateUpdateDto,
 } from '../dtos/subordinate.dto';
 import { UserDto } from '../dtos/user.dto';
-import { User } from '../entities/user.entity';
 
 @Injectable()
 export class SubordinatesService {
