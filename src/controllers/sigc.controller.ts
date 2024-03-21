@@ -89,15 +89,25 @@ export class SigcController {
     } else {
       const subordinatesCodes =
         await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      console.log('LOS CODIGOOOOOOOSSS')
-      console.log(subordinatesCodes)
       const params = JSON.stringify(subordinatesCodes);
-      console.log(params)
-      console.log(btoa(params))
       return await this.sigcService.depositsMultiParam(btoa(params));
     }
   }
 
+  @HttpCode(HttpStatus.OK)
+  @Get('/deposits-top-10/:id')
+  @UseGuards(AuthGuard)
+  async getDepositsTop10(@Param('id') id: string): Promise<any> {
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.depositsTop10SingleParam(btoa(user.code));
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.depositsTop10MultiParam(btoa(params));
+    }
+  }
   @HttpCode(HttpStatus.OK)
   @Get('/vinculations/:id')
   @UseGuards(AuthGuard)
