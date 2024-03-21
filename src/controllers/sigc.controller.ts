@@ -20,19 +20,92 @@ export class SigcController {
   ) {}
 
   @HttpCode(HttpStatus.OK)
-  @Get('/deposits/:id')
+  @Get('/deposits/total/:id')
   @UseGuards(AuthGuard)
-  async getDepositsTotalSingleParam(@Param('id') id: string): Promise<any> {
+  async getDepositsTotal(@Param('id') id: string): Promise<any> {
     const user = await this.userService.findOneById(id);
     if (user.rol.code === 'commercial') {
       return await this.sigcService.depositsTotalSingleParam(btoa(user.code));
     } else {
       const subordinatesCodes =
         await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      console.log('llego aqui');
-      console.log(subordinatesCodes);
-      //data = await this.sigcService.depositsMultiParam();
-      return { response: btoa(JSON.stringify(user)) };
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.depositsTotalMultiParam(btoa(params));
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/placements/total/:id')
+  @UseGuards(AuthGuard)
+  async getPlacementsTotal(@Param('id') id: string): Promise<any> {
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.placementsTotalSingleParam(btoa(user.code));
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.placementsTotalMultiParam(btoa(params));
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/placements/:id')
+  @UseGuards(AuthGuard)
+  async getPlacements(@Param('id') id: string): Promise<any> {
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.placementsSingleParam(btoa(user.code));
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.placementsMultiParam(btoa(params));
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/captures/:id')
+  @UseGuards(AuthGuard)
+  async getCaptures(@Param('id') id: string): Promise<any> {
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.captureSingleParam(btoa(user.code));
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.capturesMultiParam(btoa(params));
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/deposits/:id')
+  @UseGuards(AuthGuard)
+  async getDeposits(@Param('id') id: string): Promise<any> {
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.depositsSingleParam(btoa(user.code));
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.depositsMultiParam(btoa(params));
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/vinculations/:id')
+  @UseGuards(AuthGuard)
+  async getVinculations(@Param('id') id: string): Promise<any> {
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.vinculationsSingleParam(btoa(user.code));
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.vinculationsMultiParam(btoa(params));
     }
   }
 }
