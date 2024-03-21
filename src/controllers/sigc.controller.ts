@@ -89,7 +89,11 @@ export class SigcController {
     } else {
       const subordinatesCodes =
         await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      console.log('LOS CODIGOOOOOOOSSS')
+      console.log(subordinatesCodes)
       const params = JSON.stringify(subordinatesCodes);
+      console.log(params)
+      console.log(btoa(params))
       return await this.sigcService.depositsMultiParam(btoa(params));
     }
   }
