@@ -277,4 +277,82 @@ export class SigcService {
       };
     }
   }
+
+  async vinculationsTop10SingleParam(param: string) {
+    const customParam = {
+      officer_code: param,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/top10_vinculations_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+  async vinculationsTop10MultiParam(param: string) {
+    const customParam = {
+      list_of_officers: param,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/top10_vinculations_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async assetsTop10SingleParam(param: string) {
+    const customParam = {
+      officer_code: param,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/top10_assets_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+  async assetsTop10MultiParam(param: string) {
+    const customParam = {
+      list_of_officers: param,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/top10_assets_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
 }

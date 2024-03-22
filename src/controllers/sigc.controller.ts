@@ -109,17 +109,34 @@ export class SigcController {
     }
   }
   @HttpCode(HttpStatus.OK)
-  @Get('/vinculations/:id')
+  @Get('/vinculations-top-10/:id')
   @UseGuards(AuthGuard)
-  async getVinculations(@Param('id') id: string): Promise<any> {
+  async getVinculationsTop10(@Param('id') id: string): Promise<any> {
     const user = await this.userService.findOneById(id);
     if (user.rol.code === 'commercial') {
-      return await this.sigcService.vinculationsSingleParam(btoa(user.code));
+      return await this.sigcService.vinculationsTop10SingleParam(
+        btoa(user.code),
+      );
     } else {
       const subordinatesCodes =
         await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
       const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.vinculationsMultiParam(btoa(params));
+      return await this.sigcService.vinculationsTop10MultiParam(btoa(params));
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/assets-top-10/:id')
+  @UseGuards(AuthGuard)
+  async getAssetsTop10(@Param('id') id: string): Promise<any> {
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.assetsTop10SingleParam(btoa(user.code));
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.assetsTop10MultiParam(btoa(params));
     }
   }
 }
