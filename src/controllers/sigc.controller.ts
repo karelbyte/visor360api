@@ -139,4 +139,19 @@ export class SigcController {
       return await this.sigcService.assetsTop10MultiParam(btoa(params));
     }
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/all-expiration/:id')
+  @UseGuards(AuthGuard)
+  async getExpirationAll(@Param('id') id: string): Promise<any> {
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.expirationAllSingleParam(btoa(user.code));
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.expirationAllMultiParam(btoa(params));
+    }
+  }
 }

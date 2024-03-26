@@ -48,6 +48,9 @@ export class User {
   public created_at: Date;
 
   @Column()
+  token: string;
+
+  @Column()
   public updated_at: Date;
 
   @OneToOne(() => Rol)

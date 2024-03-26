@@ -1,8 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { UserDto, UserLoginDto } from '../dtos/user.dto';
+import { UserDto, UserLoginDto, UserResetPassword } from '../dtos/user.dto';
 import { UsersService } from './users.service';
+import { AppConfig } from '../config';
 
 @Injectable()
 export class AuthService {
@@ -27,6 +28,38 @@ export class AuthService {
     return {
       token: await this.jwtService.signAsync(payload),
       ...new UserDto(user),
+      leader: new UserDto(user.leader),
     };
+  }
+
+  async resetPassword(userData: UserResetPassword) {
+    try {
+      const data = await this.jwtService.verifyAsync(userData.token, {
+        secret: AppConfig().appKey,
+      });
+      const user = await this.usersService.findOneById(data['userId']);
+      if (user.token === userData.token) {
+        const updatePasswordData = {
+          id: user.id,
+          password: userData.password,
+          token: null,
+        };
+        await this.usersService.update(updatePasswordData);
+        return {
+          status: 200,
+          message: 'Constraseña actualizada correctamente.',
+        };
+      } else {
+        return {
+          status: 401,
+          message: 'El token no es valido!',
+        };
+      }
+    } catch (e) {
+      return {
+        status: 401,
+        message: 'El token no es valido!',
+      };
+    }
   }
 }

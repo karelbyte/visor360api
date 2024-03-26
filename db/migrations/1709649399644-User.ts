@@ -14,6 +14,7 @@ export class User1709649399644 implements MigrationInterface {
               [is_staff] bit NOT NULL,
               [is_active] bit NOT NULL,
               [boss_id] uniqueidentifier NULL,
+              [token] nvarchar(500) NOT NULL,
               [created_at] datetime2(6) NOT NULL,
               [updated_at] datetime2(6) NOT NULL,
               CONSTRAINT [UQ_users_email] UNIQUE ([email]),

@@ -27,6 +27,7 @@
     "seed": "ts-node -r tsconfig-paths/register node_modules/typeorm-extension/bin/cli.cjs seed:run -d ./db/typeorm.config.ts"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^1.11.2",
     "@nestjs/axios": "^3.0.2",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.0",
@@ -41,6 +42,8 @@
     "dotenv": "^16.4.5",
     "mssql": "^10.0.2",
     "mysql2": "^3.9.2",
+    "nodemailer": "^6.9.13",
+    "pug": "^3.0.2",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20",

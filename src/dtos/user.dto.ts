@@ -8,6 +8,19 @@ import {
 import { IsUserAlreadyExist } from '../decorators/IsUserAlreadyExist';
 import { RolDto } from './rol.dto';
 
+export class UserChangePasswordDto {
+  @IsEmail(undefined, {
+    message: 'No se proporciono un correo o su formato es inválido.',
+  })
+  email: string;
+}
+export class UserResetPassword {
+  @IsNotEmpty()
+  token: string;
+
+  @IsNotEmpty()
+  password: string;
+}
 export class UserLoginDto {
   @IsEmail(undefined, {
     message: 'No se proporciono un correo o su formato es inválido.',
@@ -99,6 +112,10 @@ export class UserUpdateDto {
   @IsString()
   @IsOptional()
   boss_id: string;
+
+  @IsString()
+  @IsOptional()
+  token: string;
 }
 
 interface IUserDto {
