@@ -154,4 +154,19 @@ export class SigcController {
       return await this.sigcService.expirationAllMultiParam(btoa(params));
     }
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/financial/:id')
+  @UseGuards(AuthGuard)
+  async getFinancial(@Param('id') id: string): Promise<any> {
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.financialSingleParam(btoa(user.code));
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.financialMultiParam(btoa(params));
+    }
+  }
 }

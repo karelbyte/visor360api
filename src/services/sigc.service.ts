@@ -394,4 +394,43 @@ export class SigcService {
       };
     }
   }
+
+  async financialSingleParam(param: string) {
+    const customParam = {
+      officer_code: param,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/sigc_financial_information_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+  async financialMultiParam(param: string) {
+    const customParam = {
+      list_of_officers: param,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/sigc_financial_information_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
 }

@@ -6,9 +6,11 @@ import {
   OneToMany,
   OneToOne,
   JoinColumn,
+  AfterInsert,
 } from 'typeorm';
 import { Subordinate } from './subordinate.entity';
 import { Rol } from './rol.entity';
+import { UserCredentialsLog } from './usercredentialslog.entity';
 
 @Entity('users')
 export class User {
@@ -51,7 +53,13 @@ export class User {
   token: string;
 
   @Column()
+  logins: number;
+
+  @Column()
   public updated_at: Date;
+
+  @OneToMany(() => UserCredentialsLog, (log) => log.user)
+  log: UserCredentialsLog[];
 
   @OneToOne(() => Rol)
   @JoinColumn({
@@ -67,6 +75,16 @@ export class User {
 
   @OneToMany(() => Subordinate, (subordinate) => subordinate.user)
   subordinates: Subordinate[];
+
+/*  @AfterInsert()
+  async createLog() {
+    const log = new UserCredentialsLog({
+      user_id: this.id,
+      password: this.password,
+    });
+
+    await log.save();
+  }*/
   constructor(partial: User) {
     Object.assign(this, partial);
   }

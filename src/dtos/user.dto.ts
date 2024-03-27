@@ -2,6 +2,7 @@ import {
   IsBoolean,
   IsEmail,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -116,6 +117,10 @@ export class UserUpdateDto {
   @IsString()
   @IsOptional()
   token: string;
+
+  @IsNumber()
+  @IsOptional()
+  logins: number;
 }
 
 interface IUserDto {
@@ -130,6 +135,7 @@ interface IUserDto {
   boss_id: string;
   rol: RolDto;
   leader: UserDto;
+  logins: number
   created_at: Date;
   updated_at: Date;
 }
@@ -145,6 +151,7 @@ export class UserDto {
   boss_id: string;
   rol: RolDto;
   leader: UserDto;
+  logins: number;
   created_at: Date;
   updated_at: Date;
   constructor({
@@ -159,6 +166,7 @@ export class UserDto {
     boss_id,
     rol,
     leader,
+    logins,
     created_at,
     updated_at,
   }: IUserDto) {
@@ -173,6 +181,7 @@ export class UserDto {
     this.boss_id = boss_id;
     this.rol = rol;
     this.leader = leader;
+    this.logins = logins;
     this.created_at = created_at;
     this.updated_at = updated_at;
   }
