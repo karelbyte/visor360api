@@ -135,7 +135,7 @@ interface IUserDto {
   boss_id: string;
   rol: RolDto;
   leader: UserDto;
-  logins: number
+  logins: number;
   created_at: Date;
   updated_at: Date;
 }
