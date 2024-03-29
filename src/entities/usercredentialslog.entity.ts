@@ -7,9 +7,9 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 
-@Entity('users_credentials_log')
+@Entity('users_credential_log')
 export class UserCredentialsLog {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: string;
 
   @Column()

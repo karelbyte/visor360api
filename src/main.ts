@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { useContainer } from 'class-validator';
 import { ConfigService } from '@nestjs/config';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
@@ -11,6 +12,16 @@ async function bootstrap() {
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT');
+
+  const config = new DocumentBuilder()
+    .setTitle('SIGC API')
+    .setDescription('Sistema integral de gestion de costos')
+    .setVersion('1.0')
+    .addTag('sigc')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
   await app.listen(port);
 }
 bootstrap();

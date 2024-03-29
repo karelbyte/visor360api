@@ -4,9 +4,10 @@ import { User } from '../entities/user.entity';
 import { UsersController } from '../controllers/user.controller';
 import { UsersService } from '../services/users.service';
 import { IsUserAlreadyExistConstraint } from '../decorators/IsUserAlreadyExist';
+import { UserCredentialsLog } from '../entities/usercredentialslog.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [TypeOrmModule.forFeature([User, UserCredentialsLog])],
   providers: [UsersService, IsUserAlreadyExistConstraint],
   controllers: [UsersController],
   exports: [TypeOrmModule, UsersService],

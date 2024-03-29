@@ -8,40 +8,51 @@ import {
 } from 'class-validator';
 import { IsUserAlreadyExist } from '../decorators/IsUserAlreadyExist';
 import { RolDto } from './rol.dto';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UserChangePasswordDto {
+  @ApiProperty()
   @IsEmail(undefined, {
     message: 'No se proporciono un correo o su formato es inválido.',
   })
   email: string;
 }
 export class UserResetPassword {
+  @ApiProperty()
   @IsNotEmpty()
   token: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   password: string;
 }
 export class UserLoginDto {
+  @ApiProperty()
   @IsEmail(undefined, {
     message: 'No se proporciono un correo o su formato es inválido.',
   })
   email: string;
+
+  @ApiProperty()
   @IsNotEmpty({
     message: 'No se proporciono una contraseña!',
   })
   password: string;
 }
 export class UserCreateDto {
+  @ApiProperty()
   @IsNotEmpty()
   code: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   username: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   names: string;
 
+  @ApiProperty()
   @IsEmail(undefined, {
     message: 'No se proporciono un correo o su formato es inválido.',
   })
@@ -50,41 +61,51 @@ export class UserCreateDto {
   })
   email: string;
 
+  @ApiProperty()
   @IsString()
   @IsOptional()
   password: string;
 
+  @ApiProperty()
   @IsBoolean()
   @IsOptional()
   is_active: boolean;
 
+  @ApiProperty()
   @IsString()
   @IsOptional()
   rol_id: string;
 
+  @ApiProperty()
   @IsBoolean()
   @IsOptional()
   is_staff: boolean;
 
+  @ApiProperty()
   @IsString()
   @IsOptional()
   boss_id: string;
 }
 
 export class UserUpdateDto {
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   id: string;
 
+  @ApiProperty()
   @IsOptional()
   code: string;
 
+  @ApiProperty()
   @IsOptional()
   username: string;
 
+  @ApiProperty()
   @IsOptional()
   names: string;
 
+  @ApiProperty()
   @IsEmail(undefined, {
     message: 'No se proporciono un correo o su formato es inválido.',
   })
@@ -94,30 +115,37 @@ export class UserUpdateDto {
   @IsOptional()
   email: string;
 
+  @ApiProperty()
   @IsString()
   @IsOptional()
   password: string;
 
+  @ApiProperty()
   @IsBoolean()
   @IsOptional()
   is_active: boolean;
 
+  @ApiProperty()
   @IsString()
   @IsOptional()
   rol_id: string;
 
+  @ApiProperty()
   @IsBoolean()
   @IsOptional()
   is_staff: boolean;
 
+  @ApiProperty()
   @IsString()
   @IsOptional()
   boss_id: string;
 
+  @ApiProperty()
   @IsString()
   @IsOptional()
   token: string;
 
+  @ApiProperty()
   @IsNumber()
   @IsOptional()
   logins: number;
@@ -185,4 +213,9 @@ export class UserDto {
     this.created_at = created_at;
     this.updated_at = updated_at;
   }
+}
+
+export interface UserLogedDto extends UserDto {
+  token: string;
+  leader: UserDto;
 }

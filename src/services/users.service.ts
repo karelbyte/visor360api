@@ -4,14 +4,15 @@ import { Like, Repository, FindManyOptions, Not, IsNull, In } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from '../entities/user.entity';
 import { UserCreateDto, UserUpdateDto } from '../dtos/user.dto';
-import { HttpRequestService } from './http.service';
+import { UserCredentialsLog } from '../entities/usercredentialslog.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    private http: HttpRequestService,
+    @InjectRepository(UserCredentialsLog)
+    private logRepository: Repository<UserCredentialsLog>,
   ) {}
 
   async getAll(
@@ -131,13 +132,28 @@ export class UsersService {
     if (userData.password) {
       userData.password = await bcrypt.hash(userData.password, 10);
     }
-    return await this.usersRepository.save(userData);
+    const user = await this.usersRepository.save(userData);
+    const credentialsLog = {
+      user_id: user.id,
+      password: userData.password,
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+    await this.logRepository.save(credentialsLog);
+    return user;
   }
 
   async update(userData: Partial<UserUpdateDto>): Promise<User> {
     userData['updated_at'] = new Date();
     if (userData.password) {
       userData.password = await bcrypt.hash(userData.password, 10);
+      const credentialsLog = {
+        user_id: userData.id,
+        password: userData.password,
+        created_at: new Date(),
+        updated_at: new Date(),
+      };
+      await this.logRepository.save(credentialsLog);
     }
 
     if (userData.rol_id && userData.rol_id === '') {

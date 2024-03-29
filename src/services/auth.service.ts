@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UserDto, UserLoginDto, UserResetPassword } from '../dtos/user.dto';
@@ -12,10 +16,25 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  async canLogin(userData: UserLoginDto) {
+    const user = await this.usersService.findOneByEmail(userData.email);
+    if (!user || user.password === null || !user.is_active) {
+      throw new HttpException('El usuario no existe o esta inactivo', 302);
+    }
+    if (user.logins >= 15) {
+      throw new HttpException(
+        'A exedido el uso de la contraseña actual, actualizela.',
+        301,
+      );
+    }
+    return {
+      status: 200,
+    };
+  }
   async login(userData: UserLoginDto) {
     const user = await this.usersService.findOneByEmail(userData.email);
     if (!user || user.password === null || !user.is_active) {
-      throw new UnauthorizedException();
+      throw new HttpException('El usuario no existe o esta inactivo', 302);
     }
     const isSamePassword = await bcrypt.compare(
       userData.password,
@@ -25,6 +44,10 @@ export class AuthService {
       throw new UnauthorizedException();
     }
     const payload = { userId: user.id, names: user.names, rol: user.rol.code };
+    await this.usersService.update({
+      id: user.id,
+      logins: user.logins + 1,
+    });
     return {
       token: await this.jwtService.signAsync(payload),
       ...new UserDto(user),
@@ -42,6 +65,7 @@ export class AuthService {
         const updatePasswordData = {
           id: user.id,
           password: userData.password,
+          logins: 0,
           token: null,
         };
         await this.usersService.update(updatePasswordData);
