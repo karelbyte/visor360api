@@ -10,13 +10,13 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { JwtService } from '@nestjs/jwt';
 import { UserChangePasswordDto } from '../dtos/user.dto';
-import { MailerService } from '../services/mailer.service';
+import { AppMailerService } from '../services/mailer.service';
 import { UsersService } from '../services/users.service';
 
 @Controller('mailer')
 export class MailerController {
   constructor(
-    private readonly mailerService: MailerService,
+    private readonly mailerService: AppMailerService,
     private readonly userService: UsersService,
     private jwtService: JwtService,
   ) {}

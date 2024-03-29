@@ -13,7 +13,7 @@ import { SubordinateModule } from './modules/subordinate.module';
 import { Visor360Module } from './modules/visor360.module';
 import { RolModule } from './modules/rol.module';
 import { SigcModule } from './modules/sigc.module';
-import { MailerModule as ManagerMails } from './modules/mailer.module';
+import { AppMailerModule } from './modules/mailer.module';
 
 @Module({
   imports: [
@@ -29,7 +29,7 @@ import { MailerModule as ManagerMails } from './modules/mailer.module';
       }),
       inject: [ConfigService],
     }),
-    ManagerMails,
+    AppMailerModule,
     UsersModule,
     Visor360Module,
     SigcModule,

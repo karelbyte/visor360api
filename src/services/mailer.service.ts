@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { MailerService as MailerMain } from '@nestjs-modules/mailer';
+import { MailerService } from '@nestjs-modules/mailer';
 import * as pug from 'pug';
 
 @Injectable()
-export class MailerService {
-  constructor(private readonly mailerMain: MailerMain) {}
+export class AppMailerService {
+  constructor(private readonly mailerMain: MailerService) {}
 
   async sendMail(dataMailer: any): Promise<any> {
     const render = this._bodyTemplate(

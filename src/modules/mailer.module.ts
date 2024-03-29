@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { MailerController } from '../controllers/mailer.controller';
-import { MailerService } from '../services/mailer.service';
+import { AppMailerService } from '../services/mailer.service';
 import { UsersModule } from './users.module';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
-import { MailerModule as Mailer } from '@nestjs-modules/mailer';
+import { MailerModule } from '@nestjs-modules/mailer';
 import { JwtModule } from '@nestjs/jwt';
 import { AppConfig } from '../config';
 
 @Module({
   imports: [
-    Mailer.forRoot({
+    MailerModule.forRoot({
       transport: {
         host: String(process.env.MAIL_HOST),
         port: Number(process.env.MAIL_PORT),
@@ -35,7 +35,7 @@ import { AppConfig } from '../config';
     UsersModule,
   ],
   controllers: [MailerController],
-  providers: [MailerService],
-  exports: [MailerService],
+  providers: [AppMailerService],
+  exports: [AppMailerService],
 })
-export class MailerModule {}
+export class AppMailerModule {}
