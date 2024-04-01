@@ -51,7 +51,7 @@ export class AuthService {
     return {
       token: await this.jwtService.signAsync(payload),
       ...new UserDto(user),
-      leader: new UserDto(user.leader),
+      leader: user.leader ? new UserDto(user.leader) : null,
     };
   }
 
