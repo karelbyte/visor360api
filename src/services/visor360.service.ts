@@ -5,6 +5,28 @@ import { HttpRequestService } from './http.service';
 export class Visor360Service {
   constructor(private httpService: HttpRequestService) {}
 
+  async searchClient({ page, limit, search }) {
+    const customParam = {
+      search_param: btoa(search),
+      page: Number(page),
+      limit: Number(limit),
+    };
+    console.log(customParam);
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/visor360_search_client/run',
+        customParam,
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
   async clientInfo(param: string) {
     const customParam = {
       search_param: param,

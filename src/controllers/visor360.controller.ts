@@ -4,6 +4,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { Visor360Service } from '../services/visor360.service';
@@ -12,6 +13,14 @@ import { AuthGuard } from '../guards/auth.guard';
 @Controller('visor360')
 export class Visor360Controller {
   constructor(private readonly visor360Service: Visor360Service) {}
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/clients')
+  @UseGuards(AuthGuard)
+  async getClients(@Query() params: any): Promise<any> {
+    const { page, limit, search } = params;
+    return await this.visor360Service.searchClient({ page, limit, search });
+  }
 
   @HttpCode(HttpStatus.OK)
   @Get('/client_info/:search')
