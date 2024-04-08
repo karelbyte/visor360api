@@ -30,8 +30,8 @@ export class AppMailerService {
     body: string,
   ): Promise<void> {
     await this.mailerMain.sendMail({
+      from: process.env.MAIL_USER,
       to: to,
-      cc: 'karelpuerto78@gmail.com',
       subject: subject,
       text: text,
       html: body,
