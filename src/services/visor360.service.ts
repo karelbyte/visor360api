@@ -34,7 +34,26 @@ export class Visor360Service {
     try {
       return await this.httpService.request(
         'post',
-        '/Visor360/search_client_info_base64/run',
+        '/SIGC_Panama/visor360_client_information/run',
+        customParam,
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async financialInformation(param: string) {
+    const customParam = {
+      num_client: param,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/visor360_financial_information/run',
         customParam,
       );
     } catch (e) {

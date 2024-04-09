@@ -30,6 +30,13 @@ export class Visor360Controller {
   }
 
   @HttpCode(HttpStatus.OK)
+  @Get('/financial_information/:search')
+  @UseGuards(AuthGuard)
+  async getFinancialInformation(@Param('search') search: string): Promise<any> {
+    return await this.visor360Service.financialInformation(search);
+  }
+
+  @HttpCode(HttpStatus.OK)
   @Get('/consolidate_position/:search')
   @UseGuards(AuthGuard)
   async getConsolidatePosition(@Param('search') search: string): Promise<any> {

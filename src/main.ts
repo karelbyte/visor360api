@@ -15,7 +15,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('SIGC API')
-    .setDescription('Sistema integral de gestion de costos')
+    .setDescription('Sistema integral de gestion de comercial.')
     .setVersion('1.0')
     .addTag('sigc')
     .build();
