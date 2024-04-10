@@ -7,17 +7,17 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { Visor360Service } from '../services/visor360.service';
+import { IPaginateParams, Visor360Service } from '../services/visor360.service';
 import { AuthGuard } from '../guards/auth.guard';
 
 @Controller('visor360')
 export class Visor360Controller {
-  constructor(private readonly visor360Service: Visor360Service) {}
+  constructor(private readonly visor360Service: Visor360Service) { }
 
   @HttpCode(HttpStatus.OK)
   @Get('/clients')
   @UseGuards(AuthGuard)
-  async getClients(@Query() params: any): Promise<any> {
+  async getClients(@Query() params: IPaginateParams): Promise<any> {
     const { page, limit, search } = params;
     return await this.visor360Service.searchClient({ page, limit, search });
   }
@@ -34,6 +34,18 @@ export class Visor360Controller {
   @UseGuards(AuthGuard)
   async getFinancialInformation(@Param('search') search: string): Promise<any> {
     return await this.visor360Service.financialInformation(search);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/placements_position')
+  @UseGuards(AuthGuard)
+  async getPlacementsPosition(@Query() params: IPaginateParams): Promise<any> {
+    const { page, limit, search } = params;
+    return await this.visor360Service.placementsPosition({
+      page,
+      limit,
+      search,
+    });
   }
 
   @HttpCode(HttpStatus.OK)

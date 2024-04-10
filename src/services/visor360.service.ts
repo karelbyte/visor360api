@@ -1,17 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { HttpRequestService } from './http.service';
 
+export interface IPaginateParams {
+  page: number;
+  limit: number;
+  search: string;
+}
 @Injectable()
 export class Visor360Service {
   constructor(private httpService: HttpRequestService) {}
 
-  async searchClient({ page, limit, search }) {
+  async searchClient({ page, limit, search }: IPaginateParams) {
     const customParam = {
-      search_param: btoa(search),
+      search_param: search,
       page: Number(page),
       limit: Number(limit),
     };
-    console.log(customParam);
     try {
       return await this.httpService.request(
         'post',
@@ -54,6 +58,27 @@ export class Visor360Service {
       return await this.httpService.request(
         'post',
         '/SIGC_Panama/visor360_financial_information/run',
+        customParam,
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async placementsPosition({ page, limit, search }: IPaginateParams) {
+    const customParam = {
+      num_client: search,
+      page: Number(page),
+      limit: Number(limit),
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/visor360_placements_position/run',
         customParam,
       );
     } catch (e) {
