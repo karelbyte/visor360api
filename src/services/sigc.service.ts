@@ -433,4 +433,43 @@ export class SigcService {
       };
     }
   }
+
+  async cancelSingleParam(param: string) {
+    const customParam = {
+      officer_code: param,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/product_cancelation_top10_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+  async cancelMultiParam(param: string) {
+    const customParam = {
+      list_of_officers: param,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/product_cancelation_top10_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
 }

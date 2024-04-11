@@ -172,4 +172,19 @@ export class SigcController {
       return await this.sigcService.financialMultiParam(btoa(params));
     }
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/product_cancelation/:id')
+  @UseGuards(AuthGuard)
+  async getProductCancelation(@Param('id') id: string): Promise<any> {
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.cancelSingleParam(btoa(user.code));
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.cancelMultiParam(btoa(params));
+    }
+  }
 }
