@@ -18,6 +18,7 @@ async function bootstrap() {
     .setDescription('Sistema integral de gestion de comercial.')
     .setVersion('1.0')
     .addTag('sigc')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

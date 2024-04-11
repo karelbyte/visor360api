@@ -10,19 +10,42 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { UsersService } from '../services/users.service';
+import {
+  IPaginateAndFilterParams,
+  UsersService,
+} from '../services/users.service';
 import { User } from '../entities/user.entity';
 import { UserCreateDto, UserDto, UserUpdateDto } from '../dtos/user.dto';
 import { AuthGuard } from '../guards/auth.guard';
-export interface IGetUsersResponse {
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiProperty,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { IsArray, IsNumber } from 'class-validator';
+export class UsersResponseDto {
+  @ApiProperty({
+    isArray: true,
+    type: UserDto,
+  })
+  @IsArray()
   data: UserDto[];
+  @ApiProperty()
+  @IsNumber()
   pages: number;
+  @ApiProperty()
+  @IsNumber()
   count: number;
 }
 
+@ApiBearerAuth()
+@ApiTags('User service')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   formatResponse(result: User[], total: number, limit: number) {
     const dataMapping = result.map((user: User) => {
@@ -37,24 +60,33 @@ export class UsersController {
     };
   }
 
+  @ApiOperation({ summary: 'Gel all users' })
+  @ApiQuery({ name: 'page', type: 'number', required: false })
+  @ApiQuery({ name: 'limit', type: 'number', required: false })
+  @ApiQuery({ name: 'fieldToFilte', type: 'string', required: false })
+  @ApiQuery({ name: 'term', type: 'string', required: false })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 200, type: UsersResponseDto })
   @Get()
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  async getAllUsers(@Query() params: any): Promise<IGetUsersResponse> {
+  async getAllUsers(
+    @Query() params: IPaginateAndFilterParams,
+  ): Promise<UsersResponseDto> {
     const { page, limit, fieldToFilter, term } = params;
-    const [result, total] = await this.usersService.getAll(
+    const [result, total] = await this.usersService.getAll({
       page,
       limit,
       fieldToFilter,
       term,
-    );
+    });
     return this.formatResponse(result, total, limit);
   }
 
   @Get('/free')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  async getAllUsersFree(@Query() params: any): Promise<IGetUsersResponse> {
+  async getAllUsersFree(@Query() params: any): Promise<UsersResponseDto> {
     const { page, limit, fieldToFilter, term } = params;
     const [result, total] = await this.usersService.getAllWithLeader(
       page,
@@ -70,9 +102,7 @@ export class UsersController {
   @Get('/with_leader')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  async getAllUsersWithLeader(
-    @Query() params: any,
-  ): Promise<IGetUsersResponse> {
+  async getAllUsersWithLeader(@Query() params: any): Promise<UsersResponseDto> {
     const { page, limit, fieldToFilter, term } = params;
     const [result, total] = await this.usersService.getAllWithLeader(
       page,

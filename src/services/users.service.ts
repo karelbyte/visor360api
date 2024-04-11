@@ -6,6 +6,13 @@ import { User } from '../entities/user.entity';
 import { UserCreateDto, UserUpdateDto } from '../dtos/user.dto';
 import { UserCredentialsLog } from '../entities/usercredentialslog.entity';
 
+export interface IPaginateAndFilterParams {
+  page: number | null;
+  limit: number | null;
+  fieldToFilter: string | null;
+  term: string | null;
+}
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -13,14 +20,14 @@ export class UsersService {
     private usersRepository: Repository<User>,
     @InjectRepository(UserCredentialsLog)
     private logRepository: Repository<UserCredentialsLog>,
-  ) {}
+  ) { }
 
-  async getAll(
-    page: number | null = null,
-    limit: number | null = null,
-    fieldToFilter: string | null = null,
-    term: string | null = null,
-  ): Promise<[User[], number]> {
+  async getAll({
+    page = null,
+    limit = null,
+    fieldToFilter = null,
+    term = null,
+  }: IPaginateAndFilterParams): Promise<[User[], number]> {
     const options: FindManyOptions<User> = {
       relations: {
         rol: true,

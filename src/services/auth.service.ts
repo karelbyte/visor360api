@@ -8,13 +8,62 @@ import { JwtService } from '@nestjs/jwt';
 import { UserDto, UserLoginDto, UserResetPassword } from '../dtos/user.dto';
 import { UsersService } from './users.service';
 import { AppConfig } from '../config';
+import { RolDto } from 'src/dtos/rol.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsBoolean, IsDate, IsNumber, IsString } from 'class-validator';
+
+export class LoginResponseDto implements UserDto {
+  @ApiProperty()
+  @IsString()
+  id: string;
+  @ApiProperty()
+  @IsString()
+  code: string;
+  @ApiProperty()
+  @IsString()
+  username: string;
+  @ApiProperty()
+  @IsString()
+  names: string;
+  @ApiProperty()
+  @IsString()
+  email: string;
+  @ApiProperty()
+  @IsString()
+  rol_id: string;
+  @ApiProperty()
+  @IsBoolean()
+  is_active: boolean;
+  @ApiProperty()
+  @IsBoolean()
+  is_staff: boolean;
+  @ApiProperty()
+  @IsString()
+  boss_id: string;
+  @ApiProperty()
+  rol: RolDto;
+  @ApiProperty()
+  @IsNumber()
+  logins: number;
+  @ApiProperty()
+  @IsDate()
+  created_at: Date;
+  @ApiProperty()
+  @IsDate()
+  updated_at: Date;
+  @ApiProperty()
+  @IsString()
+  token: string;
+  @ApiProperty()
+  leader: UserDto | null;
+}
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async canLogin(userData: UserLoginDto) {
     const user = await this.usersService.findOneByEmail(userData.email);
@@ -48,11 +97,13 @@ export class AuthService {
       id: user.id,
       logins: user.logins + 1,
     });
-    return {
+    const response: LoginResponseDto = {
       token: await this.jwtService.signAsync(payload),
       ...new UserDto(user),
       leader: user.leader ? new UserDto(user.leader) : null,
     };
+
+    return response;
   }
 
   async resetPassword(userData: UserResetPassword) {

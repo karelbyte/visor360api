@@ -6,6 +6,12 @@ import {
   HttpStatus,
   Post,
 } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { JwtService } from '@nestjs/jwt';
@@ -13,16 +19,23 @@ import { UserChangePasswordDto } from '../dtos/user.dto';
 import { AppMailerService } from '../services/mailer.service';
 import { UsersService } from '../services/users.service';
 
+@ApiTags('Mailer service')
 @Controller('mailer')
 export class MailerController {
   constructor(
     private readonly mailerService: AppMailerService,
     private readonly userService: UsersService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   @HttpCode(HttpStatus.OK)
   @Post('/change-password-mail')
+  @ApiOperation({ summary: 'Sending email to update password' })
+  @ApiResponse({ status: 202, description: 'Correo enviado correctamente.' })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'No se encontro el correo proporcionado.',
+  })
   async changePassword(@Body() body: UserChangePasswordDto): Promise<any> {
     const user = await this.userService.findOneByEmail(body.email);
     if (!user) {

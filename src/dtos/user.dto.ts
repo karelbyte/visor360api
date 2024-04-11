@@ -168,14 +168,32 @@ interface IUserDto {
   updated_at: Date;
 }
 export class UserDto {
+  @ApiProperty()
+  @IsString()
   id: string;
+  @ApiProperty()
+  @IsString()
   code: string;
+  @ApiProperty()
+  @IsString()
   username: string;
+  @ApiProperty()
+  @IsString()
   names: string;
+  @ApiProperty()
+  @IsString()
   email: string;
+  @ApiProperty()
+  @IsString()
   rol_id: string;
+  @ApiProperty()
+  @IsBoolean()
   is_active: boolean;
+  @ApiProperty()
+  @IsBoolean()
   is_staff: boolean;
+  @ApiProperty()
+  @IsString()
   boss_id: string;
   rol: RolDto;
   leader: UserDto;

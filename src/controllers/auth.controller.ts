@@ -1,16 +1,31 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { AuthService } from '../services/auth.service';
+import { AuthService, LoginResponseDto } from '../services/auth.service';
 import {
   UserLoginDto,
   UserResetPassword,
   UserLogedDto,
 } from '../dtos/user.dto';
 import { User } from '../entities/user.entity';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth service')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
+  @ApiOperation({ summary: 'Authenticate user with email and password' })
+  @ApiResponse({
+    status: 302,
+    description: 'El usuario no existe o esta inactivo',
+  })
+  @ApiResponse({
+    status: 301,
+    description: 'A exedido el uso de la contraseña actual, actualizela.',
+  })
+  @ApiResponse({
+    status: 200,
+    type: LoginResponseDto,
+  })
   @HttpCode(HttpStatus.OK)
   @Post('/login')
   async login(@Body() body: UserLoginDto): Promise<UserLogedDto> {
