@@ -6,7 +6,12 @@ import {
   UserLogedDto,
 } from '../dtos/user.dto';
 import { User } from '../entities/user.entity';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiExcludeEndpoint,
+} from '@nestjs/swagger';
 
 @ApiTags('Auth service')
 @Controller('auth')
@@ -32,12 +37,22 @@ export class AuthController {
     return await this.authService.login(body);
   }
 
+  @ApiExcludeEndpoint()
   @HttpCode(HttpStatus.OK)
   @Post('/can-login')
   async canLogin(@Body() body: UserLoginDto): Promise<User | any> {
     return await this.authService.canLogin(body);
   }
 
+  @ApiOperation({ summary: 'User reset password' })
+  @ApiResponse({
+    status: 200,
+    description: 'Constraseña actualizada correctamente.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'El token no es valido!',
+  })
   @HttpCode(HttpStatus.OK)
   @Post('/reset-password')
   async resetPassword(@Body() body: UserResetPassword): Promise<any> {

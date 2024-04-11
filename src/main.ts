@@ -17,10 +17,10 @@ async function bootstrap() {
     .setTitle('SIGC API')
     .setDescription('Sistema integral de gestion de comercial.')
     .setVersion('1.0')
-    .addTag('sigc')
+    .addTag('Especificaciones de la api')
     .addBearerAuth()
     .build();
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, config, {});
   SwaggerModule.setup('api', app, document);
 
   await app.listen(port);

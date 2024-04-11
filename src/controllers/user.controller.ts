@@ -60,10 +60,10 @@ export class UsersController {
     };
   }
 
-  @ApiOperation({ summary: 'Gel all users' })
+  @ApiOperation({ summary: 'Get all users' })
   @ApiQuery({ name: 'page', type: 'number', required: false })
   @ApiQuery({ name: 'limit', type: 'number', required: false })
-  @ApiQuery({ name: 'fieldToFilte', type: 'string', required: false })
+  @ApiQuery({ name: 'fieldToFilter', type: 'string', required: false })
   @ApiQuery({ name: 'term', type: 'string', required: false })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiResponse({ status: 200, type: UsersResponseDto })
@@ -82,7 +82,13 @@ export class UsersController {
     });
     return this.formatResponse(result, total, limit);
   }
-
+  @ApiOperation({ summary: 'Get all users without leader' })
+  @ApiQuery({ name: 'page', type: 'number', required: false })
+  @ApiQuery({ name: 'limit', type: 'number', required: false })
+  @ApiQuery({ name: 'fieldToFilter', type: 'string', required: false })
+  @ApiQuery({ name: 'term', type: 'string', required: false })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 200, type: UsersResponseDto })
   @Get('/free')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
@@ -99,6 +105,13 @@ export class UsersController {
     return this.formatResponse(result, total, limit);
   }
 
+  @ApiOperation({ summary: 'Get all users with leader' })
+  @ApiQuery({ name: 'page', type: 'number', required: false })
+  @ApiQuery({ name: 'limit', type: 'number', required: false })
+  @ApiQuery({ name: 'fieldToFilter', type: 'string', required: false })
+  @ApiQuery({ name: 'term', type: 'string', required: false })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 200, type: UsersResponseDto })
   @Get('/with_leader')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
@@ -113,7 +126,11 @@ export class UsersController {
     );
     return this.formatResponse(result, total, limit);
   }
+  @ApiOperation({ summary: 'Get all users leader' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 200, type: UsersResponseDto })
   @Get('/leaders')
+  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   async getAllLeaders(): Promise<UserDto[]> {
     const leaders = await this.usersService.getAllLeaders();
@@ -122,6 +139,9 @@ export class UsersController {
     }));
   }
 
+  @ApiOperation({ summary: 'Get user by id' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 200, type: UserDto })
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
@@ -130,13 +150,20 @@ export class UsersController {
     return new UserDto(user);
   }
 
+  @ApiOperation({ summary: 'Create user' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 200, type: UserDto })
   @Post()
+  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   async createUser(@Body() createUserDto: UserCreateDto): Promise<UserDto> {
     const user = await this.usersService.create(createUserDto);
     return new UserDto(user);
   }
 
+  @ApiOperation({ summary: 'Update user' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 200, type: UserDto })
   @Put()
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)

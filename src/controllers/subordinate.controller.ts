@@ -20,12 +20,15 @@ import {
 import { UserDto } from '../dtos/user.dto';
 import { UsersService } from '../services/users.service';
 import { DeleteResult } from 'typeorm';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 export interface IGetUsersResponse {
   data: any[];
   pages: number;
   count: number;
 }
+@ApiBearerAuth()
+@ApiTags('Subordinates service')
 @Controller('subordinates')
 @UseGuards(AuthGuard)
 export class SubordinateController {

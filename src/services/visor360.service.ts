@@ -90,6 +90,48 @@ export class Visor360Service {
     }
   }
 
+  async catchmentsPosition({ page, limit, search }: IPaginateParams) {
+    const customParam = {
+      num_client: search,
+      page: Number(page),
+      limit: Number(limit),
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/visor360_catchments_position/run',
+        customParam,
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async ccPosition({ page, limit, search }: IPaginateParams) {
+    const customParam = {
+      num_client: search,
+      page: Number(page),
+      limit: Number(limit),
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/visor360_cc_position/run',
+        customParam,
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
   async consolidatePosition(param: string) {
     const customParam = {
       num_client_ibs: param,
@@ -108,6 +150,7 @@ export class Visor360Service {
       };
     }
   }
+
 
   async pqrPetitionSingleParam(param: string) {
     const customParam = {

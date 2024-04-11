@@ -9,7 +9,10 @@ import {
 } from '@nestjs/common';
 import { IPaginateParams, Visor360Service } from '../services/visor360.service';
 import { AuthGuard } from '../guards/auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Visor360 service')
 @Controller('visor360')
 export class Visor360Controller {
   constructor(private readonly visor360Service: Visor360Service) { }
@@ -48,6 +51,29 @@ export class Visor360Controller {
     });
   }
 
+  @HttpCode(HttpStatus.OK)
+  @Get('/catchments_position')
+  @UseGuards(AuthGuard)
+  async getCatchmentsPosition(@Query() params: IPaginateParams): Promise<any> {
+    const { page, limit, search } = params;
+    return await this.visor360Service.catchmentsPosition({
+      page,
+      limit,
+      search,
+    });
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/cc_position')
+  @UseGuards(AuthGuard)
+  async getCCposition(@Query() params: IPaginateParams): Promise<any> {
+    const { page, limit, search } = params;
+    return await this.visor360Service.ccPosition({
+      page,
+      limit,
+      search,
+    });
+  }
   @HttpCode(HttpStatus.OK)
   @Get('/consolidate_position/:search')
   @UseGuards(AuthGuard)

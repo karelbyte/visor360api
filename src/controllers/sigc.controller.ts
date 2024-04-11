@@ -10,7 +10,10 @@ import { AuthGuard } from '../guards/auth.guard';
 import { SigcService } from '../services/sigc.service';
 import { UsersService } from '../services/users.service';
 import { SubordinatesService } from '../services/subordinate.service';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Sigc service')
 @Controller('sigc')
 export class SigcController {
   constructor(

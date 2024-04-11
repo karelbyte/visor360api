@@ -8,7 +8,10 @@ import {
 import { RolService } from '../services/rol.service';
 import { Rol } from '../entities/rol.entity';
 import { AuthGuard } from '../guards/auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Rols service')
 @Controller('rols')
 export class RolController {
   constructor(private readonly rolService: RolService) {}
