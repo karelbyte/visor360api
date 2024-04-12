@@ -4,14 +4,16 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Res,
   UseGuards,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { AuthGuard } from '../guards/auth.guard';
 import { SigcService } from '../services/sigc.service';
 import { UsersService } from '../services/users.service';
 import { SubordinatesService } from '../services/subordinate.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-
+import { Workbook } from 'exceljs';
 @ApiBearerAuth()
 @ApiTags('Sigc service')
 @Controller('sigc')
@@ -20,7 +22,7 @@ export class SigcController {
     private readonly sigcService: SigcService,
     private readonly userService: UsersService,
     private readonly subordinateService: SubordinatesService,
-  ) {}
+  ) { }
 
   @HttpCode(HttpStatus.OK)
   @Get('/deposits/total/:id')
@@ -186,5 +188,46 @@ export class SigcController {
       const params = JSON.stringify(subordinatesCodes);
       return await this.sigcService.cancelMultiParam(btoa(params));
     }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/product_xls/:id')
+  /*  @UseGuards(AuthGuard) */
+  async getProductXls(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<any> {
+    const user = await this.userService.findOneById(id);
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet('exceljs-example');
+
+    worksheet.columns = [
+      { header: 'Periodo', key: 'periodo' },
+      { header: 'Name', key: 'name' },
+    ];
+
+    const cancelSingle = await this.sigcService.cancelSingleParam(
+      btoa(user.code),
+    );
+
+    const decryObject = atob(cancelSingle.response).replace(/\\/g, '');
+
+    const clearString =
+      decryObject[0] == '"'
+        ? decryObject.substring(1, decryObject.length - 1)
+        : decryObject;
+
+    const data = JSON.parse(clearString);
+
+    console.log(clearString);
+
+    data.forEach((val: any) => {
+      worksheet.addRow(val);
+    });
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    return res
+      .set('Content-Disposition', `attachment; filename=example.xlsx`)
+      .send(buffer);
   }
 }
