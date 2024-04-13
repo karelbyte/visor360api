@@ -11,8 +11,9 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   const configService = app.get(ConfigService);
+  const hostname = configService.get<string>('HOSTNAME');
   const port = configService.get<number>('PORT');
-
+  console.log(`Corriendo en IP: ${hostname}:${port}`);
   const config = new DocumentBuilder()
     .setTitle('SIGC API')
     .setDescription('Sistema integral de gestion de comercial.')
@@ -23,6 +24,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config, {});
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(port);
+  await app.listen(port, hostname);
 }
 bootstrap();
