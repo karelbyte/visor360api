@@ -77,6 +77,7 @@ export class AuthService {
       );
     }
     return {
+      rol: user.rol.code,
       status: 200,
     };
   }
