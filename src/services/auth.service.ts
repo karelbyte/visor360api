@@ -86,10 +86,8 @@ export class AuthService {
     if (!user || user.password === null || !user.is_active) {
       throw new HttpException('El usuario no existe o esta inactivo', 302);
     }
-    const isSamePassword = await bcrypt.compare(
-      userData.password,
-      user.password,
-    );
+    const password = atob(userData.password);
+    const isSamePassword = await bcrypt.compare(password, user.password);
     if (!isSamePassword) {
       throw new UnauthorizedException();
     }

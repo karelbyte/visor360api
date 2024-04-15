@@ -133,11 +133,12 @@ export class UsersService {
   }
 
   async create(userData: UserCreateDto): Promise<User> {
-    userData.is_active = userData.is_active || true;
+    userData.is_active = false;
     userData['created_at'] = new Date();
     userData['updated_at'] = new Date();
     if (userData.password) {
-      userData.password = await bcrypt.hash(userData.password, 10);
+      const password = atob(userData.password);
+      userData.password = await bcrypt.hash(password, 10);
     }
     const user = await this.usersRepository.save(userData);
     const credentialsLog = {

@@ -154,7 +154,6 @@ export class UsersController {
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiResponse({ status: 200, type: UserDto })
   @Post()
-  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   async createUser(@Body() createUserDto: UserCreateDto): Promise<UserDto> {
     const user = await this.usersService.create(createUserDto);
