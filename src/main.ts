@@ -11,7 +11,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   const configService = app.get(ConfigService);
-  const hostname = configService.get<string>('HOSTNAME');
+  const hostname = configService.get<string>('HOSTDEPLOY');
   const port = configService.get<number>('PORT');
   console.log(`Corriendo en IP: ${hostname}:${port}`);
   const config = new DocumentBuilder()
