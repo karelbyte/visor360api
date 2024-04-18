@@ -31,6 +31,9 @@ export class UsersService {
     const options: FindManyOptions<User> = {
       relations: {
         rol: true,
+        leaders: {
+          boss: true,
+        },
       },
       order: {
         created_at: 'ASC',
@@ -103,7 +106,14 @@ export class UsersService {
       },
       relations: {
         rol: true,
-        leader: true,
+        leaders: {
+          boss: {
+            rol: true,
+            leaders: {
+              boss: true,
+            },
+          },
+        },
       },
     });
   }
@@ -115,7 +125,10 @@ export class UsersService {
       },
       relations: {
         rol: true,
-        leader: true,
+        subordinates: true,
+        leaders: {
+          boss: true,
+        },
       },
     });
   }

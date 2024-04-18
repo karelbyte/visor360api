@@ -6,6 +6,8 @@ import {
   OneToMany,
   OneToOne,
   JoinColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Subordinate } from './subordinate.entity';
 import { Rol } from './rol.entity';
@@ -71,6 +73,12 @@ export class User {
     name: 'boss_id',
   })
   leader: User;
+
+  @OneToOne(() => Subordinate, (subordinate) => subordinate.boss_id)
+  boss: User;
+
+  @OneToMany(() => Subordinate, (subordinate) => subordinate.user)
+  leaders: User[];
 
   @OneToMany(() => Subordinate, (subordinate) => subordinate.user)
   subordinates: Subordinate[];

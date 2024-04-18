@@ -162,7 +162,7 @@ interface IUserDto {
   is_staff: boolean;
   boss_id: string;
   rol: RolDto;
-  leader: UserDto;
+  leaders: UserDto[];
   logins: number;
   created_at: Date;
   updated_at: Date;
@@ -196,7 +196,7 @@ export class UserDto {
   @IsString()
   boss_id: string;
   rol: RolDto;
-  leader: UserDto;
+  leaders: UserDto[];
   logins: number;
   created_at: Date;
   updated_at: Date;
@@ -211,7 +211,7 @@ export class UserDto {
     is_staff,
     boss_id,
     rol,
-    leader,
+    leaders,
     logins,
     created_at,
     updated_at,
@@ -226,7 +226,7 @@ export class UserDto {
     this.is_staff = is_staff;
     this.boss_id = boss_id;
     this.rol = rol;
-    this.leader = leader;
+    this.leaders = leaders;
     this.logins = logins;
     this.created_at = created_at;
     this.updated_at = updated_at;
@@ -235,5 +235,5 @@ export class UserDto {
 
 export interface UserLogedDto extends UserDto {
   token: string;
-  leader: UserDto;
+  leaders: UserDto[];
 }

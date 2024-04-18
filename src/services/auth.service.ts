@@ -55,7 +55,7 @@ export class LoginResponseDto implements UserDto {
   @IsString()
   token: string;
   @ApiProperty()
-  leader: UserDto | null;
+  leaders: UserDto[] | null;
 }
 
 @Injectable()
@@ -63,7 +63,7 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-  ) { }
+  ) {}
 
   async canLogin(userData: UserLoginDto) {
     const user = await this.usersService.findOneByEmail(userData.email);
@@ -96,10 +96,14 @@ export class AuthService {
       id: user.id,
       logins: user.logins + 1,
     });
+    const leadersMapped =
+      user.leaders && user.leaders.length > 0
+        ? user.leaders.map((leader) => new UserDto(leader.boss))
+        : [];
     const response: LoginResponseDto = {
       token: await this.jwtService.signAsync(payload),
       ...new UserDto(user),
-      leader: user.leader ? new UserDto(user.leader) : null,
+      leaders: leadersMapped,
     };
 
     return response;

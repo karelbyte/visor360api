@@ -24,6 +24,10 @@ export class Subordinate {
   @Column()
   public updated_at: Date;
 
+  @ManyToOne(() => User, (user) => user.leaders)
+  @JoinColumn({ name: 'boss_id' })
+  boss: User;
+
   @ManyToOne(() => User, (user) => user.subordinates)
   @JoinColumn({ name: 'user_id' })
   user: User;

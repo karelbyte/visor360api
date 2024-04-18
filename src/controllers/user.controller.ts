@@ -49,9 +49,16 @@ export class UsersController {
 
   formatResponse(result: User[], total: number, limit: number) {
     const dataMapping = result.map((user: User) => {
-      const { leader, ...partialUser } = user;
-      const leaderMapped = leader ? new UserDto(leader) : null;
-      return new UserDto({ ...partialUser, leader: leaderMapped });
+      const { leaders, ...partialUser } = user;
+      const constPossibleLeaders = leaders
+        ? leaders.filter((leader) => leader.boss_id !== null)
+        : [];
+
+      const leadersMapped =
+        constPossibleLeaders && constPossibleLeaders.length > 0
+          ? constPossibleLeaders.map((leader) => new UserDto(leader.boss))
+          : [];
+      return new UserDto({ ...partialUser, leaders: leadersMapped });
     });
     return {
       data: dataMapping,
@@ -147,7 +154,16 @@ export class UsersController {
   @UseGuards(AuthGuard)
   async getUserById(@Param('id') id: string): Promise<UserDto> {
     const user = await this.usersService.findOneById(id);
-    return new UserDto(user);
+    const { leaders, ...partialUser } = user;
+    const constPossibleLeaders = leaders
+      ? leaders.filter((leader) => leader.boss_id !== null)
+      : [];
+
+    const leadersMapped =
+      constPossibleLeaders && constPossibleLeaders.length > 0
+        ? constPossibleLeaders.map((leader) => new UserDto(leader.boss))
+        : [];
+    return new UserDto({ ...partialUser, leaders: leadersMapped });
   }
 
   @ApiOperation({ summary: 'Create user' })
@@ -168,8 +184,15 @@ export class UsersController {
   @UseGuards(AuthGuard)
   async updateUser(@Body() updateUserDto: UserUpdateDto): Promise<UserDto> {
     const user = await this.usersService.update(updateUserDto);
-    const { leader, ...partialUser } = user;
-    const leaderMapped = leader ? new UserDto(leader) : null;
-    return new UserDto({ ...partialUser, leader: leaderMapped });
+    const { leaders, ...partialUser } = user;
+    const constPossibleLeaders = leaders
+      ? leaders.filter((leader) => leader.boss_id !== null)
+      : [];
+
+    const leadersMapped =
+      constPossibleLeaders && constPossibleLeaders.length > 0
+        ? constPossibleLeaders.map((leader) => new UserDto(leader.boss))
+        : [];
+    return new UserDto({ ...partialUser, leaders: leadersMapped });
   }
 }

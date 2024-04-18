@@ -138,15 +138,27 @@ export class SubordinatesService {
       relations: {
         user: {
           rol: true,
-          leader: true,
+          leaders: {
+            boss: true,
+          },
         },
       },
     });
-    let data = this.getSubordinateByTerm(
+    const subordinates = this.getSubordinateByTerm(
       id,
       (subordinate: Subordinate) => subordinate.user,
       allData,
     );
+
+    const idsUniques = new Set();
+
+    let data = subordinates.filter((objeto) => {
+      if (!idsUniques.has(objeto.id)) {
+        idsUniques.add(objeto.id);
+        return true;
+      }
+      return false;
+    });
 
     const init = (page - 1) * limit;
     const end = page * limit;
@@ -170,6 +182,7 @@ export class SubordinatesService {
         user: true,
       },
     });
+    console.log(allData);
     return this.getSubordinateByTerm(
       boss_id,
       (subordinate) => subordinate.user.code,

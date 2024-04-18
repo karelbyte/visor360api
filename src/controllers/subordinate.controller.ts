@@ -30,12 +30,12 @@ export interface IGetUsersResponse {
 @ApiBearerAuth()
 @ApiTags('Subordinates service')
 @Controller('subordinates')
-@UseGuards(AuthGuard)
+/* @UseGuards(AuthGuard) */
 export class SubordinateController {
   constructor(
     private readonly subordinateService: SubordinatesService,
     private readonly userService: UsersService,
-  ) {}
+  ) { }
   @Get()
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
@@ -122,7 +122,9 @@ export class SubordinateController {
   @Get('/get-subordinate-codes/:id')
   @UseGuards(AuthGuard)
   async getSubordinates(@Param('id') id: string): Promise<string[]> {
-    return await this.subordinateService.getSubordinatesByBossOnlyCodes(id);
+    const allCodes =
+      await this.subordinateService.getSubordinatesByBossOnlyCodes(id);
+    return [...new Set(allCodes)];
   }
 
   @Get('/get-subordinate')
