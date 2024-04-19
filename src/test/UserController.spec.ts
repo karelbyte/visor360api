@@ -54,6 +54,8 @@ const mockUser = new User({
   boss_id: '2',
   rol: null,
   leader: null,
+  boss: null,
+  leaders: [],
   logins: 0,
   created_at: new Date(),
   updated_at: new Date(),
