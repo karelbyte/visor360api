@@ -96,9 +96,13 @@ export class AuthService {
       id: user.id,
       logins: user.logins + 1,
     });
+    const constPossibleLeaders = user.leaders
+      ? user.leaders.filter((leader) => leader.boss_id !== null)
+      : [];
+
     const leadersMapped =
-      user.leaders && user.leaders.length > 0
-        ? user.leaders.map((leader) => new UserDto(leader.boss))
+      constPossibleLeaders && constPossibleLeaders.length > 0
+        ? constPossibleLeaders.map((leader) => new UserDto(leader.boss))
         : [];
     const response: LoginResponseDto = {
       token: await this.jwtService.signAsync(payload),

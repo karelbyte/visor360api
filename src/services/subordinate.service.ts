@@ -139,7 +139,11 @@ export class SubordinatesService {
         user: {
           rol: true,
           leaders: {
-            boss: true,
+            boss: {
+              leaders: {
+                boss: true,
+              },
+            },
           },
         },
       },
