@@ -8,6 +8,11 @@
         "include": "/templates/**/*",
         "outDir": "dist/src/",
         "watchAssets": true
+      },
+      {
+        "include": "/ssl/**/*",
+        "outDir": "dist/src/",
+        "watchAssets": true
       }
     ],
     "watchAssets": true,

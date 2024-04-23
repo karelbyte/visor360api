@@ -9,7 +9,14 @@ import {
 } from '@nestjs/common';
 import { IPaginateParams, Visor360Service } from '../services/visor360.service';
 import { AuthGuard } from '../guards/auth.guard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiProperty,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiBearerAuth()
 @ApiTags('Visor360 service')
@@ -20,6 +27,7 @@ export class Visor360Controller {
   @HttpCode(HttpStatus.OK)
   @Get('/clients')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get all clients' })
   async getClients(@Query() params: IPaginateParams): Promise<any> {
     const { page, limit, search } = params;
     return await this.visor360Service.searchClient({ page, limit, search });
@@ -28,6 +36,7 @@ export class Visor360Controller {
   @HttpCode(HttpStatus.OK)
   @Get('/client_info/:search')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get client info' })
   async getClientInfo(@Param('search') search: string): Promise<any> {
     return await this.visor360Service.clientInfo(search);
   }
@@ -35,6 +44,7 @@ export class Visor360Controller {
   @HttpCode(HttpStatus.OK)
   @Get('/financial_information/:search')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get financial information' })
   async getFinancialInformation(@Param('search') search: string): Promise<any> {
     return await this.visor360Service.financialInformation(search);
   }
@@ -42,6 +52,7 @@ export class Visor360Controller {
   @HttpCode(HttpStatus.OK)
   @Get('/placements_position')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get placements position' })
   async getPlacementsPosition(@Query() params: IPaginateParams): Promise<any> {
     const { page, limit, search } = params;
     return await this.visor360Service.placementsPosition({
@@ -54,6 +65,7 @@ export class Visor360Controller {
   @HttpCode(HttpStatus.OK)
   @Get('/catchments_position')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get catchment position' })
   async getCatchmentsPosition(@Query() params: IPaginateParams): Promise<any> {
     const { page, limit, search } = params;
     return await this.visor360Service.catchmentsPosition({
@@ -66,9 +78,10 @@ export class Visor360Controller {
   @HttpCode(HttpStatus.OK)
   @Get('/cc_position')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get credit card position' })
   async getCCposition(@Query() params: IPaginateParams): Promise<any> {
     const { page, limit, search } = params;
-    return await this.visor360Service.ccPosition({
+    return await this.visor360Service.creditCardPosition({
       page,
       limit,
       search,
@@ -77,6 +90,7 @@ export class Visor360Controller {
   @HttpCode(HttpStatus.OK)
   @Get('/consolidate_position/:search')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get consolidate position' })
   async getConsolidatePosition(@Param('search') search: string): Promise<any> {
     return await this.visor360Service.consolidatePosition(search);
   }
@@ -84,6 +98,7 @@ export class Visor360Controller {
   @HttpCode(HttpStatus.OK)
   @Get('/pqr_petition_single_param/:search')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get PQR petition with single code' })
   async getPqrPetitionSingleParam(
     @Param('search') search: string,
   ): Promise<any> {
@@ -93,6 +108,7 @@ export class Visor360Controller {
   @HttpCode(HttpStatus.OK)
   @Get('/pqr_claim_single_param/:search')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get PQR claim with single code' })
   async getPqrClaimSingleParam(@Param('search') search: string): Promise<any> {
     return await this.visor360Service.pqrClaimSingleParam(search);
   }
@@ -100,6 +116,7 @@ export class Visor360Controller {
   @HttpCode(HttpStatus.OK)
   @Get('/pqr_complaint_single_param/:search')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get PQR complaint with single code' })
   async getPqrComplaintSingleParam(
     @Param('search') search: string,
   ): Promise<any> {

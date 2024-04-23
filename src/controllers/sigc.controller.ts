@@ -12,7 +12,14 @@ import { AuthGuard } from '../guards/auth.guard';
 import { SigcService } from '../services/sigc.service';
 import { UsersService } from '../services/users.service';
 import { SubordinatesService } from '../services/subordinate.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiProperty,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Workbook } from 'exceljs';
 @ApiBearerAuth()
 @ApiTags('Sigc service')
@@ -27,6 +34,7 @@ export class SigcController {
   @HttpCode(HttpStatus.OK)
   @Get('/deposits/total/:id')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get deposits total by user id' })
   async getDepositsTotal(@Param('id') id: string): Promise<any> {
     const user = await this.userService.findOneById(id);
     if (user.rol.code === 'commercial') {
@@ -42,6 +50,7 @@ export class SigcController {
   @HttpCode(HttpStatus.OK)
   @Get('/placements/total/:id')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get placements total by user id' })
   async getPlacementsTotal(@Param('id') id: string): Promise<any> {
     const user = await this.userService.findOneById(id);
     if (user.rol.code === 'commercial') {
@@ -57,6 +66,7 @@ export class SigcController {
   @HttpCode(HttpStatus.OK)
   @Get('/placements/:id')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get placements by user id' })
   async getPlacements(@Param('id') id: string): Promise<any> {
     const user = await this.userService.findOneById(id);
     if (user.rol.code === 'commercial') {
@@ -72,6 +82,7 @@ export class SigcController {
   @HttpCode(HttpStatus.OK)
   @Get('/captures/:id')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get captures by user id' })
   async getCaptures(@Param('id') id: string): Promise<any> {
     const user = await this.userService.findOneById(id);
     if (user.rol.code === 'commercial') {
@@ -87,6 +98,7 @@ export class SigcController {
   @HttpCode(HttpStatus.OK)
   @Get('/deposits/:id')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get deposits by user id' })
   async getDeposits(@Param('id') id: string): Promise<any> {
     const user = await this.userService.findOneById(id);
     if (user.rol.code === 'commercial') {
@@ -102,6 +114,7 @@ export class SigcController {
   @HttpCode(HttpStatus.OK)
   @Get('/deposits-top-10/:id')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get deposits top 10 by user id' })
   async getDepositsTop10(@Param('id') id: string): Promise<any> {
     const user = await this.userService.findOneById(id);
     if (user.rol.code === 'commercial') {
@@ -116,6 +129,7 @@ export class SigcController {
   @HttpCode(HttpStatus.OK)
   @Get('/vinculations-top-10/:id')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get vinculations top 10 by user id' })
   async getVinculationsTop10(@Param('id') id: string): Promise<any> {
     const user = await this.userService.findOneById(id);
     if (user.rol.code === 'commercial') {
@@ -133,6 +147,7 @@ export class SigcController {
   @HttpCode(HttpStatus.OK)
   @Get('/assets-top-10/:id')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get assets top 10 by user id' })
   async getAssetsTop10(@Param('id') id: string): Promise<any> {
     const user = await this.userService.findOneById(id);
     if (user.rol.code === 'commercial') {
@@ -148,6 +163,7 @@ export class SigcController {
   @HttpCode(HttpStatus.OK)
   @Get('/all-expiration/:id')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get all expiration by user id' })
   async getExpirationAll(@Param('id') id: string): Promise<any> {
     const user = await this.userService.findOneById(id);
     if (user.rol.code === 'commercial') {
@@ -163,6 +179,7 @@ export class SigcController {
   @HttpCode(HttpStatus.OK)
   @Get('/financial/:id')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get financial by user id' })
   async getFinancial(@Param('id') id: string): Promise<any> {
     const user = await this.userService.findOneById(id);
     if (user.rol.code === 'commercial') {
@@ -178,6 +195,7 @@ export class SigcController {
   @HttpCode(HttpStatus.OK)
   @Get('/product_cancelation/:id')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get product cancelation by user id' })
   async getProductCancelation(@Param('id') id: string): Promise<any> {
     const user = await this.userService.findOneById(id);
     if (user.rol.code === 'commercial') {
@@ -193,6 +211,7 @@ export class SigcController {
   @HttpCode(HttpStatus.OK)
   @Get('/product_xls/:id')
   /*  @UseGuards(AuthGuard) */
+  @ApiOperation({ summary: 'Get product report in xls by user id' })
   async getProductXls(
     @Param('id') id: string,
     @Res() res: Response,

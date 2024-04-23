@@ -186,7 +186,6 @@ export class SubordinatesService {
         user: true,
       },
     });
-    console.log(allData);
     return this.getSubordinateByTerm(
       boss_id,
       (subordinate) => subordinate.user.code,

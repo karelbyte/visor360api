@@ -111,7 +111,7 @@ export class Visor360Service {
     }
   }
 
-  async ccPosition({ page, limit, search }: IPaginateParams) {
+  async creditCardPosition({ page, limit, search }: IPaginateParams) {
     const customParam = {
       num_client: search,
       page: Number(page),
@@ -150,7 +150,6 @@ export class Visor360Service {
       };
     }
   }
-
 
   async pqrPetitionSingleParam(param: string) {
     const customParam = {
