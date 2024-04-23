@@ -17,10 +17,16 @@ import {
   SubordinateDto,
   SubordinateUpdateDto,
 } from '../dtos/subordinate.dto';
-import { UserDto } from '../dtos/user.dto';
 import { UsersService } from '../services/users.service';
 import { DeleteResult } from 'typeorm';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiProperty,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 export interface IGetUsersResponse {
   data: any[];
@@ -30,7 +36,7 @@ export interface IGetUsersResponse {
 @ApiBearerAuth()
 @ApiTags('Subordinates service')
 @Controller('subordinates')
-/* @UseGuards(AuthGuard) */
+@UseGuards(AuthGuard)
 export class SubordinateController {
   constructor(
     private readonly subordinateService: SubordinatesService,
@@ -39,6 +45,7 @@ export class SubordinateController {
   @Get()
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get all users and subordinates' })
   async getAllUsersAndSubordinates(
     @Query() params: any,
   ): Promise<IGetUsersResponse> {
@@ -59,6 +66,7 @@ export class SubordinateController {
   @Post()
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Create a subordinate' })
   async createSubordinate(
     @Body() createSubordinateDto: SubordinateCreateDto,
   ): Promise<SubordinateDto> {
@@ -75,6 +83,7 @@ export class SubordinateController {
   @Post('delete')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Delete a subordinate' })
   async deleteSubordinate(
     @Body() createSubordinateDto: SubordinateCreateDto,
   ): Promise<DeleteResult> {
@@ -90,6 +99,7 @@ export class SubordinateController {
   @Put()
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Update a subordinate' })
   async updateSubordinateById(
     @Body() updateSubordinateDto: SubordinateUpdateDto,
   ): Promise<SubordinateDto> {
@@ -106,6 +116,7 @@ export class SubordinateController {
   @Post('/update/leader')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Update a user leader' })
   async updateSubordinateByUserID(
     @Body() updateSubordinateDto: SubordinateCreateDto,
   ): Promise<SubordinateDto> {
@@ -121,6 +132,7 @@ export class SubordinateController {
 
   @Get('/get-subordinate-codes/:id')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get user subordinates codes by user id' })
   async getSubordinates(@Param('id') id: string): Promise<string[]> {
     const allCodes =
       await this.subordinateService.getSubordinatesByBossOnlyCodes(id);
@@ -130,6 +142,7 @@ export class SubordinateController {
   @Get('/get-subordinate')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get user subordinate details by user id' })
   async findByUserId(@Query() params: any): Promise<IGetUsersResponse> {
     const { id, page, limit, fieldToFilter, term } = params;
     const [result, total] = await this.subordinateService.getSubordinatesByBoss(
@@ -149,6 +162,7 @@ export class SubordinateController {
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get user subordinates details by user id' })
   async getSubordinateById(@Param('id') id: number): Promise<SubordinateDto> {
     const subordinate = await this.subordinateService.findOneById(id);
     return new SubordinateDto(subordinate);
