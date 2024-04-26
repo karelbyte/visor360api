@@ -1,9 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { HttpRequestService } from './http.service';
 
+export interface IPaginateParamsWithSearch {
+  page: number;
+  limit: number;
+  search: string;
+  codes: string;
+}
 @Injectable()
 export class SigcService {
-  constructor(private httpService: HttpRequestService) {}
+  constructor(private httpService: HttpRequestService) { }
 
   async depositsTotalSingleParam(param: string) {
     const customParam = {
@@ -455,12 +461,462 @@ export class SigcService {
   }
   async cancelMultiParam(param: string) {
     const customParam = {
-      list_of_officers: param,
+      officer_code: param,
     };
     try {
       return await this.httpService.request(
         'post',
         '/SIGC_Panama/product_cancelation_top10_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async expirationDpfMonthSingleParam({
+    page,
+    limit,
+    search,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      search_param: search,
+      page: Number(page),
+      limit: Number(limit),
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/expiration_dpf_month_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async expirationDpfMonthMultiParam({
+    page,
+    limit,
+    search,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      search_param: search,
+      page: Number(page),
+      limit: Number(limit),
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/expiration_dpf_month_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async expirationDpfYearSingleParam({
+    page,
+    limit,
+    search,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      search_param: search,
+      page: Number(page),
+      limit: Number(limit),
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/expiration_dpf_year_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async expirationDpfYearMultiParam({
+    page,
+    limit,
+    search,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      search_param: search,
+      page: Number(page),
+      limit: Number(limit),
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/expiration_dpf_year_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async expirationCreditLineMonthSingleParam({
+    page,
+    limit,
+    search,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      search_param: search,
+      page: Number(page),
+      limit: Number(limit),
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/expiration_line_credit_month_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async expirationCreditLineMonthMultiParam({
+    page,
+    limit,
+    search,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      search_param: search,
+      page: Number(page),
+      limit: Number(limit),
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/expiration_line_credit_month_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async expirationCreditLineYearSingleParam({
+    page,
+    limit,
+    search,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      search_param: search,
+      page: Number(page),
+      limit: Number(limit),
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/expiration_line_credit_year_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async expirationCreditLineYearMultiParam({
+    page,
+    limit,
+    search,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      search_param: search,
+      page: Number(page),
+      limit: Number(limit),
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/expiration_line_credit_year_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async expirationClientMonthSingleParam({
+    page,
+    limit,
+    search,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      search_param: search,
+      page: Number(page),
+      limit: Number(limit),
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/expiration_client_month_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async expirationClientMonthMultiParam({
+    page,
+    limit,
+    search,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      search_param: search,
+      page: Number(page),
+      limit: Number(limit),
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/expiration_client_month_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async expirationClientYearSingleParam({
+    page,
+    limit,
+    search,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      search_param: search,
+      page: Number(page),
+      limit: Number(limit),
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/expiration_client_year_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async expirationClientYearMultiParam({
+    page,
+    limit,
+    search,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      search_param: search,
+      page: Number(page),
+      limit: Number(limit),
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/expiration_client_year_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  // -----------------
+
+  async expirationPlacementsMonthSingleParam({
+    page,
+    limit,
+    search,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      search_param: search,
+      page: Number(page),
+      limit: Number(limit),
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/expiration_placements_month_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async expirationPlacementsMonthMultiParam({
+    page,
+    limit,
+    search,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      search_param: search,
+      page: Number(page),
+      limit: Number(limit),
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/expiration_placements_month_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async expirationPlacementsYearSingleParam({
+    page,
+    limit,
+    search,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      search_param: search,
+      page: Number(page),
+      limit: Number(limit),
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/expiration_placements_year_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async expirationPlacementsYearMultiParam({
+    page,
+    limit,
+    search,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      search_param: search,
+      page: Number(page),
+      limit: Number(limit),
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/expiration_placements_year_multi_param/run',
         customParam,
         'sigc',
       );

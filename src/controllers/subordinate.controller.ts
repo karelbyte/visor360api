@@ -142,7 +142,7 @@ export class SubordinateController {
   @Get('/get-subordinate')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Get user subordinate details by user id' })
+  @ApiOperation({ summary: 'Get user subordinates details by user id' })
   async findByUserId(@Query() params: any): Promise<IGetUsersResponse> {
     const { id, page, limit, fieldToFilter, term } = params;
     const [result, total] = await this.subordinateService.getSubordinatesByBoss(
@@ -162,7 +162,7 @@ export class SubordinateController {
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Get user subordinates details by user id' })
+  @ApiOperation({ summary: 'Get user subordinate by id' })
   async getSubordinateById(@Param('id') id: number): Promise<SubordinateDto> {
     const subordinate = await this.subordinateService.findOneById(id);
     return new SubordinateDto(subordinate);
