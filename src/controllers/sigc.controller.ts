@@ -214,6 +214,7 @@ export class SigcController {
 
   @HttpCode(HttpStatus.OK)
   @Get('/expiration_dpf_month')
+  @ApiOperation({ summary: 'Get expiration dpf month by user id' })
   @UseGuards(AuthGuard)
   async getExpirationDpfMonth(
     @Query()
@@ -248,6 +249,7 @@ export class SigcController {
 
   @HttpCode(HttpStatus.OK)
   @Get('/expiration_dpf_year')
+  @ApiOperation({ summary: 'Get expiration dpf year by user id' })
   @UseGuards(AuthGuard)
   async getExpirationDpfYear(
     @Query()
@@ -283,6 +285,7 @@ export class SigcController {
   @HttpCode(HttpStatus.OK)
   @Get('/expiration_credit_line_month')
   @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get expiration credit line month by user id' })
   async getExpirationCreditLineMonth(
     @Query()
     params: {
@@ -316,6 +319,7 @@ export class SigcController {
 
   @HttpCode(HttpStatus.OK)
   @Get('/expiration_credit_line_year')
+  @ApiOperation({ summary: 'Get expiration dpf year by user id' })
   @UseGuards(AuthGuard)
   async getExpirationCreditLineYear(
     @Query()
@@ -350,6 +354,7 @@ export class SigcController {
 
   @HttpCode(HttpStatus.OK)
   @Get('/expiration_client_month')
+  @ApiOperation({ summary: 'Get expiration client month by user id' })
   @UseGuards(AuthGuard)
   async getExpirationClientMonth(
     @Query()
@@ -384,6 +389,7 @@ export class SigcController {
 
   @HttpCode(HttpStatus.OK)
   @Get('/expiration_client_year')
+  @ApiOperation({ summary: 'Get expiration clinet year by user id' })
   @UseGuards(AuthGuard)
   async getExpirationClientYear(
     @Query()
@@ -418,6 +424,7 @@ export class SigcController {
 
   @HttpCode(HttpStatus.OK)
   @Get('/expiration_placements_month')
+  @ApiOperation({ summary: 'Get expiration placements month by user id' })
   @UseGuards(AuthGuard)
   async getExpirationPlacementstMonth(
     @Query()
@@ -452,6 +459,7 @@ export class SigcController {
 
   @HttpCode(HttpStatus.OK)
   @Get('/expiration_placements_year')
+  @ApiOperation({ summary: 'Get expiration placements year by user id' })
   @UseGuards(AuthGuard)
   async getExpirationPlacementstYear(
     @Query()
