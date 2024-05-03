@@ -461,7 +461,7 @@ export class SigcService {
   }
   async cancelMultiParam(param: string) {
     const customParam = {
-      officer_code: param,
+      list_of_officers: param,
     };
     try {
       return await this.httpService.request(
