@@ -4,7 +4,7 @@ import { HttpRequestService } from './http.service';
 export interface IPaginateParamsWithSearch {
   page: number;
   limit: number;
-  search: string;
+  search?: string;
   codes: string;
 }
 @Injectable()
@@ -917,6 +917,190 @@ export class SigcService {
       return await this.httpService.request(
         'post',
         '/SIGC_Panama/expiration_placements_year_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async placementsFullSingleParam({
+    page,
+    limit,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      page: Number(page),
+      limit: Number(limit),
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/list_of_placements_pag_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async placementsFullMultiParam({
+    page,
+    limit,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      page: Number(page),
+      limit: Number(limit),
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/list_of_placements_pag_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async placementsFullXlsSingleParam({ codes }: { codes: string }) {
+    const customParam = {
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/list_of_placements_dwl_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async placementsFullXlsMultiParam({ codes }: { codes: string }) {
+    const customParam = {
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/list_of_placements_dwl_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async catchmentsFullSingleParam({
+    page,
+    limit,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      page: Number(page),
+      limit: Number(limit),
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/list_of_catchments_pag_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async catchmentsFullMultiParam({
+    page,
+    limit,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      page: Number(page),
+      limit: Number(limit),
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/list_of_catchments_pag_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async catchmentsFullXlsSingleParam({ codes }: { codes: string }) {
+    const customParam = {
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/list_of_catchments_dwl_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async catchmentsFullXlsMultiParam({ codes }: { codes: string }) {
+    const customParam = {
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/list_of_catchments_dwl_multi_param/run',
         customParam,
         'sigc',
       );

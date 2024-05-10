@@ -493,27 +493,75 @@ export class SigcController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/product_xls/:id')
-  /*  @UseGuards(AuthGuard) */
-  @ApiOperation({ summary: 'Get product report in xls by user id' })
-  async getProductXls(
+  @Get('/placements_full')
+  @ApiOperation({ summary: 'Get placements full by id' })
+  @UseGuards(AuthGuard)
+  async getPlacementsFull(
+    @Query()
+    params: {
+      page: number;
+      limit: number;
+      id: string;
+    },
+  ): Promise<any> {
+    const { page, limit, id } = params;
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.placementsFullSingleParam({
+        page,
+        limit,
+        codes: btoa(user.code),
+      });
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.placementsFullMultiParam({
+        page,
+        limit,
+        codes: btoa(params),
+      });
+    }
+  }
+  @HttpCode(HttpStatus.OK)
+  @Get('/placements_full_xls/:id')
+  @ApiOperation({ summary: 'Get placements full report in xls by user id' })
+  async getPlacementsXls(
     @Param('id') id: string,
     @Res() res: Response,
   ): Promise<any> {
-    const user = await this.userService.findOneById(id);
-    const workbook = new Workbook();
-    const worksheet = workbook.addWorksheet('exceljs-example');
+    let payload: any;
 
-    worksheet.columns = [
-      { header: 'Periodo', key: 'periodo' },
-      { header: 'Name', key: 'name' },
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      payload = await this.sigcService.placementsFullXlsSingleParam({
+        codes: btoa(user.code),
+      });
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      payload = await this.sigcService.placementsFullXlsMultiParam({
+        codes: btoa(params),
+      });
+    }
+
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet('datos');
+    const columns = [
+      { header: 'Cliente', key: 'nombre_cliente' },
+      { header: 'Num. Cliente', key: 'num_cliente' },
+      { header: 'Producto', key: 'tipo_producto' },
+      { header: 'Tipo de producto', key: 'cod_prod' },
+      { header: 'Tipo sub producto', key: 'cod_subprod' },
+      { header: 'Numero de cuenta', key: 'num_cuenta' },
+      { header: 'Fecha Apertura', key: 'fecha_apertura' },
+      { header: 'Fecha Vencimiento', key: 'fecha_vencimiento' },
+      { header: 'Monto original', key: 'monto_original' },
     ];
 
-    const cancelSingle = await this.sigcService.cancelSingleParam(
-      btoa(user.code),
-    );
-
-    const decryObject = atob(cancelSingle.response).replace(/\\/g, '');
+    worksheet.columns = columns;
+    const decryObject = atob(payload.response).replace(/\\/g, '');
 
     const clearString =
       decryObject[0] == '"'
@@ -522,15 +570,132 @@ export class SigcController {
 
     const data = JSON.parse(clearString);
 
-    console.log(clearString);
+    data.forEach((val: any) => {
+      worksheet.addRow(val);
+    });
+    for (let i = 1; i <= columns.length; i++) {
+      const maxLength = Math.max(
+        ...worksheet
+          .getColumn(i)
+          .values.filter((item) => typeof item === 'string')
+          .map((value) => (value ? value.toString().length : 0)),
+      );
+      worksheet.getColumn(i).width = maxLength < 10 ? 10 : maxLength;
+    }
+    worksheet.getRow(1).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'a4a7ab' },
+    };
+    worksheet.getColumn(9).numFmt = '#,##0';
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    return res
+      .set('Content-Disposition', `attachment; filename=Colocaciones.xlsx`)
+      .send(buffer);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/catchments_full')
+  @ApiOperation({ summary: 'Get catchments full by id' })
+  @UseGuards(AuthGuard)
+  async getCatchmentsFull(
+    @Query()
+    params: {
+      page: number;
+      limit: number;
+      id: string;
+    },
+  ): Promise<any> {
+    const { page, limit, id } = params;
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.catchmentsFullSingleParam({
+        page,
+        limit,
+        codes: btoa(user.code),
+      });
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.catchmentsFullMultiParam({
+        page,
+        limit,
+        codes: btoa(params),
+      });
+    }
+  }
+  @HttpCode(HttpStatus.OK)
+  @Get('/catchments_full_xls/:id')
+  @ApiOperation({ summary: 'Get catchments full report in xls by user id' })
+  async getCatchmentXls(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<any> {
+    let payload: any;
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      payload = await this.sigcService.catchmentsFullXlsSingleParam({
+        codes: btoa(user.code),
+      });
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      payload = await this.sigcService.catchmentsFullXlsMultiParam({
+        codes: btoa(params),
+      });
+    }
+
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet('datos');
+
+    const columns = [
+      { header: 'Cliente', key: 'nombre_cliente' },
+      { header: 'Num. Cliente', key: 'num_cliente' },
+      { header: 'Producto', key: 'tipo_producto' },
+      { header: 'Tipo de producto', key: 'cod_prod' },
+      { header: 'Tipo sub producto', key: 'cod_subprod' },
+      { header: 'Numero de cuenta', key: 'num_cuenta' },
+      { header: 'Fecha Apertura', key: 'fecha_apertura' },
+      { header: 'Fecha Vencimiento', key: 'fecha_vencimiento' },
+      { header: 'Monto original', key: 'monto_original' },
+    ];
+    worksheet.columns = columns;
+
+    const decryObject = atob(payload.response).replace(/\\/g, '');
+
+    const clearString =
+      decryObject[0] == '"'
+        ? decryObject.substring(1, decryObject.length - 1)
+        : decryObject;
+
+    const data = JSON.parse(clearString);
 
     data.forEach((val: any) => {
       worksheet.addRow(val);
     });
+
+    for (let i = 1; i <= columns.length; i++) {
+      const maxLength = Math.max(
+        ...worksheet
+          .getColumn(i)
+          .values.filter((item) => typeof item === 'string')
+          .map((value) => (value ? value.toString().length : 0)),
+      );
+      worksheet.getColumn(i).width = maxLength < 10 ? 10 : maxLength;
+    }
+    worksheet.getRow(1).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'a4a7ab' },
+    };
+    worksheet.getColumn(9).numFmt = '#,##0';
     const buffer = await workbook.xlsx.writeBuffer();
 
     return res
-      .set('Content-Disposition', `attachment; filename=example.xlsx`)
+      .set('Content-Disposition', `attachment; filename=Captaciones.xlsx`)
       .send(buffer);
   }
 }
