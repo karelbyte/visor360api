@@ -587,6 +587,7 @@ export class SigcController {
       pattern: 'solid',
       fgColor: { argb: 'a4a7ab' },
     };
+    worksheet.getColumn(6).numFmt = '0';
     worksheet.getColumn(9).numFmt = '#,##0';
     const buffer = await workbook.xlsx.writeBuffer();
 
@@ -656,11 +657,9 @@ export class SigcController {
       { header: 'Num. Cliente', key: 'num_cliente' },
       { header: 'Producto', key: 'tipo_producto' },
       { header: 'Tipo de producto', key: 'cod_prod' },
-      { header: 'Tipo sub producto', key: 'cod_subprod' },
       { header: 'Numero de cuenta', key: 'num_cuenta' },
       { header: 'Fecha Apertura', key: 'fecha_apertura' },
       { header: 'Fecha Vencimiento', key: 'fecha_vencimiento' },
-      { header: 'Monto original', key: 'monto_original' },
     ];
     worksheet.columns = columns;
 
@@ -691,7 +690,7 @@ export class SigcController {
       pattern: 'solid',
       fgColor: { argb: 'a4a7ab' },
     };
-    worksheet.getColumn(9).numFmt = '#,##0';
+    worksheet.getColumn(5).numFmt = '0';
     const buffer = await workbook.xlsx.writeBuffer();
 
     return res
