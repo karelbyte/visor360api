@@ -655,10 +655,10 @@ export class SigcController {
     const columns = [
       { header: 'Cliente', key: 'nombre_cliente' },
       { header: 'Num. Cliente', key: 'num_cliente' },
-      { header: 'Producto', key: 'tipo_producto' },
-      { header: 'Tipo de producto', key: 'cod_prod' },
+      { header: 'Producto', key: 'producto' },
+      { header: 'Tipo de producto', key: 'cod_producto' },
       { header: 'Numero de cuenta', key: 'num_cuenta' },
-      { header: 'Fecha Apertura', key: 'fecha_apertura' },
+      { header: 'Fecha Apertura', key: 'fec_apertura' },
       { header: 'Fecha Vencimiento', key: 'fecha_vencimiento' },
     ];
     worksheet.columns = columns;
