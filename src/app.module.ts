@@ -14,6 +14,7 @@ import { Visor360Module } from './modules/visor360.module';
 import { RolModule } from './modules/rol.module';
 import { SigcModule } from './modules/sigc.module';
 import { AppMailerModule } from './modules/mailer.module';
+import { ReportModule } from './modules/report.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { AppMailerModule } from './modules/mailer.module';
     RolModule,
     SubordinateModule,
     GlobalHttpModule,
+    ReportModule,
   ],
   controllers: [AppController],
   providers: [AppService],
