@@ -9,9 +9,13 @@ export class ReportService {
     @InjectRepository(Report)
     private reporRepository: Repository<Report>,
     private http: HttpRequestService,
-  ) {}
+  ) { }
 
   async getAll() {
-    return await this.reporRepository.find();
+    return await this.reporRepository.find({
+      relations: {
+        fields: true,
+      },
+    });
   }
 }

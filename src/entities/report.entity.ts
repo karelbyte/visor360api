@@ -4,11 +4,8 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   OneToMany,
-  OneToOne,
-  JoinColumn,
-  ManyToMany,
-  JoinTable,
 } from 'typeorm';
+import { ReportField } from './reportfield.entity';
 
 @Entity('reports')
 export class Report {
@@ -29,6 +26,9 @@ export class Report {
 
   @Column()
   public updated_at: Date;
+
+  @OneToMany(() => ReportField, (field) => field.report)
+  fields: ReportField[];
 
   constructor(partial: Report) {
     Object.assign(this, partial);
