@@ -6,6 +6,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { ReportField } from './reportfield.entity';
+import { ReportFilter } from './reportfilter.entity';
 
 @Entity('reports')
 export class Report {
@@ -29,6 +30,9 @@ export class Report {
 
   @OneToMany(() => ReportField, (field) => field.report)
   fields: ReportField[];
+
+  @OneToMany(() => ReportFilter, (filter) => filter.report)
+  filters: ReportFilter[];
 
   constructor(partial: Report) {
     Object.assign(this, partial);

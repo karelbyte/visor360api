@@ -15,6 +15,7 @@ export class ReportService {
     return await this.reporRepository.find({
       relations: {
         fields: true,
+        filters: true,
       },
     });
   }
