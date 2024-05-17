@@ -33,7 +33,7 @@ export class SigcController {
     private readonly sigcService: SigcService,
     private readonly userService: UsersService,
     private readonly subordinateService: SubordinatesService,
-  ) { }
+  ) {}
 
   @HttpCode(HttpStatus.OK)
   @Get('/deposits/total/:id')
@@ -493,6 +493,59 @@ export class SigcController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @Get('/assets_group/:id')
+  @ApiOperation({ summary: 'Get assets group by id' })
+  @UseGuards(AuthGuard)
+  async getAssetsGroup(@Param('id') id: string): Promise<any> {
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.assetsGroupSingleParam({
+        codes: btoa(user.code),
+      });
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      console.log(subordinatesCodes);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.assetsGroupMultiParam({
+        codes: btoa(params),
+      });
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/assets_full')
+  @ApiOperation({ summary: 'Get assets full by id' })
+  @UseGuards(AuthGuard)
+  async getAssetsFull(
+    @Query()
+    params: {
+      page: number;
+      limit: number;
+      id: string;
+    },
+  ): Promise<any> {
+    const { page, limit, id } = params;
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.assetsFullSingleParam({
+        page,
+        limit,
+        codes: btoa(user.code),
+      });
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.assetsFullMultiParam({
+        page,
+        limit,
+        codes: btoa(params),
+      });
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
   @Get('/placements_full')
   @ApiOperation({ summary: 'Get placements full by id' })
   @UseGuards(AuthGuard)
@@ -523,6 +576,7 @@ export class SigcController {
       });
     }
   }
+
   @HttpCode(HttpStatus.OK)
   @Get('/placements_full_xls/:id')
   @ApiOperation({ summary: 'Get placements full report in xls by user id' })
