@@ -3,11 +3,7 @@ import {
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  OneToMany,
-  OneToOne,
   JoinColumn,
-  ManyToMany,
-  JoinTable,
   ManyToOne,
 } from 'typeorm';
 import { Report } from './report.entity';

@@ -1244,4 +1244,137 @@ export class SigcService {
       };
     }
   }
+
+  // aqui
+  async passivesGroupSingleParam({ codes }: { codes: string }) {
+    const customParam = {
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/pasive_groupby_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async passivesGroupMultiParam({ codes }: { codes: string }) {
+    const customParam = {
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/pasive_groupby_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async passivesFullSingleParam({
+    page,
+    limit,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      page: Number(page),
+      limit: Number(limit),
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/pasive_pag_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async passivesFullMultiParam({
+    page,
+    limit,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      page: Number(page),
+      limit: Number(limit),
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/pasive_pag_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async passivesFullXlsSingleParam({ codes }: { codes: string }) {
+    const customParam = {
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/pasive_dwl_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async passivesFullXlsMultiParam({ codes }: { codes: string }) {
+    const customParam = {
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/pasive_dwl_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
 }

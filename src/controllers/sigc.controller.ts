@@ -505,7 +505,6 @@ export class SigcController {
     } else {
       const subordinatesCodes =
         await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      console.log(subordinatesCodes);
       const params = JSON.stringify(subordinatesCodes);
       return await this.sigcService.assetsGroupMultiParam({
         codes: btoa(params),
@@ -544,6 +543,206 @@ export class SigcController {
       });
     }
   }
+  @HttpCode(HttpStatus.OK)
+  @Get('/assets_full_xls/:id')
+  @ApiOperation({ summary: 'Get assets full report in xls by user id' })
+  async getAssetsXls(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<any> {
+    let payload: any;
+
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      payload = await this.sigcService.assetsFullXlsSingleParam({
+        codes: btoa(user.code),
+      });
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      payload = await this.sigcService.assetsFullXlsMultiParam({
+        codes: btoa(params),
+      });
+    }
+
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet('datos');
+    const columns = [
+      { header: 'Producto', key: 'tipo_producto' },
+      { header: 'Cuenta', key: 'num_cuenta' },
+      { header: 'Cliente', key: 'nombre_cliente' },
+      { header: 'Numero Cliente', key: 'num_cliente' },
+      { header: 'Fecha letra', key: 'fecha_prox_pago' },
+      { header: 'Tasa', key: 'tasa' },
+      { header: 'Proximo pago', key: 'cuota' },
+      { header: 'Dias mora', key: 'dias_mora' },
+      { header: 'Monto Inicial', key: 'monto_original' },
+      { header: 'Saldo actual', key: 'saldo_capital' },
+    ];
+
+    worksheet.columns = columns;
+    const decryObject = atob(payload.response).replace(/\\/g, '');
+
+    const clearString =
+      decryObject[0] == '"'
+        ? decryObject.substring(1, decryObject.length - 1)
+        : decryObject;
+
+    const data = JSON.parse(clearString);
+
+    data.forEach((val: any) => {
+      worksheet.addRow(val);
+    });
+    for (let i = 1; i <= columns.length; i++) {
+      const maxLength = Math.max(
+        ...worksheet
+          .getColumn(i)
+          .values.filter((item) => typeof item === 'string')
+          .map((value) => (value ? value.toString().length : 0)),
+      );
+      worksheet.getColumn(i).width = maxLength < 10 ? 10 : maxLength;
+    }
+    worksheet.getRow(1).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'a4a7ab' },
+    };
+    worksheet.getColumn(9).numFmt = '#,##0';
+    worksheet.getColumn(10).numFmt = '#,##0';
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    return res
+      .set('Content-Disposition', `attachment; filename=actives.xlsx`)
+      .send(buffer);
+  }
+
+  //a qui
+  @HttpCode(HttpStatus.OK)
+  @Get('/passives_group/:id')
+  @ApiOperation({ summary: 'Get passives group by id' })
+  @UseGuards(AuthGuard)
+  async getPassivesGroup(@Param('id') id: string): Promise<any> {
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.passivesGroupSingleParam({
+        codes: btoa(user.code),
+      });
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.passivesGroupMultiParam({
+        codes: btoa(params),
+      });
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/passives_full')
+  @ApiOperation({ summary: 'Get passives full by id' })
+  @UseGuards(AuthGuard)
+  async getPassivesFull(
+    @Query()
+    params: {
+      page: number;
+      limit: number;
+      id: string;
+    },
+  ): Promise<any> {
+    const { page, limit, id } = params;
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.passivesFullSingleParam({
+        page,
+        limit,
+        codes: btoa(user.code),
+      });
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.passivesFullMultiParam({
+        page,
+        limit,
+        codes: btoa(params),
+      });
+    }
+  }
+  @HttpCode(HttpStatus.OK)
+  @Get('/passives_full_xls/:id')
+  @ApiOperation({ summary: 'Get passives full report in xls by user id' })
+  async getPassivesXls(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<any> {
+    let payload: any;
+
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      payload = await this.sigcService.assetsFullXlsSingleParam({
+        codes: btoa(user.code),
+      });
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      payload = await this.sigcService.assetsFullXlsMultiParam({
+        codes: btoa(params),
+      });
+    }
+
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet('datos');
+    const columns = [
+      { header: 'Producto', key: 'tipo_producto' },
+      { header: 'Cuenta', key: 'num_cuenta' },
+      { header: 'Cliente', key: 'nombre_cliente' },
+      { header: 'Numero Cliente', key: 'num_cliente' },
+      { header: 'Fecha letra', key: 'fecha_prox_pago' },
+      { header: 'Tasa', key: 'tasa' },
+      { header: 'Proximo pago', key: 'cuota' },
+      { header: 'Dias mora', key: 'dias_mora' },
+      { header: 'Monto Inicial', key: 'monto_original' },
+      { header: 'Saldo actual', key: 'saldo_capital' },
+    ];
+
+    worksheet.columns = columns;
+    const decryObject = atob(payload.response).replace(/\\/g, '');
+
+    const clearString =
+      decryObject[0] == '"'
+        ? decryObject.substring(1, decryObject.length - 1)
+        : decryObject;
+
+    const data = JSON.parse(clearString);
+
+    data.forEach((val: any) => {
+      worksheet.addRow(val);
+    });
+    for (let i = 1; i <= columns.length; i++) {
+      const maxLength = Math.max(
+        ...worksheet
+          .getColumn(i)
+          .values.filter((item) => typeof item === 'string')
+          .map((value) => (value ? value.toString().length : 0)),
+      );
+      worksheet.getColumn(i).width = maxLength < 10 ? 10 : maxLength;
+    }
+    worksheet.getRow(1).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'a4a7ab' },
+    };
+   // worksheet.getColumn(9).numFmt = '#,##0';
+    worksheet.getColumn(10).numFmt = '#,##0';
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    return res
+      .set('Content-Disposition', `attachment; filename=actives.xlsx`)
+      .send(buffer);
+  }
+  //hasta aqui
 
   @HttpCode(HttpStatus.OK)
   @Get('/placements_full')
