@@ -33,7 +33,7 @@ export class SigcController {
     private readonly sigcService: SigcService,
     private readonly userService: UsersService,
     private readonly subordinateService: SubordinatesService,
-  ) {}
+  ) { }
 
   @HttpCode(HttpStatus.OK)
   @Get('/deposits/total/:id')
@@ -680,14 +680,14 @@ export class SigcController {
 
     const user = await this.userService.findOneById(id);
     if (user.rol.code === 'commercial') {
-      payload = await this.sigcService.assetsFullXlsSingleParam({
+      payload = await this.sigcService.passivesFullXlsSingleParam({
         codes: btoa(user.code),
       });
     } else {
       const subordinatesCodes =
         await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
       const params = JSON.stringify(subordinatesCodes);
-      payload = await this.sigcService.assetsFullXlsMultiParam({
+      payload = await this.sigcService.passivesFullXlsMultiParam({
         codes: btoa(params),
       });
     }
@@ -695,16 +695,19 @@ export class SigcController {
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('datos');
     const columns = [
-      { header: 'Producto', key: 'tipo_producto' },
+      { header: 'Producto', key: 'producto' },
+      { header: 'Cod. Producto', key: 'cod_producto' },
       { header: 'Cuenta', key: 'num_cuenta' },
       { header: 'Cliente', key: 'nombre_cliente' },
       { header: 'Numero Cliente', key: 'num_cliente' },
-      { header: 'Fecha letra', key: 'fecha_prox_pago' },
-      { header: 'Tasa', key: 'tasa' },
-      { header: 'Proximo pago', key: 'cuota' },
-      { header: 'Dias mora', key: 'dias_mora' },
+      { header: 'Oficial cuenta', key: 'oficial_cuenta' },
+      { header: 'Fecha apertura', key: 'fec_apertura' },
+      { header: 'Fecha vencimiento', key: 'fecha_vencimiento' },
       { header: 'Monto Inicial', key: 'monto_original' },
-      { header: 'Saldo actual', key: 'saldo_capital' },
+      { header: 'Saldo cierre de mes', key: 'saldo_capital_ld_lm' },
+      { header: 'Saldo cierre de año', key: 'saldo_capital_ld_ly' },
+      { header: 'Saldo SD-LM', key: 'saldo_capital_sd_lm' },
+      { header: 'Tasa', key: 'tasa' },
     ];
 
     worksheet.columns = columns;
@@ -716,6 +719,8 @@ export class SigcController {
         : decryObject;
 
     const data = JSON.parse(clearString);
+
+    console.log(data);
 
     data.forEach((val: any) => {
       worksheet.addRow(val);
@@ -734,7 +739,7 @@ export class SigcController {
       pattern: 'solid',
       fgColor: { argb: 'a4a7ab' },
     };
-   // worksheet.getColumn(9).numFmt = '#,##0';
+    worksheet.getColumn(9).numFmt = '#,##0';
     worksheet.getColumn(10).numFmt = '#,##0';
     const buffer = await workbook.xlsx.writeBuffer();
 
@@ -742,7 +747,6 @@ export class SigcController {
       .set('Content-Disposition', `attachment; filename=actives.xlsx`)
       .send(buffer);
   }
-  //hasta aqui
 
   @HttpCode(HttpStatus.OK)
   @Get('/placements_full')
@@ -948,6 +952,229 @@ export class SigcController {
 
     return res
       .set('Content-Disposition', `attachment; filename=Captaciones.xlsx`)
+      .send(buffer);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/cancels_full')
+  @ApiOperation({ summary: 'Get cancels full by id' })
+  @UseGuards(AuthGuard)
+  async getCancelsFull(
+    @Query()
+    params: {
+      page: number;
+      limit: number;
+      id: string;
+    },
+  ): Promise<any> {
+    const { page, limit, id } = params;
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.cancelsFullSingleParam({
+        page,
+        limit,
+        codes: btoa(user.code),
+      });
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.cancelsFullMultiParam({
+        page,
+        limit,
+        codes: btoa(params),
+      });
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/cancels_full_xls/:id')
+  @ApiOperation({ summary: 'Get catchments full report in xls by user id' })
+  async getCancelstXls(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<any> {
+    let payload: any;
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      payload = await this.sigcService.cancelsFullXlsSingleParam({
+        codes: btoa(user.code),
+      });
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      payload = await this.sigcService.cancelsFullXlsMultiParam({
+        codes: btoa(params),
+      });
+    }
+
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet('datos');
+
+    const columns = [
+      { header: 'Num. Producto', key: 'num_cuenta' },
+      { header: 'Tipo de producto', key: 'tipo_producto' },
+      { header: 'Cliente', key: 'nombre_cliente' },
+      {
+        header: 'Fecha cancelación',
+        key: 'periodo',
+      },
+      { header: 'Num. Cliente', key: 'num_cliente' },
+    ];
+    worksheet.columns = columns;
+
+    const decryObject = atob(payload.response).replace(/\\/g, '');
+
+    const clearString =
+      decryObject[0] == '"'
+        ? decryObject.substring(1, decryObject.length - 1)
+        : decryObject;
+
+    const data = JSON.parse(clearString);
+
+    data.forEach((val: any) => {
+      worksheet.addRow(val);
+    });
+
+    for (let i = 1; i <= columns.length; i++) {
+      const maxLength = Math.max(
+        ...worksheet
+          .getColumn(i)
+          .values.filter((item) => typeof item === 'string')
+          .map((value) => (value ? value.toString().length : 0)),
+      );
+      worksheet.getColumn(i).width = maxLength < 10 ? 10 : maxLength;
+    }
+    worksheet.getRow(1).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'a4a7ab' },
+    };
+    worksheet.getColumn(1).numFmt = '0';
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    return res
+      .set('Content-Disposition', `attachment; filename=cancels.xlsx`)
+      .send(buffer);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/entailments_full')
+  @ApiOperation({ summary: 'Get Entailmants full by id' })
+  @UseGuards(AuthGuard)
+  async getEntailmantsFull(
+    @Query()
+    params: {
+      page: number;
+      limit: number;
+      id: string;
+    },
+  ): Promise<any> {
+    const { page, limit, id } = params;
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.sigcService.entailmentsFullSingleParam({
+        page,
+        limit,
+        codes: btoa(user.code),
+      });
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.sigcService.entailmentsFullMultiParam({
+        page,
+        limit,
+        codes: btoa(params),
+      });
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/entailments_full_xls/:id')
+  @ApiOperation({ summary: 'Get Entailmants full report in xls by user id' })
+  async getEntailmantsXls(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<any> {
+    let payload: any;
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      payload = await this.sigcService.entailmentsFullXlsSingleParam({
+        codes: btoa(user.code),
+      });
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      payload = await this.sigcService.entailmentsFullXlsMultiParam({
+        codes: btoa(params),
+      });
+    }
+
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet('datos');
+
+    const columns = [
+      { header: 'Código de Oficial', key: 'cod_oficial' },
+      { header: 'Nombre del Oficial', key: 'nombre_oficial' },
+      { header: 'Nombre del Cliente', key: 'nombre_cliente' },
+      { header: 'Identificación', key: 'identificacion' },
+      { header: 'Número de Cliente', key: 'num_cliente' },
+      { header: 'Tipo de Cliente', key: 'tipo_cliente_0' },
+      { header: 'Dirección', key: 'direccion' },
+      { header: 'Fecha de Vinculación', key: 'fecha_vinculacion' },
+      { header: 'Flag Mes Actual', key: 'FLG_MES_ACTUAL' },
+      { header: 'Teléfono Final', key: 'telefono_final' },
+      { header: 'Correo', key: 'correo' },
+      { header: 'Fecha de Última Actualización', key: 'fec_ult_act' },
+      { header: 'Riesgo AML', key: 'riesgo_aml' },
+      { header: 'Actividad de Cliente de Riesgo', key: 'act_cliente_riesgo' },
+      { header: 'Fecha de Próxima Actualización', key: 'fecha_prox_act' },
+      { header: 'Total Activos', key: 'total_activos' },
+      { header: 'Total Pasivos', key: 'total_pasivos' },
+      { header: 'Total Patrimonio', key: 'total_patrimonio' },
+    ];
+
+    worksheet.columns = columns;
+
+    const decryObject = atob(payload.response).replace(/\\/g, '');
+
+    const clearString =
+      decryObject[0] == '"'
+        ? decryObject.substring(1, decryObject.length - 1)
+        : decryObject;
+
+    const data = JSON.parse(clearString);
+
+    console.log(data);
+
+    data.forEach((val: any) => {
+      worksheet.addRow(val);
+    });
+
+    for (let i = 1; i <= columns.length; i++) {
+      const maxLength = Math.max(
+        ...worksheet
+          .getColumn(i)
+          .values.filter((item) => typeof item === 'string')
+          .map((value) => (value ? value.toString().length : 0)),
+      );
+      worksheet.getColumn(i).width = maxLength < 10 ? 10 : maxLength;
+    }
+    worksheet.getRow(1).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'a4a7ab' },
+    };
+    worksheet.getColumn(16).numFmt = '0';
+    worksheet.getColumn(17).numFmt = '0';
+    worksheet.getColumn(18).numFmt = '0';
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    return res
+      .set('Content-Disposition', `attachment; filename=cancels.xlsx`)
       .send(buffer);
   }
 }

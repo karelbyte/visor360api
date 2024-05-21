@@ -1377,4 +1377,188 @@ export class SigcService {
       };
     }
   }
+
+  async cancelsFullSingleParam({
+    page,
+    limit,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      page: Number(page),
+      limit: Number(limit),
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/product_cancelation_pag_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async cancelsFullMultiParam({
+    page,
+    limit,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      page: Number(page),
+      limit: Number(limit),
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/product_cancelation_pag_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async cancelsFullXlsSingleParam({ codes }: { codes: string }) {
+    const customParam = {
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/product_cancelation_dwl_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async cancelsFullXlsMultiParam({ codes }: { codes: string }) {
+    const customParam = {
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/product_cancelation_dwl_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async entailmentsFullSingleParam({
+    page,
+    limit,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      page: Number(page),
+      limit: Number(limit),
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/vinculations_pag_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async entailmentsFullMultiParam({
+    page,
+    limit,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      page: Number(page),
+      limit: Number(limit),
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/vinculations_pag_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async entailmentsFullXlsSingleParam({ codes }: { codes: string }) {
+    const customParam = {
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/vinculations_dwl_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async entailmentsFullXlsMultiParam({ codes }: { codes: string }) {
+    const customParam = {
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/vinculations_dwl_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
 }
