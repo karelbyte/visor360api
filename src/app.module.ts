@@ -15,6 +15,7 @@ import { RolModule } from './modules/rol.module';
 import { SigcModule } from './modules/sigc.module';
 import { AppMailerModule } from './modules/mailer.module';
 import { ReportModule } from './modules/report.module';
+import { InteractionsModule } from './modules/interactions.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { ReportModule } from './modules/report.module';
     SubordinateModule,
     GlobalHttpModule,
     ReportModule,
+    InteractionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
