@@ -27,7 +27,7 @@ export class InteractionsController {
   @Get('/pqr_details')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get PQrs details by user id' })
-  async getDepositsTotal(
+  async getPqrDetailsTotal(
     @Query()
     params: {
       page: number;
@@ -48,6 +48,38 @@ export class InteractionsController {
         await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
       const params = JSON.stringify(subordinatesCodes);
       return await this.interactionsService.pqrDetailsMultiParam({
+        page,
+        limit,
+        codes: btoa(params),
+      });
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/pqr_grouped')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get Pqr grouped by user id' })
+  async getPqrGroupedTotal(
+    @Query()
+    params: {
+      page: number;
+      limit: number;
+      id: string;
+    },
+  ): Promise<any> {
+    const { page, limit, id } = params;
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.interactionsService.pqrGroupedSingleParam({
+        page,
+        limit,
+        codes: btoa(user.code),
+      });
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.interactionsService.pqrGroupedMultiParam({
         page,
         limit,
         codes: btoa(params),

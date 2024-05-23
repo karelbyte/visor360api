@@ -57,4 +57,56 @@ export class InteractionsService {
       };
     }
   }
+
+  async pqrGroupedSingleParam({
+    page,
+    limit,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      page: Number(page),
+      limit: Number(limit),
+      officer_code: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_PANAMA_INTERACCIONES/pqr_grouped_single_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async pqrGroupedMultiParam({
+    page,
+    limit,
+    codes,
+  }: IPaginateParamsWithSearch) {
+    const customParam = {
+      page: Number(page),
+      limit: Number(limit),
+      list_of_officers: codes,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_PANAMA_INTERACCIONES/pqr_grouped_multi_param/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
 }
