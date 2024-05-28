@@ -22,7 +22,7 @@ import {
 @ApiTags('Visor360 service')
 @Controller('visor360')
 export class Visor360Controller {
-  constructor(private readonly visor360Service: Visor360Service) { }
+  constructor(private readonly visor360Service: Visor360Service) {}
 
   @HttpCode(HttpStatus.OK)
   @Get('/clients')
@@ -121,5 +121,25 @@ export class Visor360Controller {
     @Param('search') search: string,
   ): Promise<any> {
     return await this.visor360Service.pqrComplaintSingleParam(search);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/pqr_by_client')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get PQRs by client code' })
+  async getPqrByClient(
+    @Query()
+    params: {
+      page: number;
+      limit: number;
+      num_client: string;
+    },
+  ): Promise<any> {
+    const { page, limit, num_client } = params;
+    return await this.visor360Service.pqrsByClientId({
+      page,
+      limit,
+      num_client,
+    });
   }
 }

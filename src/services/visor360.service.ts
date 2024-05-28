@@ -207,4 +207,34 @@ export class Visor360Service {
       };
     }
   }
+
+  async pqrsByClientId({
+    page,
+    limit,
+    num_client,
+  }: {
+    page: number;
+    limit: number;
+    num_client: string;
+  }) {
+    const customParam = {
+      num_client: num_client,
+      page: Number(page),
+      limit: Number(limit),
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/visor360_pqr_details_num_client/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
 }

@@ -21,7 +21,7 @@ export class InteractionsController {
     private readonly interactionsService: InteractionsService,
     private readonly userService: UsersService,
     private readonly subordinateService: SubordinatesService,
-  ) { }
+  ) {}
 
   @HttpCode(HttpStatus.OK)
   @Get('/pqr_details')
@@ -82,6 +82,34 @@ export class InteractionsController {
       return await this.interactionsService.pqrGroupedMultiParam({
         page,
         limit,
+        codes: btoa(params),
+      });
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/grouped_information_header')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get grouped information header by user id' })
+  async getGroupedInformationHeader(
+    @Query()
+    params: {
+      id: string;
+    },
+  ): Promise<any> {
+    const { id } = params;
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.interactionsService.groupedInformationHeaderSingleParam(
+        {
+          codes: btoa(user.code),
+        },
+      );
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const params = JSON.stringify(subordinatesCodes);
+      return await this.interactionsService.groupedInformationHeaderMultiParam({
         codes: btoa(params),
       });
     }

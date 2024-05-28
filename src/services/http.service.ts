@@ -24,6 +24,7 @@ export class HttpRequestService {
         'Content-Type': 'application/json',
         Authorization: `Basic ${btoa(authKey + ':')}`,
       },
+      timeout: 10000,
     });
 
     return response.data;
