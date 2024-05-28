@@ -56,6 +56,9 @@ export class LoginResponseDto implements UserDto {
   token: string;
   @ApiProperty()
   leaders: UserDto[] | null;
+  @ApiProperty()
+  @IsBoolean()
+  can_download_xlsx: boolean;
 }
 
 @Injectable()

@@ -59,6 +59,9 @@ export class User {
   @Column()
   public updated_at: Date;
 
+  @Column()
+  can_download_xlsx: boolean;
+
   @OneToMany(() => UserCredentialsLog, (log) => log.user)
   log: UserCredentialsLog[];
 

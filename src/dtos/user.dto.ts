@@ -85,6 +85,11 @@ export class UserCreateDto {
   @IsString()
   @IsOptional()
   boss_id: string;
+
+  @ApiProperty()
+  @IsBoolean()
+  @IsOptional()
+  can_download_xlsx: boolean;
 }
 
 export class UserUpdateDto {
@@ -149,6 +154,11 @@ export class UserUpdateDto {
   @IsNumber()
   @IsOptional()
   logins: number;
+
+  @ApiProperty()
+  @IsBoolean()
+  @IsOptional()
+  can_download_xlsx: boolean;
 }
 
 interface IUserDto {
@@ -166,6 +176,7 @@ interface IUserDto {
   logins: number;
   created_at: Date;
   updated_at: Date;
+  can_download_xlsx: boolean;
 }
 export class UserDto {
   @ApiProperty()
@@ -192,6 +203,8 @@ export class UserDto {
   @ApiProperty()
   @IsBoolean()
   is_staff: boolean;
+  @IsBoolean()
+  can_download_xlsx: boolean;
   @ApiProperty()
   @IsString()
   boss_id: string;
@@ -213,6 +226,7 @@ export class UserDto {
     rol,
     leaders,
     logins,
+    can_download_xlsx,
     created_at,
     updated_at,
   }: IUserDto) {
@@ -228,6 +242,7 @@ export class UserDto {
     this.rol = rol;
     this.leaders = leaders;
     this.logins = logins;
+    this.can_download_xlsx = can_download_xlsx;
     this.created_at = created_at;
     this.updated_at = updated_at;
   }
