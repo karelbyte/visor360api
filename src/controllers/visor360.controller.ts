@@ -142,4 +142,52 @@ export class Visor360Controller {
       num_client,
     });
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/legal-representative')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get legal representative by client code' })
+  async getLegalRepresentative(
+    @Query()
+    params: {
+      num_client: string;
+    },
+  ): Promise<any> {
+    const { num_client } = params;
+    return await this.visor360Service.legalRepresentativeByClientId({
+      num_client,
+    });
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/board-directors')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get board directors by client code' })
+  async getBoardDirectors(
+    @Query()
+    params: {
+      num_client: string;
+    },
+  ): Promise<any> {
+    const { num_client } = params;
+    return await this.visor360Service.boardDirectorsByClientId({
+      num_client,
+    });
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/stockholders')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get stockholders by client code' })
+  async getStockholders(
+    @Query()
+    params: {
+      num_client: string;
+    },
+  ): Promise<any> {
+    const { num_client } = params;
+    return await this.visor360Service.stockholdersByClientId({
+      num_client,
+    });
+  }
 }

@@ -237,4 +237,64 @@ export class Visor360Service {
       };
     }
   }
+
+  async legalRepresentativeByClientId({ num_client }: { num_client: string }) {
+    const customParam = {
+      num_client: num_client,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/visor360_rep_legal_num_client/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async boardDirectorsByClientId({ num_client }: { num_client: string }) {
+    const customParam = {
+      num_client: num_client,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/visor360_JD_num_client/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async stockholdersByClientId({ num_client }: { num_client: string }) {
+    const customParam = {
+      num_client: num_client,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_Panama/visor360_accionistas_num_client/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
 }
