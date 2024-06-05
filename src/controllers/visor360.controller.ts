@@ -9,14 +9,7 @@ import {
 } from '@nestjs/common';
 import { IPaginateParams, Visor360Service } from '../services/visor360.service';
 import { AuthGuard } from '../guards/auth.guard';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiProperty,
-  ApiQuery,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiBearerAuth()
 @ApiTags('Visor360 service')
