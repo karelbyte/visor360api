@@ -720,8 +720,6 @@ export class SigcController {
 
     const data = JSON.parse(clearString);
 
-    console.log(data);
-
     data.forEach((val: any) => {
       worksheet.addRow(val);
     });
@@ -1147,8 +1145,6 @@ export class SigcController {
         : decryObject;
 
     const data = JSON.parse(clearString);
-
-    console.log(data);
 
     data.forEach((val: any) => {
       worksheet.addRow(val);

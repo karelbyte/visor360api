@@ -64,7 +64,6 @@ export class ReportService {
       field_list: body.fields.map((item: Field) => item.field_name),
       ...this.filtersArrayToObject(body.filters),
     };
-    console.log(customParam);
     try {
       return await this.http.request(
         'post',
