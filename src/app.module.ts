@@ -16,6 +16,7 @@ import { SigcModule } from './modules/sigc.module';
 import { AppMailerModule } from './modules/mailer.module';
 import { ReportModule } from './modules/report.module';
 import { InteractionsModule } from './modules/interactions.module';
+import { BankModule } from './modules/bank.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { InteractionsModule } from './modules/interactions.module';
     GlobalHttpModule,
     ReportModule,
     InteractionsModule,
+    BankModule,
   ],
   controllers: [AppController],
   providers: [AppService],

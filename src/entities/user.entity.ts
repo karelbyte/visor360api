@@ -6,12 +6,11 @@ import {
   OneToMany,
   OneToOne,
   JoinColumn,
-  ManyToMany,
-  JoinTable,
 } from 'typeorm';
 import { Subordinate } from './subordinate.entity';
 import { Rol } from './rol.entity';
 import { UserCredentialsLog } from './usercredentialslog.entity';
+import { Filial } from './filials.entity';
 
 @Entity('users')
 export class User {
@@ -64,6 +63,12 @@ export class User {
 
   @OneToMany(() => UserCredentialsLog, (log) => log.user)
   log: UserCredentialsLog[];
+
+  @OneToOne(() => Rol)
+  @JoinColumn({
+    name: 'rol_id',
+  })
+  filial: Filial;
 
   @OneToOne(() => Rol)
   @JoinColumn({
