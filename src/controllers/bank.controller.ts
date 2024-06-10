@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   Put,
   UseGuards,
@@ -17,17 +18,18 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { BankCreateDto, BankDto, BankUpdateDto } from 'src/dtos/bank.dto';
+import { FilialCreateDto, FilialDto, FilialUpdateDto } from 'src/dtos/filial.dto';
 
 @ApiBearerAuth()
 @ApiTags('Bank service')
 @Controller('banks')
 export class BankController {
-  constructor(private readonly bankService: BankService) {}
+  constructor(private readonly bankService: BankService) { }
 
   @HttpCode(HttpStatus.OK)
   @Get('/')
   @UseGuards(AuthGuard)
-  async getAllRols(): Promise<BankDto | any> {
+  async getAllBanks(): Promise<BankDto | any> {
     return await this.bankService.getAll();
   }
 
@@ -39,7 +41,6 @@ export class BankController {
   @UseGuards(AuthGuard)
   async createBank(@Body() createBankDto: BankCreateDto): Promise<BankDto> {
     const bank = await this.bankService.create(createBankDto);
-    console.log(bank);
     return new BankDto(bank);
   }
 
@@ -52,5 +53,46 @@ export class BankController {
   async updateUser(@Body() updateBankDto: BankUpdateDto): Promise<BankDto> {
     const bank = await this.bankService.update(updateBankDto);
     return new BankDto(bank);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/filials-all')
+  async getAllFilials(): Promise<FilialDto | any> {
+    return await this.bankService.getAllFilials();
+  }
+
+  @ApiOperation({ summary: 'Create filial for bank' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 200, type: BankDto })
+  @Post('/filials')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  async createFilial(
+    @Body() createFilialDto: FilialCreateDto,
+  ): Promise<FilialDto> {
+    const filial = await this.bankService.createFilial(createFilialDto);
+    return new FilialDto(filial);
+  }
+
+  @ApiOperation({ summary: 'Update filial for bank' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 200, type: BankDto })
+  @Put('/filials')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  async updateFilial(
+    @Body() updateFilialDto: FilialUpdateDto,
+  ): Promise<FilialDto> {
+    const filial = await this.bankService.updateFilial(updateFilialDto);
+    return new FilialDto(filial);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/filials/:id')
+  @UseGuards(AuthGuard)
+  async getAllFilialsByBankId(
+    @Param('id') id: string,
+  ): Promise<FilialDto | any> {
+    return await this.bankService.getAllFiliasByBankId(id);
   }
 }

@@ -26,7 +26,7 @@ export class Filial {
   public updated_at: Date;
 
   @ManyToOne(() => Bank, (bank) => bank.filials)
-  @JoinColumn({ name: 'id' })
+  @JoinColumn({ name: 'bank_id' })
   bank: Bank;
 
   constructor(partial: Filial) {

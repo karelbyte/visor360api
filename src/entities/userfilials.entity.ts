@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 
-@Entity('filials')
+@Entity('user_filials')
 export class UserFilials {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -17,6 +17,12 @@ export class UserFilials {
 
   @Column()
   user_id: string;
+
+  @Column()
+  public created_at: Date;
+
+  @Column()
+  public updated_at: Date;
 
   @ManyToOne(() => User, (user) => user.filial)
   @JoinColumn({ name: 'id' })

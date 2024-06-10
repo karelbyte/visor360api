@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { User } from '../entities/user.entity';
 import { UserCreateDto, UserUpdateDto } from '../dtos/user.dto';
 import { UserCredentialsLog } from '../entities/usercredentialslog.entity';
+import { UserFilials } from '../entities/userfilials.entity';
 
 export interface IPaginateAndFilterParams {
   page: number | null;
@@ -20,6 +21,8 @@ export class UsersService {
     private usersRepository: Repository<User>,
     @InjectRepository(UserCredentialsLog)
     private logRepository: Repository<UserCredentialsLog>,
+    @InjectRepository(UserFilials)
+    private userFilialsRepository: Repository<UserFilials>,
   ) { }
 
   async getAll({
@@ -145,7 +148,10 @@ export class UsersService {
     });
   }
 
-  async create(userData: UserCreateDto): Promise<User> {
+  async create(
+    userData: Omit<UserCreateDto, 'filial'>,
+    filial: string,
+  ): Promise<User> {
     userData.is_active = false;
     userData['created_at'] = new Date();
     userData['updated_at'] = new Date();
@@ -161,6 +167,12 @@ export class UsersService {
       updated_at: new Date(),
     };
     await this.logRepository.save(credentialsLog);
+    await this.userFilialsRepository.save({
+      user_id: user.id,
+      filial_id: filial,
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
     return user;
   }
 

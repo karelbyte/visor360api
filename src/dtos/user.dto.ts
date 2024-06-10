@@ -74,6 +74,11 @@ export class UserCreateDto {
   @ApiProperty()
   @IsString()
   @IsOptional()
+  filial: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
   rol_id: string;
 
   @ApiProperty()
