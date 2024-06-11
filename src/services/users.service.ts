@@ -3,7 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository, FindManyOptions, Not, IsNull, In } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from '../entities/user.entity';
-import { UserCreateDto, UserUpdateDto } from '../dtos/user.dto';
+import {
+  UpdateUserFilialDto,
+  UserCreateDto,
+  UserUpdateDto,
+} from '../dtos/user.dto';
 import { UserCredentialsLog } from '../entities/usercredentialslog.entity';
 import { UserFilials } from '../entities/userfilials.entity';
 
@@ -34,6 +38,9 @@ export class UsersService {
     const options: FindManyOptions<User> = {
       relations: {
         rol: true,
+        filial: {
+          filial: true,
+        },
         leaders: {
           boss: true,
         },
@@ -108,6 +115,9 @@ export class UsersService {
         id: userId,
       },
       relations: {
+        filial: {
+          filial: true,
+        },
         rol: true,
         leaders: {
           boss: {
@@ -127,6 +137,9 @@ export class UsersService {
         email: email,
       },
       relations: {
+        filial: {
+          filial: true,
+        },
         rol: true,
         subordinates: true,
         leaders: {
@@ -195,5 +208,27 @@ export class UsersService {
 
     await this.usersRepository.update(userData.id, userData);
     return await this.findOneById(userData.id);
+  }
+
+  async updateUserFilial(data: Partial<UpdateUserFilialDto>): Promise<User> {
+    let userFilial = await this.userFilialsRepository.findOne({
+      where: {
+        user_id: data.user_id,
+      },
+    });
+
+    if (userFilial) {
+      userFilial.filial_id = data.filial_id;
+    } else {
+      userFilial = this.userFilialsRepository.create({
+        user_id: data.user_id,
+        filial_id: data.filial_id,
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
+    }
+
+    await this.userFilialsRepository.save(userFilial);
+    return await this.findOneById(data.user_id);
   }
 }

@@ -10,7 +10,7 @@ import {
 import { Subordinate } from './subordinate.entity';
 import { Rol } from './rol.entity';
 import { UserCredentialsLog } from './usercredentialslog.entity';
-import { Filial } from './filials.entity';
+import { UserFilials } from './userfilials.entity';
 
 @Entity('users')
 export class User {
@@ -64,11 +64,8 @@ export class User {
   @OneToMany(() => UserCredentialsLog, (log) => log.user)
   log: UserCredentialsLog[];
 
-  @OneToOne(() => Rol)
-  @JoinColumn({
-    name: 'rol_id',
-  })
-  filial: Filial;
+  @OneToOne(() => UserFilials, (userFilial) => userFilial.user)
+  filial: UserFilials;
 
   @OneToOne(() => Rol)
   @JoinColumn({

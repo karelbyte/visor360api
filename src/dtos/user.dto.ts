@@ -9,6 +9,7 @@ import {
 import { IsUserAlreadyExist } from '../decorators/IsUserAlreadyExist';
 import { RolDto } from './rol.dto';
 import { ApiProperty } from '@nestjs/swagger';
+import { UserFilials } from 'src/entities/userfilials.entity';
 
 export class UserChangePasswordDto {
   @ApiProperty()
@@ -38,6 +39,16 @@ export class UserLoginDto {
     message: 'No se proporciono una contraseña!',
   })
   password: string;
+}
+
+export class UpdateUserFilialDto {
+  @ApiProperty()
+  @IsString()
+  user_id: string;
+
+  @ApiProperty()
+  @IsString()
+  filial_id: string;
 }
 export class UserCreateDto {
   @ApiProperty()
@@ -177,6 +188,7 @@ interface IUserDto {
   is_staff: boolean;
   boss_id: string;
   rol: RolDto;
+  filial: UserFilials;
   leaders: UserDto[];
   logins: number;
   created_at: Date;
@@ -214,6 +226,7 @@ export class UserDto {
   @IsString()
   boss_id: string;
   rol: RolDto;
+  filial: UserFilials;
   leaders: UserDto[];
   logins: number;
   created_at: Date;
@@ -229,6 +242,7 @@ export class UserDto {
     is_staff,
     boss_id,
     rol,
+    filial,
     leaders,
     logins,
     can_download_xlsx,
@@ -245,6 +259,7 @@ export class UserDto {
     this.is_staff = is_staff;
     this.boss_id = boss_id;
     this.rol = rol;
+    this.filial = filial;
     this.leaders = leaders;
     this.logins = logins;
     this.can_download_xlsx = can_download_xlsx;

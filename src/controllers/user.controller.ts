@@ -15,7 +15,7 @@ import {
   UsersService,
 } from '../services/users.service';
 import { User } from '../entities/user.entity';
-import { UserCreateDto, UserDto, UserUpdateDto } from '../dtos/user.dto';
+import { UpdateUserFilialDto, UserCreateDto, UserDto, UserUpdateDto } from '../dtos/user.dto';
 import { AuthGuard } from '../guards/auth.guard';
 import {
   ApiBearerAuth,
@@ -45,7 +45,7 @@ export class UsersResponseDto {
 @ApiTags('User service')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   formatResponse(result: User[], total: number, limit: number) {
     const dataMapping = result.map((user: User) => {
@@ -195,5 +195,17 @@ export class UsersController {
         ? constPossibleLeaders.map((leader) => new UserDto(leader.boss))
         : [];
     return new UserDto({ ...partialUser, leaders: leadersMapped });
+  }
+
+  @ApiOperation({ summary: 'Update user filial' })
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
+  @ApiResponse({ status: 200, type: UserDto })
+  @Post('/add-filial')
+  @HttpCode(HttpStatus.OK)
+  async updateUserFilial(
+    @Body() createUserDto: UpdateUserFilialDto,
+  ): Promise<UserDto> {
+    const user = await this.usersService.updateUserFilial(createUserDto);
+    return new UserDto(user);
   }
 }

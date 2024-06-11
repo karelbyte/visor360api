@@ -3,9 +3,10 @@ import {
   Column,
   PrimaryGeneratedColumn,
   JoinColumn,
-  ManyToOne,
+  OneToOne,
 } from 'typeorm';
 import { User } from './user.entity';
+import { Filial } from './filials.entity';
 
 @Entity('user_filials')
 export class UserFilials {
@@ -24,9 +25,13 @@ export class UserFilials {
   @Column()
   public updated_at: Date;
 
-  @ManyToOne(() => User, (user) => user.filial)
-  @JoinColumn({ name: 'id' })
+  @OneToOne(() => User, (user) => user.filial)
+  @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @OneToOne(() => Filial, (filial) => filial.userFilial)
+  @JoinColumn({ name: 'filial_id' })
+  filial: Filial;
 
   constructor(partial: UserFilials) {
     Object.assign(this, partial);
