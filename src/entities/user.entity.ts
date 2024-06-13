@@ -10,7 +10,8 @@ import {
 import { Subordinate } from './subordinate.entity';
 import { Rol } from './rol.entity';
 import { UserCredentialsLog } from './usercredentialslog.entity';
-import { UserFilials } from './userfilials.entity';
+import { Bank } from './bank.entity';
+import { Filial } from './filials.entity';
 
 @Entity('users')
 export class User {
@@ -46,6 +47,12 @@ export class User {
   @Column()
   boss_id: string;
 
+  @Column()
+  bank_id: string;
+
+  @Column()
+  filial_id: string;
+
   @CreateDateColumn()
   public created_at: Date;
 
@@ -64,8 +71,17 @@ export class User {
   @OneToMany(() => UserCredentialsLog, (log) => log.user)
   log: UserCredentialsLog[];
 
-  @OneToOne(() => UserFilials, (userFilial) => userFilial.user)
-  filial: UserFilials;
+  @OneToOne(() => Bank)
+  @JoinColumn({
+    name: 'bank_id',
+  })
+  bank: Bank;
+
+  @OneToOne(() => Filial)
+  @JoinColumn({
+    name: 'filial_id',
+  })
+  filial: Filial;
 
   @OneToOne(() => Rol)
   @JoinColumn({

@@ -11,7 +11,8 @@ import { AppConfig } from '../config';
 import { RolDto } from 'src/dtos/rol.dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean, IsDate, IsNumber, IsString } from 'class-validator';
-import { UserFilials } from 'src/entities/userfilials.entity';
+import { Filial } from 'src/entities/filials.entity';
+import { Bank } from 'src/entities/bank.entity';
 
 export class LoginResponseDto implements UserDto {
   @ApiProperty()
@@ -42,9 +43,17 @@ export class LoginResponseDto implements UserDto {
   @IsString()
   boss_id: string;
   @ApiProperty()
+  @IsString()
+  bank_id: string;
+  @ApiProperty()
+  @IsString()
+  filial_id: string;
+  @ApiProperty()
   rol: RolDto;
   @ApiProperty()
-  filial: UserFilials;
+  filial: Filial;
+  @ApiProperty()
+  bank: Bank;
   @ApiProperty()
   @IsNumber()
   logins: number;

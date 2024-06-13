@@ -172,8 +172,7 @@ export class UsersController {
   @Post()
   @HttpCode(HttpStatus.OK)
   async createUser(@Body() createUserDto: UserCreateDto): Promise<UserDto> {
-    const { filial, ...data } = createUserDto;
-    const user = await this.usersService.create(data, filial);
+    const user = await this.usersService.create(createUserDto);
     return new UserDto(user);
   }
 
@@ -195,17 +194,5 @@ export class UsersController {
         ? constPossibleLeaders.map((leader) => new UserDto(leader.boss))
         : [];
     return new UserDto({ ...partialUser, leaders: leadersMapped });
-  }
-
-  @ApiOperation({ summary: 'Update user filial' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @ApiResponse({ status: 200, type: UserDto })
-  @Post('/add-filial')
-  @HttpCode(HttpStatus.OK)
-  async updateUserFilial(
-    @Body() createUserDto: UpdateUserFilialDto,
-  ): Promise<UserDto> {
-    const user = await this.usersService.updateUserFilial(createUserDto);
-    return new UserDto(user);
   }
 }

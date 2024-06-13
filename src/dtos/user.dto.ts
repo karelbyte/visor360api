@@ -9,7 +9,8 @@ import {
 import { IsUserAlreadyExist } from '../decorators/IsUserAlreadyExist';
 import { RolDto } from './rol.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserFilials } from 'src/entities/userfilials.entity';
+import { Filial } from 'src/entities/filials.entity';
+import { Bank } from 'src/entities/bank.entity';
 
 export class UserChangePasswordDto {
   @ApiProperty()
@@ -85,7 +86,7 @@ export class UserCreateDto {
   @ApiProperty()
   @IsString()
   @IsOptional()
-  filial: string;
+  bank_id: string;
 
   @ApiProperty()
   @IsString()
@@ -175,6 +176,16 @@ export class UserUpdateDto {
   @IsBoolean()
   @IsOptional()
   can_download_xlsx: boolean;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  bank_id: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  filial_id: string;
 }
 
 interface IUserDto {
@@ -184,11 +195,14 @@ interface IUserDto {
   names: string;
   email: string;
   rol_id: string;
+  filial_id: string;
+  bank_id: string;
   is_active: boolean;
   is_staff: boolean;
   boss_id: string;
   rol: RolDto;
-  filial: UserFilials;
+  filial: Filial;
+  bank: Bank;
   leaders: UserDto[];
   logins: number;
   created_at: Date;
@@ -225,8 +239,18 @@ export class UserDto {
   @ApiProperty()
   @IsString()
   boss_id: string;
+
+  @ApiProperty()
+  @IsString()
+  filial_id: string;
+
+  @ApiProperty()
+  @IsString()
+  bank_id: string;
+
   rol: RolDto;
-  filial: UserFilials;
+  filial: Filial;
+  bank: Bank;
   leaders: UserDto[];
   logins: number;
   created_at: Date;
@@ -241,8 +265,11 @@ export class UserDto {
     is_active,
     is_staff,
     boss_id,
+    filial_id,
+    bank_id,
     rol,
     filial,
+    bank,
     leaders,
     logins,
     can_download_xlsx,
@@ -259,7 +286,10 @@ export class UserDto {
     this.is_staff = is_staff;
     this.boss_id = boss_id;
     this.rol = rol;
+    this.bank_id = bank_id;
+    this.filial_id = filial_id;
     this.filial = filial;
+    this.bank = bank;
     this.leaders = leaders;
     this.logins = logins;
     this.can_download_xlsx = can_download_xlsx;

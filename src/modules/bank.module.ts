@@ -4,10 +4,9 @@ import { Bank } from '../entities/bank.entity';
 import { BankService } from '../services/bank.service';
 import { BankController } from '../controllers/bank.controller';
 import { Filial } from 'src/entities/filials.entity';
-import { UserFilials } from 'src/entities/userfilials.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Bank, Filial, UserFilials])],
+  imports: [TypeOrmModule.forFeature([Bank, Filial])],
   controllers: [BankController],
   providers: [BankService],
   exports: [BankService],

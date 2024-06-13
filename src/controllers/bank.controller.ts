@@ -18,7 +18,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { BankCreateDto, BankDto, BankUpdateDto } from 'src/dtos/bank.dto';
-import { FilialCreateDto, FilialDto, FilialUpdateDto } from 'src/dtos/filial.dto';
+import {
+  FilialCreateDto,
+  FilialDto,
+  FilialUpdateDto,
+} from 'src/dtos/filial.dto';
 
 @ApiBearerAuth()
 @ApiTags('Bank service')
@@ -28,7 +32,6 @@ export class BankController {
 
   @HttpCode(HttpStatus.OK)
   @Get('/')
-  @UseGuards(AuthGuard)
   async getAllBanks(): Promise<BankDto | any> {
     return await this.bankService.getAll();
   }
@@ -57,6 +60,7 @@ export class BankController {
 
   @HttpCode(HttpStatus.OK)
   @Get('/filials-all')
+  @UseGuards(AuthGuard)
   async getAllFilials(): Promise<FilialDto | any> {
     return await this.bankService.getAllFilials();
   }
