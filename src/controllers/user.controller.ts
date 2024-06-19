@@ -72,6 +72,8 @@ export class UsersController {
   @ApiQuery({ name: 'limit', type: 'number', required: false })
   @ApiQuery({ name: 'fieldToFilter', type: 'string', required: false })
   @ApiQuery({ name: 'term', type: 'string', required: false })
+  @ApiQuery({ name: 'bank_id', type: 'string', required: false })
+  @ApiQuery({ name: 'filial_id', type: 'string', required: false })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiResponse({ status: 200, type: UsersResponseDto })
   @Get()
@@ -80,12 +82,14 @@ export class UsersController {
   async getAllUsers(
     @Query() params: IPaginateAndFilterParams,
   ): Promise<UsersResponseDto> {
-    const { page, limit, fieldToFilter, term } = params;
+    const { page, limit, fieldToFilter, term, bankId, filialId } = params;
     const [result, total] = await this.usersService.getAll({
       page,
       limit,
       fieldToFilter,
       term,
+      bankId,
+      filialId
     });
     return this.formatResponse(result, total, limit);
   }

@@ -3,11 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository, FindManyOptions, Not, IsNull, In } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from '../entities/user.entity';
-import {
-  UpdateUserFilialDto,
-  UserCreateDto,
-  UserUpdateDto,
-} from '../dtos/user.dto';
+import { UserCreateDto, UserUpdateDto } from '../dtos/user.dto';
 import { UserCredentialsLog } from '../entities/usercredentialslog.entity';
 import { Bank } from 'src/entities/bank.entity';
 
@@ -16,6 +12,8 @@ export interface IPaginateAndFilterParams {
   limit: number | null;
   fieldToFilter: string | null;
   term: string | null;
+  bankId?: string | null;
+  filialId?: string | null;
 }
 
 @Injectable()
@@ -27,13 +25,15 @@ export class UsersService {
     private logRepository: Repository<UserCredentialsLog>,
     @InjectRepository(Bank)
     private userBankRepository: Repository<Bank>,
-  ) { }
+  ) {}
 
   async getAll({
     page = null,
     limit = null,
     fieldToFilter = null,
     term = null,
+    bankId = null,
+    filialId = null,
   }: IPaginateAndFilterParams): Promise<[User[], number]> {
     const options: FindManyOptions<User> = {
       relations: {
@@ -58,6 +58,18 @@ export class UsersService {
     if (fieldToFilter && term) {
       options['where'] = {
         [fieldToFilter]: Like('%' + term + '%'),
+      };
+    }
+
+    if (bankId) {
+      options['where'] = {
+        ['bank_id']: bankId,
+      };
+    }
+
+    if (filialId) {
+      options['where'] = {
+        ['filial_id']: filialId,
       };
     }
     return await this.usersRepository.findAndCount(options);
