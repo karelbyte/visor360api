@@ -1,11 +1,13 @@
 import {
   Controller,
   Get,
+  Post,
   HttpCode,
   HttpStatus,
   Param,
   Query,
   Res,
+  Body,
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
@@ -36,10 +38,10 @@ export class SigcController {
   ) { }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/deposits/total/:id')
+  @Post('/deposits/total/:id')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get deposits total by user id' })
-  async getDepositsTotal(@Param('id') id: string): Promise<any> {
+  async getDepositsTotal(@Body('id') id: string): Promise<any> {
     const user = await this.userService.findOneById(id);
     if (user.rol.code === 'commercial') {
       return await this.sigcService.depositsTotalSingleParam(btoa(user.code));
