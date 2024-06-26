@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository, FindManyOptions, Not, IsNull, In } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -6,7 +6,9 @@ import { User } from '../entities/user.entity';
 import { UserCreateDto, UserUpdateDto } from '../dtos/user.dto';
 import { UserCredentialsLog } from '../entities/usercredentialslog.entity';
 import { Bank } from 'src/entities/bank.entity';
-
+import { AppMailerService } from './mailer.service';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 export interface IPaginateAndFilterParams {
   page: number | null;
   limit: number | null;
@@ -23,9 +25,10 @@ export class UsersService {
     private usersRepository: Repository<User>,
     @InjectRepository(UserCredentialsLog)
     private logRepository: Repository<UserCredentialsLog>,
+    private readonly mailerService: AppMailerService,
     @InjectRepository(Bank)
     private userBankRepository: Repository<Bank>,
-  ) {}
+  ) { }
 
   async getAll({
     page = null,
@@ -158,6 +161,17 @@ export class UsersService {
     });
   }
 
+  async findUsersByCode(codes: string[]): Promise<User[]> {
+    return await this.usersRepository.find({
+      where: {
+        code: In(codes),
+      },
+      relations: {
+        filial: true,
+      },
+    });
+  }
+
   async findOneByEmailAndDifferentId(
     email: string,
     userId: string,
@@ -186,7 +200,34 @@ export class UsersService {
       updated_at: new Date(),
     };
     await this.logRepository.save(credentialsLog);
-    return user;
+
+    // envio de email de confirmacion
+    const fileImg = join(__dirname, '..', 'templates') + '/logopng.png';
+    const imageData = readFileSync(fileImg).toString('base64');
+    const mailData = {
+      to: user.email,
+      subject: 'SIGC Confirmación de cuenta',
+      text: '',
+      template: join(__dirname, '..', 'templates') + '/user.create.pug',
+      dataTemplate: {
+        img: imageData,
+        name: user.names,
+        url: `${process.env.FRONT_URL_RECOVER_PASSWORD}/auth/login`,
+      },
+    };
+
+    try {
+      await this.mailerService.sendMail(mailData);
+      return user;
+    } catch (e) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: e,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async update(userData: Partial<UserUpdateDto>): Promise<User> {

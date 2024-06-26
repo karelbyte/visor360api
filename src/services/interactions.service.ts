@@ -149,4 +149,34 @@ export class InteractionsService {
       };
     }
   }
+
+  async totalCreditsRequests({
+    filials,
+    page,
+    limit,
+  }: {
+    filials: string[];
+    page: number;
+    limit: number;
+  }) {
+    const customParam = {
+      page: Number(page),
+      limit: Number(limit),
+      filials,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_PANAMA_INTERACCIONES/total_credits_requests/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
 }

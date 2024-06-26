@@ -6,12 +6,7 @@ import {
   HttpStatus,
   Post,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { JwtService } from '@nestjs/jwt';
@@ -26,7 +21,7 @@ export class MailerController {
     private readonly mailerService: AppMailerService,
     private readonly userService: UsersService,
     private jwtService: JwtService,
-  ) { }
+  ) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('/change-password-mail')
