@@ -1,23 +1,51 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-} from 'typeorm';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity('credit_log')
 export class CreditLog {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn()
   id: string;
+
+  @Column()
+  reference: string;
+
+  @Column()
+  num_client: number;
+
+  @Column()
+  month: string;
+
+  @Column()
+  date: string;
+
+  @Column()
+  completed_request: string;
+
+  @Column()
+  days: number;
 
   @Column()
   name: string;
 
-  @CreateDateColumn()
-  public created_at: Date;
+  @Column()
+  product: string;
 
   @Column()
-  public updated_at: Date;
+  amount: number;
+
+  @Column()
+  analist: string;
+
+  @Column()
+  agency: string;
+
+  @Column()
+  decision: string;
+
+  @Column()
+  state_auraquantic: string;
+
+  @Column()
+  contract: string;
 
   constructor(partial: CreditLog) {
     Object.assign(this, partial);

@@ -707,6 +707,7 @@ export class SigcController {
       { header: 'Saldo cierre de mes', key: 'saldo_capital_ld_lm' },
       { header: 'Saldo cierre de año', key: 'saldo_capital_ld_ly' },
       { header: 'Saldo SD-LM', key: 'saldo_capital_sd_lm' },
+      { header: 'Saldo Promedio', key: 'saldo_promedio' },
       { header: 'Tasa', key: 'tasa' },
     ];
 
