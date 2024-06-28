@@ -12,6 +12,10 @@ import { AuthGuard } from '../guards/auth.guard';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from 'src/services/users.service';
 import { SubordinatesService } from 'src/services/subordinate.service';
+import { User } from 'src/entities/user.entity';
+import { CreditLog } from 'src/entities/creditlog.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @ApiBearerAuth()
 @ApiTags('Interactions service')
@@ -112,6 +116,46 @@ export class InteractionsController {
       return await this.interactionsService.groupedInformationHeaderMultiParam({
         codes: btoa(params),
       });
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/total_credits_requests')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get grouped information header by user id' })
+  async getTotalCcreditsRequests(
+    @Query()
+    params: {
+      page: number;
+      limit: number;
+      id: string;
+    },
+  ): Promise<any> {
+    const { page, limit, id } = params;
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.interactionsService.totalCreditsRequests({
+        filials: [user.filial_id],
+        page,
+        limit,
+      });
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const users = await this.userService.findUsersByCode(subordinatesCodes);
+      const usersWithFilial = users.filter(
+        (user: User) => user.filial_id !== null,
+      );
+      const filials = usersWithFilial.map((user: User) => user.filial.name);
+      if (filials.length > 0) {
+        return await this.interactionsService.totalCreditsRequests({
+          filials,
+          page,
+          limit,
+        });
+      } else {
+        return { data: [], pages: 0, total: 0 };
+      }
     }
   }
 }
