@@ -38,19 +38,23 @@ export class SigcController {
   ) { }
 
   @HttpCode(HttpStatus.OK)
-  @Post('/deposits/total/:id')
+  @Post('/deposits/total')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get deposits total by user id' })
-  async getDepositsTotal(@Body('id') id: string): Promise<any> {
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.depositsTotalSingleParam(btoa(user.code));
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.depositsTotalMultiParam(btoa(params));
+  async getDepositsTotal(@Body('ids') ids: string[]): Promise<any> {
+    let codes: string[] = [];
+    for (const clientId of ids) {
+      const user = await this.userService.findOneById(clientId);
+      if (user.rol.code === 'commercial') {
+        codes.push(user.code);
+      } else {
+        const subordinatesCodes =
+          await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+        codes = codes.concat(subordinatesCodes);
+      }
     }
+    const params = JSON.stringify(codes);
+    return await this.sigcService.depositsTotalMultiParam(btoa(params));
   }
 
   @HttpCode(HttpStatus.OK)
