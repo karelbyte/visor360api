@@ -170,7 +170,39 @@ export class InteractionsService {
       where: {
         agency: In(filials),
       },
+      order: {
+        date: 'DESC',
+      },
     });
+
+    if (page && limit) {
+      const init = (Number(page) - 1) * limit;
+      const end = Number(page) * limit;
+      credits = credits.slice(init, end);
+    }
+    return {
+      data: credits,
+      pages: Math.ceil(credits.length / limit) || 1,
+      total: credits.length,
+    };
+  }
+
+  async totalCreditsGroupRequests({
+    filials,
+    page,
+    limit,
+  }: {
+    filials: string[];
+    page: number;
+    limit: number;
+  }) {
+    let credits = await this.CreditLogRepository.createQueryBuilder()
+      .select('agency')
+      .where({
+        agency: In(filials),
+      })
+      .groupBy('agency')
+      .getMany();
 
     if (page && limit) {
       const init = (Number(page) - 1) * limit;
