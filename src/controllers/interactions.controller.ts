@@ -158,4 +158,45 @@ export class InteractionsController {
       }
     }
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/total_credits_group_requests')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get grouped information header by user id' })
+  async getTotalCcreditsGroupRequests(
+    @Query()
+    params: {
+      page: number;
+      limit: number;
+      id: string;
+    },
+  ): Promise<any> {
+    const { page, limit, id } = params;
+    const user = await this.userService.findOneById(id);
+    if (user.rol.code === 'commercial') {
+      return await this.interactionsService.totalCreditsRequests({
+        filials: [user.filial_id],
+        page,
+        limit,
+      });
+    } else {
+      const subordinatesCodes =
+        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+      const users = await this.userService.findUsersByCode(subordinatesCodes);
+      const usersWithFilial = users.filter(
+        (user: User) => user.filial_id !== null,
+      );
+      const filials = usersWithFilial.map((user: User) => user.filial.name);
+      console.log(filials);
+      if (filials.length > 0) {
+        return await this.interactionsService.totalCreditsGroupRequests({
+          filials,
+          page,
+          limit,
+        });
+      } else {
+        return { data: [], pages: 0, total: 0 };
+      }
+    }
+  }
 }
