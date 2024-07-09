@@ -37,11 +37,8 @@ export class SigcController {
     private readonly subordinateService: SubordinatesService,
   ) { }
 
-  @HttpCode(HttpStatus.OK)
-  @Post('/deposits/total')
-  @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Get deposits total by user id' })
-  async getDepositsTotal(@Body('ids') ids: string[]): Promise<any> {
+
+  async getCodes(ids: string[]): Promise<string[]> {
     let codes: string[] = [];
     for (const clientId of ids) {
       const user = await this.userService.findOneById(clientId);
@@ -53,56 +50,47 @@ export class SigcController {
         codes = codes.concat(subordinatesCodes);
       }
     }
+    return codes;
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('/deposits/total')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get deposits total by user id' })
+  async getDepositsTotal(@Body('ids') ids: string[]): Promise<any> {
+    const codes = await this.getCodes(ids);
     const params = JSON.stringify(codes);
     return await this.sigcService.depositsTotalMultiParam(btoa(params));
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/placements/total/:id')
+  @Post('/placements/total')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get placements total by user id' })
-  async getPlacementsTotal(@Param('id') id: string): Promise<any> {
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.placementsTotalSingleParam(btoa(user.code));
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.placementsTotalMultiParam(btoa(params));
-    }
+  async getPlacementsTotal(@Body('ids') ids: string[]): Promise<any> {
+    const codes = await this.getCodes(ids);
+    const params = JSON.stringify(codes);
+    return await this.sigcService.placementsTotalMultiParam(btoa(params));
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/placements/:id')
+  @Post('/placements')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get placements by user id' })
-  async getPlacements(@Param('id') id: string): Promise<any> {
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.placementsSingleParam(btoa(user.code));
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.placementsMultiParam(btoa(params));
-    }
+  async getPlacements(@Body('ids') ids: string[]): Promise<any> {
+    const codes = await this.getCodes(ids);
+    const params = JSON.stringify(codes);
+    return await this.sigcService.placementsMultiParam(btoa(params));
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/captures/:id')
+  @Post('/captures')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get captures by user id' })
-  async getCaptures(@Param('id') id: string): Promise<any> {
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.captureSingleParam(btoa(user.code));
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.capturesMultiParam(btoa(params));
-    }
+  async getCaptures(@Body('ids') ids: string[]): Promise<any> {
+    const codes = await this.getCodes(ids);
+    const params = JSON.stringify(codes);
+    return await this.sigcService.capturesMultiParam(btoa(params));
   }
 
   @HttpCode(HttpStatus.OK)
@@ -122,104 +110,66 @@ export class SigcController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/deposits-top-10/:id')
+  @Post('/deposits-top-10')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get deposits top 10 by user id' })
-  async getDepositsTop10(@Param('id') id: string): Promise<any> {
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.depositsTop10SingleParam(btoa(user.code));
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.depositsTop10MultiParam(btoa(params));
-    }
+  async getDepositsTop10(@Body('ids') ids: string[]): Promise<any> {
+    const codes = await this.getCodes(ids);
+    const params = JSON.stringify(codes);
+    return await this.sigcService.depositsTop10MultiParam(btoa(params));
   }
   @HttpCode(HttpStatus.OK)
-  @Get('/vinculations-top-10/:id')
+  @Post('/vinculations-top-10')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get vinculations top 10 by user id' })
-  async getVinculationsTop10(@Param('id') id: string): Promise<any> {
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.vinculationsTop10SingleParam(
-        btoa(user.code),
-      );
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.vinculationsTop10MultiParam(btoa(params));
-    }
+  async getVinculationsTop10(@Body('ids') ids: string[]): Promise<any> {
+    const codes = await this.getCodes(ids);
+    const params = JSON.stringify(codes);
+    return await this.sigcService.vinculationsTop10MultiParam(btoa(params));
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/assets-top-10/:id')
+  @Post('/assets-top-10')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get assets top 10 by user id' })
-  async getAssetsTop10(@Param('id') id: string): Promise<any> {
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.assetsTop10SingleParam(btoa(user.code));
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.assetsTop10MultiParam(btoa(params));
-    }
+  async getAssetsTop10(@Body('ids') ids: string[]): Promise<any> {
+    const codes = await this.getCodes(ids);
+    const params = JSON.stringify(codes);
+    return await this.sigcService.assetsTop10MultiParam(btoa(params));
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/all-expiration/:id')
+  @Post('/all-expiration')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get all expiration by user id' })
-  async getExpirationAll(@Param('id') id: string): Promise<any> {
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.expirationAllSingleParam(btoa(user.code));
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.expirationAllMultiParam(btoa(params));
-    }
+  async getExpirationAll(@Body('ids') ids: string[]): Promise<any> {
+    const codes = await this.getCodes(ids);
+    const params = JSON.stringify(codes);
+    return await this.sigcService.expirationAllMultiParam(btoa(params));
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/financial/:id')
+  @Post('/financial')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get financial by user id' })
-  async getFinancial(@Param('id') id: string): Promise<any> {
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.financialSingleParam(btoa(user.code));
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.financialMultiParam(btoa(params));
-    }
+  async getFinancial(@Body('ids') ids: string[]): Promise<any> {
+    const codes = await this.getCodes(ids);
+    const params = JSON.stringify(codes);
+    return await this.sigcService.financialMultiParam(btoa(params));
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/product_cancelation/:id')
+  @Post('/product_cancelation')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get product cancelation by user id' })
-  async getProductCancelation(@Param('id') id: string): Promise<any> {
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.cancelSingleParam(btoa(user.code));
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.cancelMultiParam(btoa(params));
-    }
+  async getProductCancelation(@Body('ids') ids: string[]): Promise<any> {
+    const codes = await this.getCodes(ids);
+    const params = JSON.stringify(codes);
+    return await this.sigcService.cancelMultiParam(btoa(params));
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/expiration_dpf_month')
+  @Post('/expiration_dpf_month')
   @ApiOperation({ summary: 'Get expiration dpf month by user id' })
   @UseGuards(AuthGuard)
   async getExpirationDpfMonth(
@@ -228,33 +178,21 @@ export class SigcController {
       page: number;
       limit: number;
       search: string;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, search, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.expirationDpfMonthSingleParam({
-        page,
-        limit,
-        search,
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.expirationDpfMonthMultiParam({
-        page,
-        limit,
-        search,
-        codes: btoa(params),
-      });
-    }
+    const { page, limit, search } = params;
+    const codes = await this.getCodes(ids);
+    return await this.sigcService.expirationDpfMonthMultiParam({
+      page,
+      limit,
+      search,
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/expiration_dpf_year')
+  @Post('/expiration_dpf_year')
   @ApiOperation({ summary: 'Get expiration dpf year by user id' })
   @UseGuards(AuthGuard)
   async getExpirationDpfYear(
@@ -263,33 +201,21 @@ export class SigcController {
       page: number;
       limit: number;
       search: string;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, search, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.expirationDpfYearSingleParam({
-        page,
-        limit,
-        search,
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.expirationDpfYearMultiParam({
-        page,
-        limit,
-        search,
-        codes: btoa(params),
-      });
-    }
+    const { page, limit, search } = params;
+    const codes = await this.getCodes(ids);
+    return await this.sigcService.expirationDpfYearMultiParam({
+      page,
+      limit,
+      search,
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/expiration_credit_line_month')
+  @Post('/expiration_credit_line_month')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get expiration credit line month by user id' })
   async getExpirationCreditLineMonth(
@@ -298,33 +224,21 @@ export class SigcController {
       page: number;
       limit: number;
       search: string;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, search, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.expirationCreditLineMonthSingleParam({
-        page,
-        limit,
-        search,
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.expirationCreditLineMonthMultiParam({
-        page,
-        limit,
-        search,
-        codes: btoa(params),
-      });
-    }
+    const { page, limit, search } = params;
+    const codes = await this.getCodes(ids);
+    return await this.sigcService.expirationCreditLineMonthMultiParam({
+      page,
+      limit,
+      search,
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/expiration_credit_line_year')
+  @Post('/expiration_credit_line_year')
   @ApiOperation({ summary: 'Get expiration dpf year by user id' })
   @UseGuards(AuthGuard)
   async getExpirationCreditLineYear(
@@ -333,33 +247,21 @@ export class SigcController {
       page: number;
       limit: number;
       search: string;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, search, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.expirationCreditLineYearSingleParam({
-        page,
-        limit,
-        search,
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.expirationCreditLineYearMultiParam({
-        page,
-        limit,
-        search,
-        codes: btoa(params),
-      });
-    }
+    const { page, limit, search } = params;
+    const codes = await this.getCodes(ids);
+    return await this.sigcService.expirationCreditLineYearMultiParam({
+      page,
+      limit,
+      search,
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/expiration_client_month')
+  @Post('/expiration_client_month')
   @ApiOperation({ summary: 'Get expiration client month by user id' })
   @UseGuards(AuthGuard)
   async getExpirationClientMonth(
@@ -368,33 +270,21 @@ export class SigcController {
       page: number;
       limit: number;
       search: string;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, search, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.expirationClientMonthSingleParam({
-        page,
-        limit,
-        search,
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.expirationClientMonthMultiParam({
-        page,
-        limit,
-        search,
-        codes: btoa(params),
-      });
-    }
+    const { page, limit, search } = params;
+    const codes = await this.getCodes(ids);
+    return await this.sigcService.expirationClientMonthMultiParam({
+      page,
+      limit,
+      search,
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/expiration_client_year')
+  @Post('/expiration_client_year')
   @ApiOperation({ summary: 'Get expiration clinet year by user id' })
   @UseGuards(AuthGuard)
   async getExpirationClientYear(
@@ -403,33 +293,21 @@ export class SigcController {
       page: number;
       limit: number;
       search: string;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, search, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.expirationClientYearSingleParam({
-        page,
-        limit,
-        search,
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.expirationClientYearMultiParam({
-        page,
-        limit,
-        search,
-        codes: btoa(params),
-      });
-    }
+    const { page, limit, search } = params;
+    const codes = await this.getCodes(ids);
+    return await this.sigcService.expirationClientYearMultiParam({
+      page,
+      limit,
+      search,
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/expiration_placements_month')
+  @Post('/expiration_placements_month')
   @ApiOperation({ summary: 'Get expiration placements month by user id' })
   @UseGuards(AuthGuard)
   async getExpirationPlacementstMonth(
@@ -438,33 +316,21 @@ export class SigcController {
       page: number;
       limit: number;
       search: string;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, search, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.expirationPlacementsMonthSingleParam({
-        page,
-        limit,
-        search,
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.expirationPlacementsMonthMultiParam({
-        page,
-        limit,
-        search,
-        codes: btoa(params),
-      });
-    }
+    const { page, limit, search } = params;
+    const codes = await this.getCodes(ids);
+    return await this.sigcService.expirationPlacementsMonthMultiParam({
+      page,
+      limit,
+      search,
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/expiration_placements_year')
+  @Post('/expiration_placements_year')
   @ApiOperation({ summary: 'Get expiration placements year by user id' })
   @UseGuards(AuthGuard)
   async getExpirationPlacementstYear(
@@ -473,53 +339,32 @@ export class SigcController {
       page: number;
       limit: number;
       search: string;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, search, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.expirationPlacementsYearSingleParam({
-        page,
-        limit,
-        search,
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.expirationPlacementsYearMultiParam({
-        page,
-        limit,
-        search,
-        codes: btoa(params),
-      });
-    }
+    const { page, limit, search } = params;
+    const codes = await this.getCodes(ids);
+    return await this.sigcService.expirationPlacementsYearMultiParam({
+      page,
+      limit,
+      search,
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/assets_group/:id')
+  @Post('/assets_group')
   @ApiOperation({ summary: 'Get assets group by id' })
   @UseGuards(AuthGuard)
-  async getAssetsGroup(@Param('id') id: string): Promise<any> {
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.assetsGroupSingleParam({
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.assetsGroupMultiParam({
-        codes: btoa(params),
-      });
-    }
+  async getAssetsGroup(@Body('ids') ids: string[]): Promise<any> {
+    const codes = await this.getCodes(ids);
+    return await this.sigcService.assetsGroupMultiParam({
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/assets_full')
+  @Post('/assets_full')
   @ApiOperation({ summary: 'Get assets full by id' })
   @UseGuards(AuthGuard)
   async getAssetsFull(
@@ -527,50 +372,29 @@ export class SigcController {
     params: {
       page: number;
       limit: number;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.assetsFullSingleParam({
-        page,
-        limit,
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.assetsFullMultiParam({
-        page,
-        limit,
-        codes: btoa(params),
-      });
-    }
+    const { page, limit } = params;
+    const codes = await this.getCodes(ids);
+    return await this.sigcService.assetsFullMultiParam({
+      page,
+      limit,
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
   @HttpCode(HttpStatus.OK)
-  @Get('/assets_full_xls/:id')
+  @Post('/assets_full_xls')
   @ApiOperation({ summary: 'Get assets full report in xls by user id' })
   async getAssetsXls(
-    @Param('id') id: string,
+    @Body('ids') ids: string[],
     @Res() res: Response,
   ): Promise<any> {
-    let payload: any;
+    const codes = await this.getCodes(ids);
 
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      payload = await this.sigcService.assetsFullXlsSingleParam({
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      payload = await this.sigcService.assetsFullXlsMultiParam({
-        codes: btoa(params),
-      });
-    }
+    const payload = await this.sigcService.assetsFullXlsMultiParam({
+      codes: btoa(JSON.stringify(codes)),
+    });
 
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('datos');
@@ -754,7 +578,7 @@ export class SigcController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/placements_full')
+  @Post('/placements_full')
   @ApiOperation({ summary: 'Get placements full by id' })
   @UseGuards(AuthGuard)
   async getPlacementsFull(
@@ -762,51 +586,29 @@ export class SigcController {
     params: {
       page: number;
       limit: number;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.placementsFullSingleParam({
-        page,
-        limit,
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.placementsFullMultiParam({
-        page,
-        limit,
-        codes: btoa(params),
-      });
-    }
+    const { page, limit } = params;
+    const codes = await this.getCodes(ids);
+    return await this.sigcService.placementsFullMultiParam({
+      page,
+      limit,
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/placements_full_xls/:id')
+  @Post('/placements_full_xls')
   @ApiOperation({ summary: 'Get placements full report in xls by user id' })
   async getPlacementsXls(
-    @Param('id') id: string,
+    @Body('ids') ids: string[],
     @Res() res: Response,
   ): Promise<any> {
-    let payload: any;
-
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      payload = await this.sigcService.placementsFullXlsSingleParam({
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      payload = await this.sigcService.placementsFullXlsMultiParam({
-        codes: btoa(params),
-      });
-    }
+    const codes = await this.getCodes(ids);
+    const payload = await this.sigcService.placementsFullXlsMultiParam({
+      codes: btoa(JSON.stringify(codes)),
+    });
 
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('datos');
@@ -859,7 +661,7 @@ export class SigcController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/catchments_full')
+  @Post('/catchments_full')
   @ApiOperation({ summary: 'Get catchments full by id' })
   @UseGuards(AuthGuard)
   async getCatchmentsFull(
@@ -867,49 +669,28 @@ export class SigcController {
     params: {
       page: number;
       limit: number;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.catchmentsFullSingleParam({
-        page,
-        limit,
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.catchmentsFullMultiParam({
-        page,
-        limit,
-        codes: btoa(params),
-      });
-    }
+    const { page, limit } = params;
+    const codes = await this.getCodes(ids);
+    return await this.sigcService.catchmentsFullMultiParam({
+      page,
+      limit,
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
   @HttpCode(HttpStatus.OK)
-  @Get('/catchments_full_xls/:id')
+  @Post('/catchments_full_xls')
   @ApiOperation({ summary: 'Get catchments full report in xls by user id' })
   async getCatchmentXls(
-    @Param('id') id: string,
+    @Body('ids') ids: string[],
     @Res() res: Response,
   ): Promise<any> {
-    let payload: any;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      payload = await this.sigcService.catchmentsFullXlsSingleParam({
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      payload = await this.sigcService.catchmentsFullXlsMultiParam({
-        codes: btoa(params),
-      });
-    }
+    const codes = await this.getCodes(ids);
+    const payload = await this.sigcService.catchmentsFullXlsMultiParam({
+      codes: btoa(JSON.stringify(codes)),
+    });
 
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('datos');
