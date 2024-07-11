@@ -1,9 +1,10 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
   HttpStatus,
-  Param,
+  Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -13,9 +14,6 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from 'src/services/users.service';
 import { SubordinatesService } from 'src/services/subordinate.service';
 import { User } from 'src/entities/user.entity';
-import { CreditLog } from 'src/entities/creditlog.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 
 @ApiBearerAuth()
 @ApiTags('Interactions service')
@@ -25,10 +23,24 @@ export class InteractionsController {
     private readonly interactionsService: InteractionsService,
     private readonly userService: UsersService,
     private readonly subordinateService: SubordinatesService,
-  ) {}
+  ) { }
 
+  async getCodes(ids: string[]): Promise<string[]> {
+    let codes: string[] = [];
+    for (const clientId of ids) {
+      const user = await this.userService.findOneById(clientId);
+      if (user.rol.code === 'commercial') {
+        codes.push(user.code);
+      } else {
+        const subordinatesCodes =
+          await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
+        codes = codes.concat(subordinatesCodes);
+      }
+    }
+    return codes;
+  }
   @HttpCode(HttpStatus.OK)
-  @Get('/pqr_details')
+  @Post('/pqr_details')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get PQrs details by user id' })
   async getPqrDetailsTotal(
@@ -36,31 +48,20 @@ export class InteractionsController {
     params: {
       page: number;
       limit: number;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.interactionsService.pqrDetailsSingleParam({
-        page,
-        limit,
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.interactionsService.pqrDetailsMultiParam({
-        page,
-        limit,
-        codes: btoa(params),
-      });
-    }
+    const { page, limit } = params;
+    const codes = await this.getCodes(ids);
+    return await this.interactionsService.pqrDetailsMultiParam({
+      page,
+      limit,
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/pqr_grouped')
+  @Post('/pqr_grouped')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get Pqr grouped by user id' })
   async getPqrGroupedTotal(
@@ -68,59 +69,32 @@ export class InteractionsController {
     params: {
       page: number;
       limit: number;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.interactionsService.pqrGroupedSingleParam({
-        page,
-        limit,
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.interactionsService.pqrGroupedMultiParam({
-        page,
-        limit,
-        codes: btoa(params),
-      });
-    }
+    const { page, limit } = params;
+    const codes = await this.getCodes(ids);
+    return await this.interactionsService.pqrGroupedMultiParam({
+      page,
+      limit,
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/grouped_information_header')
+  @Post('/grouped_information_header')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get grouped information header by user id' })
-  async getGroupedInformationHeader(
-    @Query()
-    params: {
-      id: string;
-    },
-  ): Promise<any> {
-    const { id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.interactionsService.groupedInformationHeaderSingleParam(
-        {
-          codes: btoa(user.code),
-        },
-      );
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.interactionsService.groupedInformationHeaderMultiParam({
-        codes: btoa(params),
-      });
-    }
+  async getGroupedInformationHeader(@Body('ids') ids: string[]): Promise<any> {
+    const codes = await this.getCodes(ids);
+    const params = JSON.stringify(codes);
+    return await this.interactionsService.groupedInformationHeaderMultiParam({
+      codes: btoa(params),
+    });
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/total_credits_requests')
+  @Post('/total_credits_requests')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get grouped information header by user id' })
   async getTotalCcreditsRequests(
@@ -128,39 +102,29 @@ export class InteractionsController {
     params: {
       page: number;
       limit: number;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
+    const { page, limit } = params;
+    const codes = await this.getCodes(ids);
+    const users = await this.userService.findUsersByCode(codes);
+    const usersWithFilial = users.filter(
+      (user: User) => user.filial_id !== null,
+    );
+    const filials = usersWithFilial.map((user: User) => user.filial.name);
+    if (filials.length > 0) {
       return await this.interactionsService.totalCreditsRequests({
-        filials: [user.filial_id],
+        filials,
         page,
         limit,
       });
     } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const users = await this.userService.findUsersByCode(subordinatesCodes);
-      const usersWithFilial = users.filter(
-        (user: User) => user.filial_id !== null,
-      );
-      const filials = usersWithFilial.map((user: User) => user.filial.name);
-      if (filials.length > 0) {
-        return await this.interactionsService.totalCreditsRequests({
-          filials,
-          page,
-          limit,
-        });
-      } else {
-        return { data: [], pages: 0, total: 0 };
-      }
+      return { data: [], pages: 0, total: 0 };
     }
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/total_credits_group_requests')
+  @Post('/total_credits_group_requests')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get grouped information header by user id' })
   async getTotalCcreditsGroupRequests(
@@ -168,35 +132,24 @@ export class InteractionsController {
     params: {
       page: number;
       limit: number;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.interactionsService.totalCreditsRequests({
-        filials: [user.filial_id],
+    const { page, limit } = params;
+    const codes = await this.getCodes(ids);
+    const users = await this.userService.findUsersByCode(codes);
+    const usersWithFilial = users.filter(
+      (user: User) => user.filial_id !== null,
+    );
+    const filials = usersWithFilial.map((user: User) => user.filial.name);
+    if (filials.length > 0) {
+      return await this.interactionsService.totalCreditsGroupRequests({
+        filials,
         page,
         limit,
       });
     } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const users = await this.userService.findUsersByCode(subordinatesCodes);
-      const usersWithFilial = users.filter(
-        (user: User) => user.filial_id !== null,
-      );
-      const filials = usersWithFilial.map((user: User) => user.filial.name);
-      console.log(filials);
-      if (filials.length > 0) {
-        return await this.interactionsService.totalCreditsGroupRequests({
-          filials,
-          page,
-          limit,
-        });
-      } else {
-        return { data: [], pages: 0, total: 0 };
-      }
+      return { data: [], pages: 0, total: 0 };
     }
   }
 }

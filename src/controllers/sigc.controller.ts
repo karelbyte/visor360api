@@ -449,27 +449,18 @@ export class SigcController {
 
   //a qui
   @HttpCode(HttpStatus.OK)
-  @Get('/passives_group/:id')
+  @Post('/passives_group')
   @ApiOperation({ summary: 'Get passives group by id' })
   @UseGuards(AuthGuard)
-  async getPassivesGroup(@Param('id') id: string): Promise<any> {
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.passivesGroupSingleParam({
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.passivesGroupMultiParam({
-        codes: btoa(params),
-      });
-    }
+  async getPassivesGroup(@Body('ids') ids: string[]): Promise<any> {
+    const codes = await this.getCodes(ids);
+    return await this.sigcService.passivesGroupMultiParam({
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/passives_full')
+  @Post('/passives_full')
   @ApiOperation({ summary: 'Get passives full by id' })
   @UseGuards(AuthGuard)
   async getPassivesFull(
@@ -477,50 +468,29 @@ export class SigcController {
     params: {
       page: number;
       limit: number;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.passivesFullSingleParam({
-        page,
-        limit,
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.passivesFullMultiParam({
-        page,
-        limit,
-        codes: btoa(params),
-      });
-    }
+    const { page, limit } = params;
+    const codes = await this.getCodes(ids);
+    return await this.sigcService.passivesFullMultiParam({
+      page,
+      limit,
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
+
   @HttpCode(HttpStatus.OK)
-  @Get('/passives_full_xls/:id')
+  @Post('/passives_full_xls')
   @ApiOperation({ summary: 'Get passives full report in xls by user id' })
   async getPassivesXls(
-    @Param('id') id: string,
+    @Body('ids') ids: string[],
     @Res() res: Response,
   ): Promise<any> {
-    let payload: any;
-
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      payload = await this.sigcService.passivesFullXlsSingleParam({
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      payload = await this.sigcService.passivesFullXlsMultiParam({
-        codes: btoa(params),
-      });
-    }
+    const codes = await this.getCodes(ids);
+    const payload = await this.sigcService.passivesFullXlsMultiParam({
+      codes: btoa(JSON.stringify(codes)),
+    });
 
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('datos');
@@ -742,7 +712,7 @@ export class SigcController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/cancels_full')
+  @Post('/cancels_full')
   @ApiOperation({ summary: 'Get cancels full by id' })
   @UseGuards(AuthGuard)
   async getCancelsFull(
@@ -750,51 +720,29 @@ export class SigcController {
     params: {
       page: number;
       limit: number;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.cancelsFullSingleParam({
-        page,
-        limit,
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.cancelsFullMultiParam({
-        page,
-        limit,
-        codes: btoa(params),
-      });
-    }
+    const { page, limit } = params;
+    const codes = await this.getCodes(ids);
+    return await this.sigcService.cancelsFullMultiParam({
+      page,
+      limit,
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/cancels_full_xls/:id')
+  @Post('/cancels_full_xls')
   @ApiOperation({ summary: 'Get catchments full report in xls by user id' })
   async getCancelstXls(
-    @Param('id') id: string,
+    @Body('ids') ids: string[],
     @Res() res: Response,
   ): Promise<any> {
-    let payload: any;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      payload = await this.sigcService.cancelsFullXlsSingleParam({
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      payload = await this.sigcService.cancelsFullXlsMultiParam({
-        codes: btoa(params),
-      });
-    }
-
+    const codes = await this.getCodes(ids);
+    const payload = await this.sigcService.cancelsFullXlsMultiParam({
+      codes: btoa(JSON.stringify(codes)),
+    });
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('datos');
 
@@ -846,7 +794,7 @@ export class SigcController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/entailments_full')
+  @Post('/entailments_full')
   @ApiOperation({ summary: 'Get Entailmants full by id' })
   @UseGuards(AuthGuard)
   async getEntailmantsFull(
@@ -854,50 +802,29 @@ export class SigcController {
     params: {
       page: number;
       limit: number;
-      id: string;
     },
+    @Body('ids') ids: string[],
   ): Promise<any> {
-    const { page, limit, id } = params;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.entailmentsFullSingleParam({
-        page,
-        limit,
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.entailmentsFullMultiParam({
-        page,
-        limit,
-        codes: btoa(params),
-      });
-    }
+    const { page, limit } = params;
+    const codes = await this.getCodes(ids);
+    return await this.sigcService.entailmentsFullMultiParam({
+      page,
+      limit,
+      codes: btoa(JSON.stringify(codes)),
+    });
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get('/entailments_full_xls/:id')
+  @Post('/entailments_full_xls')
   @ApiOperation({ summary: 'Get Entailmants full report in xls by user id' })
   async getEntailmantsXls(
-    @Param('id') id: string,
+    @Body('ids') ids: string[],
     @Res() res: Response,
   ): Promise<any> {
-    let payload: any;
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      payload = await this.sigcService.entailmentsFullXlsSingleParam({
-        codes: btoa(user.code),
-      });
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      payload = await this.sigcService.entailmentsFullXlsMultiParam({
-        codes: btoa(params),
-      });
-    }
+    const codes = await this.getCodes(ids);
+    const payload = await this.sigcService.entailmentsFullXlsMultiParam({
+      codes: btoa(JSON.stringify(codes)),
+    });
 
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('datos');
