@@ -18,12 +18,16 @@ import { AuthGuard } from '../guards/auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { Workbook } from 'exceljs';
+import { SubordinatesService } from '../services/subordinate.service';
 
 @ApiBearerAuth()
 @ApiTags('Reports service')
 @Controller('reports')
 export class ReportController {
-  constructor(private readonly reportlService: ReportService) { }
+  constructor(
+    private readonly reportlService: ReportService,
+    private readonly subordinateService: SubordinatesService,
+  ) { }
 
   @HttpCode(HttpStatus.OK)
   @Get('/')
@@ -39,6 +43,9 @@ export class ReportController {
     @Body() body: GenerateReportBody,
     @Res() res: Response,
   ): Promise<Report | any> {
+    body.codes = await this.subordinateService.getSubordinatesByBossOnlyCodes(
+      body.userId,
+    );
     const payload = await this.reportlService.generateReport(body);
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('datos');

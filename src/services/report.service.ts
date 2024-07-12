@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { HttpRequestService } from './http.service';
 import { Report } from '../entities/report.entity';
 import { Type } from 'class-transformer';
-import { ValidateNested, IsString } from 'class-validator';
+import { ValidateNested, IsString, IsArray } from 'class-validator';
 
 export class Filter {
   @IsString()
@@ -22,10 +22,16 @@ export class Field {
 
 export class GenerateReportBody {
   @IsString()
+  userId: string;
+
+  @IsString()
   reportName: string;
 
   @IsString()
   url: string;
+
+  @IsArray()
+  codes: string[];
 
   @ValidateNested({ each: true })
   @Type(() => Field)
@@ -63,6 +69,7 @@ export class ReportService {
     const customParam = {
       field_list: body.fields.map((item: Field) => item.field_name),
       ...this.filtersArrayToObject(body.filters),
+      codes: body.codes,
     };
     try {
       return await this.http.request(
