@@ -186,11 +186,12 @@ export class SubordinatesService {
         user: true,
       },
     });
-    return this.getSubordinateByTerm(
+    const payload = this.getSubordinateByTerm(
       boss_id,
       (subordinate) => subordinate.user.code,
       allData,
     );
+    return [...new Set(payload)];
   }
 
   generateHierarchy(data: Subordinate[]) {
