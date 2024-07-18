@@ -12,6 +12,7 @@ import { Rol } from './rol.entity';
 import { UserCredentialsLog } from './usercredentialslog.entity';
 import { Bank } from './bank.entity';
 import { Filial } from './filials.entity';
+import { Log } from './log.entity';
 
 @Entity('users')
 export class User {
@@ -70,6 +71,9 @@ export class User {
 
   @OneToMany(() => UserCredentialsLog, (log) => log.user)
   log: UserCredentialsLog[];
+
+  @OneToMany(() => Log, (log) => log.user)
+  actions: Log[];
 
   @OneToOne(() => Bank)
   @JoinColumn({
