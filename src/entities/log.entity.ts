@@ -19,7 +19,13 @@ export class Log {
   action: string;
 
   @Column()
+  url: string;
+
+  @Column()
   payload: string;
+
+  @Column()
+  response: string;
 
   @Column()
   public created_at: Date;

@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -14,6 +13,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from 'src/services/users.service';
 import { SubordinatesService } from 'src/services/subordinate.service';
 import { User } from 'src/entities/user.entity';
+import { Action } from 'src/decorators/actions.decorator';
 
 @ApiBearerAuth()
 @ApiTags('Interactions service')
@@ -23,7 +23,7 @@ export class InteractionsController {
     private readonly interactionsService: InteractionsService,
     private readonly userService: UsersService,
     private readonly subordinateService: SubordinatesService,
-  ) { }
+  ) {}
 
   async getCodes(ids: string[]): Promise<string[]> {
     let codes: string[] = [];
@@ -39,6 +39,8 @@ export class InteractionsController {
     }
     return codes;
   }
+
+  @Action('CONSULTA A API INTERACCIONES')
   @HttpCode(HttpStatus.OK)
   @Post('/pqr_details')
   @UseGuards(AuthGuard)
@@ -60,6 +62,7 @@ export class InteractionsController {
     });
   }
 
+  @Action('CONSULTA A API INTERACCIONES')
   @HttpCode(HttpStatus.OK)
   @Post('/pqr_grouped')
   @UseGuards(AuthGuard)
@@ -81,6 +84,7 @@ export class InteractionsController {
     });
   }
 
+  @Action('CONSULTA A API INTERACCIONES')
   @HttpCode(HttpStatus.OK)
   @Post('/grouped_information_header')
   @UseGuards(AuthGuard)
@@ -93,6 +97,7 @@ export class InteractionsController {
     });
   }
 
+  @Action('CONSULTA A API INTERACCIONES')
   @HttpCode(HttpStatus.OK)
   @Post('/total_credits_requests')
   @UseGuards(AuthGuard)
@@ -123,6 +128,7 @@ export class InteractionsController {
     }
   }
 
+  @Action('CONSULTA A API INTERACCIONES')
   @HttpCode(HttpStatus.OK)
   @Post('/total_credits_group_requests')
   @UseGuards(AuthGuard)

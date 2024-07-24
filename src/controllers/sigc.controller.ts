@@ -12,21 +12,12 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthGuard } from '../guards/auth.guard';
-import {
-  IPaginateParamsWithSearch,
-  SigcService,
-} from '../services/sigc.service';
+import { SigcService } from '../services/sigc.service';
 import { UsersService } from '../services/users.service';
 import { SubordinatesService } from '../services/subordinate.service';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiProperty,
-  ApiQuery,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Workbook } from 'exceljs';
+import { Action } from 'src/decorators/actions.decorator';
 @ApiBearerAuth()
 @ApiTags('Sigc service')
 @Controller('sigc')
@@ -35,8 +26,7 @@ export class SigcController {
     private readonly sigcService: SigcService,
     private readonly userService: UsersService,
     private readonly subordinateService: SubordinatesService,
-  ) { }
-
+  ) {}
 
   async getCodes(ids: string[]): Promise<string[]> {
     let codes: string[] = [];
@@ -53,6 +43,8 @@ export class SigcController {
     return codes;
   }
 
+  @Action('CONSULTA A API SIGC')
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/deposits/total')
   @UseGuards(AuthGuard)
@@ -62,7 +54,8 @@ export class SigcController {
     const params = JSON.stringify(codes);
     return await this.sigcService.depositsTotalMultiParam(btoa(params));
   }
-
+  @Action('CONSULTA A API SIGC')
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/placements/total')
   @UseGuards(AuthGuard)
@@ -72,7 +65,8 @@ export class SigcController {
     const params = JSON.stringify(codes);
     return await this.sigcService.placementsTotalMultiParam(btoa(params));
   }
-
+  @Action('CONSULTA A API SIGC')
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/placements')
   @UseGuards(AuthGuard)
@@ -82,7 +76,8 @@ export class SigcController {
     const params = JSON.stringify(codes);
     return await this.sigcService.placementsMultiParam(btoa(params));
   }
-
+  @Action('CONSULTA A API SIGC')
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/captures')
   @UseGuards(AuthGuard)
@@ -92,7 +87,8 @@ export class SigcController {
     const params = JSON.stringify(codes);
     return await this.sigcService.capturesMultiParam(btoa(params));
   }
-
+  @Action('CONSULTA A API SIGC')
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Get('/deposits/:id')
   @UseGuards(AuthGuard)
@@ -108,7 +104,8 @@ export class SigcController {
       return await this.sigcService.depositsMultiParam(btoa(params));
     }
   }
-
+  @Action('CONSULTA A API SIGC')
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/deposits-top-10')
   @UseGuards(AuthGuard)
@@ -118,6 +115,8 @@ export class SigcController {
     const params = JSON.stringify(codes);
     return await this.sigcService.depositsTop10MultiParam(btoa(params));
   }
+  @Action('CONSULTA A API SIGC')
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/vinculations-top-10')
   @UseGuards(AuthGuard)
@@ -128,6 +127,7 @@ export class SigcController {
     return await this.sigcService.vinculationsTop10MultiParam(btoa(params));
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/assets-top-10')
   @UseGuards(AuthGuard)
@@ -138,6 +138,7 @@ export class SigcController {
     return await this.sigcService.assetsTop10MultiParam(btoa(params));
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/all-expiration')
   @UseGuards(AuthGuard)
@@ -148,6 +149,7 @@ export class SigcController {
     return await this.sigcService.expirationAllMultiParam(btoa(params));
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/financial')
   @UseGuards(AuthGuard)
@@ -158,6 +160,7 @@ export class SigcController {
     return await this.sigcService.financialMultiParam(btoa(params));
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/product_cancelation')
   @UseGuards(AuthGuard)
@@ -168,6 +171,7 @@ export class SigcController {
     return await this.sigcService.cancelMultiParam(btoa(params));
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/expiration_dpf_month')
   @ApiOperation({ summary: 'Get expiration dpf month by user id' })
@@ -191,6 +195,7 @@ export class SigcController {
     });
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/expiration_dpf_year')
   @ApiOperation({ summary: 'Get expiration dpf year by user id' })
@@ -214,6 +219,7 @@ export class SigcController {
     });
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/expiration_credit_line_month')
   @UseGuards(AuthGuard)
@@ -237,6 +243,7 @@ export class SigcController {
     });
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/expiration_credit_line_year')
   @ApiOperation({ summary: 'Get expiration dpf year by user id' })
@@ -260,6 +267,7 @@ export class SigcController {
     });
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/expiration_client_month')
   @ApiOperation({ summary: 'Get expiration client month by user id' })
@@ -283,6 +291,7 @@ export class SigcController {
     });
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/expiration_client_year')
   @ApiOperation({ summary: 'Get expiration clinet year by user id' })
@@ -306,6 +315,7 @@ export class SigcController {
     });
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/expiration_placements_month')
   @ApiOperation({ summary: 'Get expiration placements month by user id' })
@@ -329,6 +339,7 @@ export class SigcController {
     });
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/expiration_placements_year')
   @ApiOperation({ summary: 'Get expiration placements year by user id' })
@@ -352,6 +363,7 @@ export class SigcController {
     });
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/assets_group')
   @ApiOperation({ summary: 'Get assets group by id' })
@@ -363,6 +375,7 @@ export class SigcController {
     });
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/assets_full')
   @ApiOperation({ summary: 'Get assets full by id' })
@@ -383,6 +396,7 @@ export class SigcController {
       codes: btoa(JSON.stringify(codes)),
     });
   }
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/assets_full_xls')
   @ApiOperation({ summary: 'Get assets full report in xls by user id' })
@@ -447,7 +461,7 @@ export class SigcController {
       .send(buffer);
   }
 
-  //a qui
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/passives_group')
   @ApiOperation({ summary: 'Get passives group by id' })
@@ -459,6 +473,7 @@ export class SigcController {
     });
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/passives_full')
   @ApiOperation({ summary: 'Get passives full by id' })
@@ -480,6 +495,7 @@ export class SigcController {
     });
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/passives_full_xls')
   @ApiOperation({ summary: 'Get passives full report in xls by user id' })
@@ -547,6 +563,7 @@ export class SigcController {
       .send(buffer);
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/placements_full')
   @ApiOperation({ summary: 'Get placements full by id' })
@@ -568,6 +585,7 @@ export class SigcController {
     });
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/placements_full_xls')
   @ApiOperation({ summary: 'Get placements full report in xls by user id' })
@@ -630,6 +648,7 @@ export class SigcController {
       .send(buffer);
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/catchments_full')
   @ApiOperation({ summary: 'Get catchments full by id' })
@@ -650,6 +669,7 @@ export class SigcController {
       codes: btoa(JSON.stringify(codes)),
     });
   }
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/catchments_full_xls')
   @ApiOperation({ summary: 'Get catchments full report in xls by user id' })
@@ -711,6 +731,7 @@ export class SigcController {
       .send(buffer);
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/cancels_full')
   @ApiOperation({ summary: 'Get cancels full by id' })
@@ -732,6 +753,7 @@ export class SigcController {
     });
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/cancels_full_xls')
   @ApiOperation({ summary: 'Get catchments full report in xls by user id' })
@@ -793,6 +815,7 @@ export class SigcController {
       .send(buffer);
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/entailments_full')
   @ApiOperation({ summary: 'Get Entailmants full by id' })
@@ -814,6 +837,7 @@ export class SigcController {
     });
   }
 
+  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/entailments_full_xls')
   @ApiOperation({ summary: 'Get Entailmants full report in xls by user id' })

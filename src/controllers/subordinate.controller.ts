@@ -19,14 +19,8 @@ import {
 } from '../dtos/subordinate.dto';
 import { UsersService } from '../services/users.service';
 import { DeleteResult } from 'typeorm';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiProperty,
-  ApiQuery,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Action } from 'src/decorators/actions.decorator';
 
 export interface IGetUsersResponse {
   data: any[];
@@ -63,6 +57,7 @@ export class SubordinateController {
     };
   }
 
+  @Action('CREAR SUBORDINADO (API SUBORDINADOS)')
   @Post()
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
@@ -80,6 +75,7 @@ export class SubordinateController {
     return new SubordinateDto(subordinate);
   }
 
+  @Action('ELIMINAR SUBORDINADO (API SUBORDINADOS)')
   @Post('delete')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
@@ -96,6 +92,7 @@ export class SubordinateController {
     return result;
   }
 
+  @Action('ACTUALIZAR SUBORDINADO (API SUBORDINADOS)')
   @Put()
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
@@ -113,6 +110,7 @@ export class SubordinateController {
     return new SubordinateDto(subordinate);
   }
 
+  @Action('ACTUALIZAR LIDER DE SUBORDINADO (API SUBORDINADOS)')
   @Post('/update/leader')
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
@@ -130,6 +128,7 @@ export class SubordinateController {
     return new SubordinateDto(subordinate);
   }
 
+  @Action('CONSULTA SUBORDINADOS POR LIDER (API SUBORDINADOS)')
   @Get('/get-subordinate-codes/:id')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get user subordinates codes by user id' })

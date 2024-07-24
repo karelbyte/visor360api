@@ -23,19 +23,21 @@ import {
   FilialDto,
   FilialUpdateDto,
 } from 'src/dtos/filial.dto';
+import { Action } from 'src/decorators/actions.decorator';
 
 @ApiBearerAuth()
 @ApiTags('Bank service')
 @Controller('banks')
 export class BankController {
   constructor(private readonly bankService: BankService) { }
-
+  @Action('CONSULTA LISTA BANCOS (API BANCA)')
   @HttpCode(HttpStatus.OK)
   @Get('/')
   async getAllBanks(): Promise<BankDto | any> {
     return await this.bankService.getAll();
   }
 
+  @Action('CREAR BANCO (API BANCA)')
   @ApiOperation({ summary: 'Create bank' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiResponse({ status: 200, type: BankDto })
@@ -47,6 +49,7 @@ export class BankController {
     return new BankDto(bank);
   }
 
+  @Action('ACTUALIZAR BANCO (API BANCA)')
   @ApiOperation({ summary: 'Update bank' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiResponse({ status: 200, type: BankDto })
@@ -58,6 +61,7 @@ export class BankController {
     return new BankDto(bank);
   }
 
+  @Action('CONSULTA LISTA FILIALES (API BANCA)')
   @HttpCode(HttpStatus.OK)
   @Get('/filials-all')
   @UseGuards(AuthGuard)
@@ -65,6 +69,7 @@ export class BankController {
     return await this.bankService.getAllFilials();
   }
 
+  @Action('CREAR FILIAL (API BANCA)')
   @ApiOperation({ summary: 'Create filial for bank' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiResponse({ status: 200, type: BankDto })
@@ -78,6 +83,7 @@ export class BankController {
     return new FilialDto(filial);
   }
 
+  @Action('ACTUALIZAR FILIAL (API BANCA)')
   @ApiOperation({ summary: 'Update filial for bank' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiResponse({ status: 200, type: BankDto })
@@ -91,6 +97,7 @@ export class BankController {
     return new FilialDto(filial);
   }
 
+  @Action('ELIMINAR FILIAL (API BANCA)')
   @HttpCode(HttpStatus.OK)
   @Get('/filials/:id')
   @UseGuards(AuthGuard)

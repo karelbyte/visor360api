@@ -13,6 +13,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserChangePasswordDto } from '../dtos/user.dto';
 import { AppMailerService } from '../services/mailer.service';
 import { UsersService } from '../services/users.service';
+import { Action } from 'src/decorators/actions.decorator';
 
 @ApiTags('Mailer service')
 @Controller('mailer')
@@ -23,6 +24,7 @@ export class MailerController {
     private jwtService: JwtService,
   ) {}
 
+  @Action('ENVIO DE MAIL CAMBIO DE CONTRASEÑA (API MAILER)')
   @HttpCode(HttpStatus.OK)
   @Post('/change-password-mail')
   @ApiOperation({ summary: 'Sending email to update password' })

@@ -12,12 +12,14 @@ import {
   ApiTags,
   ApiExcludeEndpoint,
 } from '@nestjs/swagger';
+import { Action } from 'src/decorators/actions.decorator';
 
 @ApiTags('Auth service')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
+  @Action('AUTENTICACION (API AUTH)')
   @ApiOperation({ summary: 'Authenticate user with email and password' })
   @ApiResponse({
     status: 302,
@@ -40,6 +42,7 @@ export class AuthController {
   @ApiExcludeEndpoint()
   @HttpCode(HttpStatus.OK)
   @Post('/can-login')
+  @Action('AUTENTICACION PASO (API AUTH)')
   async canLogin(@Body() body: UserLoginDto): Promise<User | any> {
     return await this.authService.canLogin(body);
   }
@@ -54,6 +57,7 @@ export class AuthController {
     description: 'El token no es valido!',
   })
   @HttpCode(HttpStatus.OK)
+  @Action('CAMBIO DE CONTRASEÑA (API AUTH)')
   @Post('/reset-password')
   async resetPassword(@Body() body: UserResetPassword): Promise<any> {
     return await this.authService.resetPassword(body);

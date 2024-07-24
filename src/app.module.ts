@@ -17,6 +17,9 @@ import { AppMailerModule } from './modules/mailer.module';
 import { ReportModule } from './modules/report.module';
 import { InteractionsModule } from './modules/interactions.module';
 import { BankModule } from './modules/bank.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from './interceptors/logger.interceptor';
+import { Log } from './entities/log.entity';
 
 @Module({
   imports: [
@@ -32,6 +35,7 @@ import { BankModule } from './modules/bank.module';
       }),
       inject: [ConfigService],
     }),
+    TypeOrmModule.forFeature([Log]),
     AppMailerModule,
     UsersModule,
     Visor360Module,
@@ -45,7 +49,13 @@ import { BankModule } from './modules/bank.module';
     BankModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+  ],
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}

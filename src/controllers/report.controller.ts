@@ -19,6 +19,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { Workbook } from 'exceljs';
 import { SubordinatesService } from '../services/subordinate.service';
+import { Action } from 'src/decorators/actions.decorator';
 
 @ApiBearerAuth()
 @ApiTags('Reports service')
@@ -29,6 +30,7 @@ export class ReportController {
     private readonly subordinateService: SubordinatesService,
   ) { }
 
+  @Action('CONSULTA A LISTA DE REPORTES (API REPORT)')
   @HttpCode(HttpStatus.OK)
   @Get('/')
   @UseGuards(AuthGuard)
@@ -36,6 +38,7 @@ export class ReportController {
     return await this.reportlService.getAll();
   }
 
+  @Action('GENERACION DE REPORTE (API REPORT)')
   @HttpCode(HttpStatus.OK)
   @Post('/generate_data')
   //@UseGuards(AuthGuard)

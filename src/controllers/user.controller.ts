@@ -15,7 +15,7 @@ import {
   UsersService,
 } from '../services/users.service';
 import { User } from '../entities/user.entity';
-import { UpdateUserFilialDto, UserCreateDto, UserDto, UserUpdateDto } from '../dtos/user.dto';
+import { UserCreateDto, UserDto, UserUpdateDto } from '../dtos/user.dto';
 import { AuthGuard } from '../guards/auth.guard';
 import {
   ApiBearerAuth,
@@ -26,6 +26,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { IsArray, IsNumber } from 'class-validator';
+import { Action } from 'src/decorators/actions.decorator';
 export class UsersResponseDto {
   @ApiProperty({
     isArray: true,
@@ -67,6 +68,7 @@ export class UsersController {
     };
   }
 
+  @Action('CONSULTA A USUARIOS (API USERS)')
   @ApiOperation({ summary: 'Get all users' })
   @ApiQuery({ name: 'page', type: 'number', required: false })
   @ApiQuery({ name: 'limit', type: 'number', required: false })
@@ -89,10 +91,12 @@ export class UsersController {
       fieldToFilter,
       term,
       bankId,
-      filialId
+      filialId,
     });
     return this.formatResponse(result, total, limit);
   }
+
+  @Action('CONSULTA A USUARIOS SIN LIDER (API USERS)')
   @ApiOperation({ summary: 'Get all users without leader' })
   @ApiQuery({ name: 'page', type: 'number', required: false })
   @ApiQuery({ name: 'limit', type: 'number', required: false })
@@ -116,6 +120,7 @@ export class UsersController {
     return this.formatResponse(result, total, limit);
   }
 
+  @Action('CONSULTA A USUARIOS CON LIDER (API USERS)')
   @ApiOperation({ summary: 'Get all users with leader' })
   @ApiQuery({ name: 'page', type: 'number', required: false })
   @ApiQuery({ name: 'limit', type: 'number', required: false })
@@ -137,6 +142,7 @@ export class UsersController {
     );
     return this.formatResponse(result, total, limit);
   }
+  @Action('CONSULTA A LIDERES (API USERS)')
   @ApiOperation({ summary: 'Get all users leader' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiResponse({ status: 200, type: UsersResponseDto })
@@ -150,6 +156,7 @@ export class UsersController {
     }));
   }
 
+  @Action('CONSULTA A USUARI POR ID (API USERS)')
   @ApiOperation({ summary: 'Get user by id' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiResponse({ status: 200, type: UserDto })
@@ -170,6 +177,7 @@ export class UsersController {
     return new UserDto({ ...partialUser, leaders: leadersMapped });
   }
 
+  @Action('CREAR USUARIO (API USERS)')
   @ApiOperation({ summary: 'Create user' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiResponse({ status: 200, type: UserDto })
@@ -180,6 +188,7 @@ export class UsersController {
     return new UserDto(user);
   }
 
+  @Action('ACTUALIZAR USUARIO (API USERS)')
   @ApiOperation({ summary: 'Update user' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiResponse({ status: 200, type: UserDto })

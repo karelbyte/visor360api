@@ -10,6 +10,7 @@ import {
 import { IPaginateParams, Visor360Service } from '../services/visor360.service';
 import { AuthGuard } from '../guards/auth.guard';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Action } from 'src/decorators/actions.decorator';
 
 @ApiBearerAuth()
 @ApiTags('Visor360 service')
@@ -17,6 +18,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 export class Visor360Controller {
   constructor(private readonly visor360Service: Visor360Service) {}
 
+  @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/clients')
   @UseGuards(AuthGuard)
@@ -26,6 +28,7 @@ export class Visor360Controller {
     return await this.visor360Service.searchClient({ page, limit, search });
   }
 
+  @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/client_info/:search')
   @UseGuards(AuthGuard)
@@ -34,6 +37,7 @@ export class Visor360Controller {
     return await this.visor360Service.clientInfo(search);
   }
 
+  @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/financial_information/:search')
   @UseGuards(AuthGuard)
@@ -42,6 +46,7 @@ export class Visor360Controller {
     return await this.visor360Service.financialInformation(search);
   }
 
+  @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/placements_position')
   @UseGuards(AuthGuard)
@@ -55,6 +60,7 @@ export class Visor360Controller {
     });
   }
 
+  @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/catchments_position')
   @UseGuards(AuthGuard)
@@ -68,6 +74,7 @@ export class Visor360Controller {
     });
   }
 
+  @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/cc_position')
   @UseGuards(AuthGuard)
@@ -80,6 +87,7 @@ export class Visor360Controller {
       search,
     });
   }
+  @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/consolidate_position/:search')
   @UseGuards(AuthGuard)
@@ -88,6 +96,7 @@ export class Visor360Controller {
     return await this.visor360Service.consolidatePosition(search);
   }
 
+  @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/pqr_petition_single_param/:search')
   @UseGuards(AuthGuard)
@@ -98,6 +107,7 @@ export class Visor360Controller {
     return await this.visor360Service.pqrPetitionSingleParam(search);
   }
 
+  @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/pqr_claim_single_param/:search')
   @UseGuards(AuthGuard)
@@ -106,6 +116,7 @@ export class Visor360Controller {
     return await this.visor360Service.pqrClaimSingleParam(search);
   }
 
+  @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/pqr_complaint_single_param/:search')
   @UseGuards(AuthGuard)
@@ -116,6 +127,7 @@ export class Visor360Controller {
     return await this.visor360Service.pqrComplaintSingleParam(search);
   }
 
+  @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/pqr_by_client')
   @UseGuards(AuthGuard)
@@ -136,6 +148,7 @@ export class Visor360Controller {
     });
   }
 
+  @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/legal-representative')
   @UseGuards(AuthGuard)
@@ -152,6 +165,7 @@ export class Visor360Controller {
     });
   }
 
+  @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/board-directors')
   @UseGuards(AuthGuard)
@@ -168,6 +182,7 @@ export class Visor360Controller {
     });
   }
 
+  @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/stockholders')
   @UseGuards(AuthGuard)

@@ -5,11 +5,11 @@ import {
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
-import { Rol } from '../entities/rol.entity';
 import { AuthGuard } from '../guards/auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LogService } from 'src/services/log.service';
 import { Log } from 'src/entities/log.entity';
+import { Action } from 'src/decorators/actions.decorator';
 
 @ApiBearerAuth()
 @ApiTags('Log service')
@@ -17,6 +17,7 @@ import { Log } from 'src/entities/log.entity';
 export class LogController {
   constructor(private readonly logService: LogService) {}
 
+  @Action('CONSULTA LISTA LOGS (API LOGGER)')
   @HttpCode(HttpStatus.OK)
   @Get('/')
   @UseGuards(AuthGuard)

@@ -9,6 +9,7 @@ import { RolService } from '../services/rol.service';
 import { Rol } from '../entities/rol.entity';
 import { AuthGuard } from '../guards/auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Action } from 'src/decorators/actions.decorator';
 
 @ApiBearerAuth()
 @ApiTags('Rols service')
@@ -16,6 +17,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class RolController {
   constructor(private readonly rolService: RolService) {}
 
+  @Action('CONSULTA A LISTA DE ROLES (API ROLES)')
   @HttpCode(HttpStatus.OK)
   @Get('/')
   @UseGuards(AuthGuard)
