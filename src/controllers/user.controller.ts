@@ -156,7 +156,7 @@ export class UsersController {
     }));
   }
 
-  @Action('CONSULTA A USUARI POR ID (API USERS)')
+  @Action('CONSULTA A USUARIO POR ID (API USERS)')
   @ApiOperation({ summary: 'Get user by id' })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
   @ApiResponse({ status: 200, type: UserDto })

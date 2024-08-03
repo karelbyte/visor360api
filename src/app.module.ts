@@ -20,6 +20,7 @@ import { BankModule } from './modules/bank.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './interceptors/logger.interceptor';
 import { Log } from './entities/log.entity';
+import { LogModule } from './modules/log.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { Log } from './entities/log.entity';
     ReportModule,
     InteractionsModule,
     BankModule,
+    LogModule,
   ],
   controllers: [AppController],
   providers: [

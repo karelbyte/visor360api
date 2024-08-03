@@ -10,4 +10,4 @@ import { LogService } from 'src/services/log.service';
   providers: [LogService],
   exports: [LogService],
 })
-export class RolModule {}
+export class LogModule {}
