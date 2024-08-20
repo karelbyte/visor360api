@@ -19,7 +19,7 @@ export class Visor360Service {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/visor360_search_client/run',
+        '/SIGC_PANAMA_VISOR360/visor360_search_client/run',
         customParam,
       );
     } catch (e) {
@@ -38,7 +38,7 @@ export class Visor360Service {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/visor360_client_information/run',
+        '/SIGC_PANAMA_VISOR360/visor360_client_information/run',
         customParam,
       );
     } catch (e) {
@@ -57,7 +57,7 @@ export class Visor360Service {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/visor360_financial_information/run',
+        '/SIGC_PANAMA_VISOR360/visor360_financial_information/run',
         customParam,
       );
     } catch (e) {
@@ -78,7 +78,7 @@ export class Visor360Service {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/visor360_placements_position/run',
+        '/SIGC_PANAMA_VISOR360/visor360_placements_position/run',
         customParam,
       );
     } catch (e) {
@@ -99,7 +99,7 @@ export class Visor360Service {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/visor360_catchments_position/run',
+        '/SIGC_PANAMA_VISOR360/visor360_catchments_position/run',
         customParam,
       );
     } catch (e) {
@@ -120,7 +120,7 @@ export class Visor360Service {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/visor360_cc_position/run',
+        '/SIGC_PANAMA_VISOR360/visor360_cc_position/run',
         customParam,
       );
     } catch (e) {
@@ -132,6 +132,7 @@ export class Visor360Service {
     }
   }
 
+  /*
   async consolidatePosition(param: string) {
     const customParam = {
       num_client_ibs: param,
@@ -207,7 +208,7 @@ export class Visor360Service {
       };
     }
   }
-
+ */
   async pqrsByClientId({
     page,
     limit,
@@ -225,7 +226,7 @@ export class Visor360Service {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/visor360_pqr_details_num_client/run',
+        '/SIGC_PANAMA_VISOR360/visor360_pqr_details_num_client/run',
         customParam,
         'sigc',
       );
@@ -245,7 +246,7 @@ export class Visor360Service {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/visor360_rep_legal_num_client/run',
+        '/SIGC_PANAMA_VISOR360/visor360_rep_legal_num_client/run',
         customParam,
         'sigc',
       );
@@ -265,7 +266,7 @@ export class Visor360Service {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/visor360_JD_num_client/run',
+        '/SIGC_PANAMA_VISOR360/visor360_JD_num_client/run',
         customParam,
         'sigc',
       );
@@ -285,7 +286,7 @@ export class Visor360Service {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/visor360_accionistas_num_client/run',
+        '/SIGC_PANAMA_VISOR360/visor360_accionistas_num_client/run',
         customParam,
         'sigc',
       );

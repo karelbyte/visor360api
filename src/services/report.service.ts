@@ -74,7 +74,7 @@ export class ReportService {
     try {
       return await this.http.request(
         'post',
-        '/SIGC_PANAMA_REPORTERS' + body.url,
+        '/SIGC_PANAMA_REPORTER' + body.url,
         customParam,
         'sigc',
       );

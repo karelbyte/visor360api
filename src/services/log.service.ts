@@ -24,7 +24,6 @@ export class LogService {
   async getAll({
     page = null,
     limit = null,
-    fieldToFilter = null,
     term = null,
     dateStart,
     dateEnd,
@@ -45,21 +44,22 @@ export class LogService {
       options['skip'] = (page - 1) * limit;
     }
 
-    if (fieldToFilter && term) {
+    if (term !== null && term !== '') {
       options['where'] = {
         user: {
-          [fieldToFilter]: Like('%' + term + '%'),
+          names: Like('%' + term + '%'),
         },
       };
     }
 
     if (dateStart && dateEnd) {
+      const startOfDay = new Date(dateStart);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(dateEnd);
+      endOfDay.setHours(23, 59, 59, 999);
       options['where'] = {
         ...options['where'],
-        user: {
-          [fieldToFilter]: Like('%' + term + '%'),
-        },
-        created_at: Between(new Date(dateStart), new Date(dateEnd)),
+        created_at: Between(startOfDay, endOfDay),
       };
     }
 
@@ -69,7 +69,6 @@ export class LogService {
         action: action,
       };
     }
-    console.log(options);
     return await this.logRepository.findAndCount(options);
   }
 

@@ -87,6 +87,8 @@ export class Visor360Controller {
       search,
     });
   }
+
+  /*
   @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/consolidate_position/:search')
@@ -126,7 +128,7 @@ export class Visor360Controller {
   ): Promise<any> {
     return await this.visor360Service.pqrComplaintSingleParam(search);
   }
-
+*/
   @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/pqr_by_client')

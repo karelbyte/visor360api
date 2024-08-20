@@ -18,7 +18,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/deposits_total_single_param/run',
+        '/SIGC_PANAMA/deposits_total_single_param/run',
         customParam,
         'sigc',
       );
@@ -38,7 +38,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/deposits_total_multi_param/run',
+        '/SIGC_PANAMA/deposits_total_multi_param/run',
         customParam,
         'sigc',
       );
@@ -57,7 +57,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/deposits_single_param/run',
+        '/SIGC_PANAMA/deposits_single_param/run',
         customParam,
         'sigc',
       );
@@ -76,7 +76,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/deposits_multi_param/run',
+        '/SIGC_PANAMA/deposits_multi_param/run',
         customParam,
         'sigc',
       );
@@ -96,7 +96,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/top10_deposits_single_param/run',
+        '/SIGC_PANAMA/top10_deposits_single_param/run',
         customParam,
         'sigc',
       );
@@ -115,7 +115,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/top10_deposits_multi_param/run',
+        '/SIGC_PANAMA/top10_deposits_multi_param/run',
         customParam,
         'sigc',
       );
@@ -135,7 +135,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/placements_total_single_param/run',
+        '/SIGC_PANAMA/placements_total_single_param/run',
         customParam,
         'sigc',
       );
@@ -155,7 +155,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/placements_total_multi_param/run',
+        '/SIGC_PANAMA/placements_total_multi_param/run',
         customParam,
         'sigc',
       );
@@ -174,7 +174,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/placements_single_param/run',
+        '/SIGC_PANAMA/placements_single_param/run',
         customParam,
         'sigc',
       );
@@ -193,7 +193,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/placements_multi_param/run',
+        '/SIGC_PANAMA/placements_multi_param/run',
         customParam,
         'sigc',
       );
@@ -213,7 +213,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/captures_single_param/run',
+        '/SIGC_PANAMA/captures_single_param/run',
         customParam,
         'sigc',
       );
@@ -232,7 +232,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/captures_multi_param/run',
+        '/SIGC_PANAMA/captures_multi_param/run',
         customParam,
         'sigc',
       );
@@ -252,7 +252,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/vinculations_single_param/run',
+        '/SIGC_PANAMA/vinculations_single_param/run',
         customParam,
         'sigc',
       );
@@ -271,7 +271,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/vinculations_multi_param/run',
+        '/SIGC_PANAMA/vinculations_multi_param/run',
         customParam,
         'sigc',
       );
@@ -291,7 +291,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/top10_vinculations_single_param/run',
+        '/SIGC_PANAMA/top10_vinculations_single_param/run',
         customParam,
         'sigc',
       );
@@ -310,7 +310,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/top10_vinculations_multi_param/run',
+        '/SIGC_PANAMA/top10_vinculations_multi_param/run',
         customParam,
         'sigc',
       );
@@ -330,7 +330,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/top10_assets_single_param/run',
+        '/SIGC_PANAMA/top10_assets_single_param/run',
         customParam,
         'sigc',
       );
@@ -349,7 +349,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/top10_assets_multi_param/run',
+        '/SIGC_PANAMA/top10_assets_multi_param/run',
         customParam,
         'sigc',
       );
@@ -369,7 +369,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_all_single_param/run',
+        '/SIGC_PANAMA/expiration_all_single_param/run',
         customParam,
         'sigc',
       );
@@ -388,7 +388,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_all_multi_param/run',
+        '/SIGC_PANAMA/expiration_all_multi_param/run',
         customParam,
         'sigc',
       );
@@ -408,7 +408,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/sigc_financial_information_single_param/run',
+        '/SIGC_PANAMA/sigc_financial_information_single_param/run',
         customParam,
         'sigc',
       );
@@ -427,7 +427,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/sigc_financial_information_multi_param/run',
+        '/SIGC_PANAMA/sigc_financial_information_multi_param/run',
         customParam,
         'sigc',
       );
@@ -447,7 +447,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/product_cancelation_top10_single_param/run',
+        '/SIGC_PANAMA/product_cancelation_top10_single_param/run',
         customParam,
         'sigc',
       );
@@ -466,7 +466,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/product_cancelation_top10_multi_param/run',
+        '/SIGC_PANAMA/product_cancelation_top10_multi_param/run',
         customParam,
         'sigc',
       );
@@ -494,7 +494,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_dpf_month_single_param/run',
+        '/SIGC_PANAMA/expiration_dpf_month_single_param/run',
         customParam,
         'sigc',
       );
@@ -522,7 +522,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_dpf_month_multi_param/run',
+        '/SIGC_PANAMA/expiration_dpf_month_multi_param/run',
         customParam,
         'sigc',
       );
@@ -550,7 +550,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_dpf_year_single_param/run',
+        '/SIGC_PANAMA/expiration_dpf_year_single_param/run',
         customParam,
         'sigc',
       );
@@ -578,7 +578,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_dpf_year_multi_param/run',
+        '/SIGC_PANAMA/expiration_dpf_year_multi_param/run',
         customParam,
         'sigc',
       );
@@ -606,7 +606,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_line_credit_month_single_param/run',
+        '/SIGC_PANAMA/expiration_line_credit_month_single_param/run',
         customParam,
         'sigc',
       );
@@ -634,7 +634,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_line_credit_month_multi_param/run',
+        '/SIGC_PANAMA/expiration_line_credit_month_multi_param/run',
         customParam,
         'sigc',
       );
@@ -662,7 +662,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_line_credit_year_single_param/run',
+        '/SIGC_PANAMA/expiration_line_credit_year_single_param/run',
         customParam,
         'sigc',
       );
@@ -690,7 +690,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_line_credit_year_multi_param/run',
+        '/SIGC_PANAMA/expiration_line_credit_year_multi_param/run',
         customParam,
         'sigc',
       );
@@ -718,7 +718,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_client_month_single_param/run',
+        '/SIGC_PANAMA/expiration_client_month_single_param/run',
         customParam,
         'sigc',
       );
@@ -746,7 +746,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_client_month_multi_param/run',
+        '/SIGC_PANAMA/expiration_client_month_multi_param/run',
         customParam,
         'sigc',
       );
@@ -774,7 +774,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_client_year_single_param/run',
+        '/SIGC_PANAMA/expiration_client_year_single_param/run',
         customParam,
         'sigc',
       );
@@ -802,7 +802,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_client_year_multi_param/run',
+        '/SIGC_PANAMA/expiration_client_year_multi_param/run',
         customParam,
         'sigc',
       );
@@ -832,7 +832,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_placements_month_single_param/run',
+        '/SIGC_PANAMA/expiration_placements_month_single_param/run',
         customParam,
         'sigc',
       );
@@ -860,7 +860,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_placements_month_multi_param/run',
+        '/SIGC_PANAMA/expiration_placements_month_multi_param/run',
         customParam,
         'sigc',
       );
@@ -888,7 +888,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_placements_year_single_param/run',
+        '/SIGC_PANAMA/expiration_placements_year_single_param/run',
         customParam,
         'sigc',
       );
@@ -916,7 +916,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/expiration_placements_year_multi_param/run',
+        '/SIGC_PANAMA/expiration_placements_year_multi_param/run',
         customParam,
         'sigc',
       );
@@ -942,7 +942,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/list_of_placements_pag_single_param/run',
+        '/SIGC_PANAMA/list_of_placements_pag_single_param/run',
         customParam,
         'sigc',
       );
@@ -968,7 +968,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/list_of_placements_pag_multi_param/run',
+        '/SIGC_PANAMA/list_of_placements_pag_multi_param/run',
         customParam,
         'sigc',
       );
@@ -988,7 +988,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/list_of_placements_dwl_single_param/run',
+        '/SIGC_PANAMA/list_of_placements_dwl_single_param/run',
         customParam,
         'sigc',
       );
@@ -1008,7 +1008,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/list_of_placements_dwl_multi_param/run',
+        '/SIGC_PANAMA/list_of_placements_dwl_multi_param/run',
         customParam,
         'sigc',
       );
@@ -1034,7 +1034,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/list_of_catchments_pag_single_param/run',
+        '/SIGC_PANAMA/list_of_catchments_pag_single_param/run',
         customParam,
         'sigc',
       );
@@ -1060,7 +1060,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/list_of_catchments_pag_multi_param/run',
+        '/SIGC_PANAMA/list_of_catchments_pag_multi_param/run',
         customParam,
         'sigc',
       );
@@ -1080,7 +1080,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/list_of_catchments_dwl_single_param/run',
+        '/SIGC_PANAMA/list_of_catchments_dwl_single_param/run',
         customParam,
         'sigc',
       );
@@ -1100,7 +1100,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/list_of_catchments_dwl_multi_param/run',
+        '/SIGC_PANAMA/list_of_catchments_dwl_multi_param/run',
         customParam,
         'sigc',
       );
@@ -1120,7 +1120,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/assets_groupby_single_param/run',
+        '/SIGC_PANAMA/assets_groupby_single_param/run',
         customParam,
         'sigc',
       );
@@ -1140,7 +1140,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/assets_groupby_multi_param/run',
+        '/SIGC_PANAMA/assets_groupby_multi_param/run',
         customParam,
         'sigc',
       );
@@ -1166,7 +1166,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/assets_pag_single_param/run',
+        '/SIGC_PANAMA/assets_pag_single_param/run',
         customParam,
         'sigc',
       );
@@ -1192,7 +1192,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/assets_pag_multi_param/run',
+        '/SIGC_PANAMA/assets_pag_multi_param/run',
         customParam,
         'sigc',
       );
@@ -1212,7 +1212,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/assets_dwl_single_param/run',
+        '/SIGC_PANAMA/assets_dwl_single_param/run',
         customParam,
         'sigc',
       );
@@ -1232,7 +1232,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/assets_dwl_multi_param/run',
+        '/SIGC_PANAMA/assets_dwl_multi_param/run',
         customParam,
         'sigc',
       );
@@ -1253,7 +1253,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/pasive_groupby_single_param/run',
+        '/SIGC_PANAMA/pasive_groupby_single_param/run',
         customParam,
         'sigc',
       );
@@ -1273,7 +1273,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/pasive_groupby_multi_param/run',
+        '/SIGC_PANAMA/pasive_groupby_multi_param/run',
         customParam,
         'sigc',
       );
@@ -1299,7 +1299,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/pasive_pag_single_param/run',
+        '/SIGC_PANAMA/pasive_pag_single_param/run',
         customParam,
         'sigc',
       );
@@ -1325,7 +1325,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/pasive_pag_multi_param/run',
+        '/SIGC_PANAMA/pasive_pag_multi_param/run',
         customParam,
         'sigc',
       );
@@ -1345,7 +1345,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/pasive_dwl_single_param/run',
+        '/SIGC_PANAMA/pasive_dwl_single_param/run',
         customParam,
         'sigc',
       );
@@ -1365,7 +1365,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/pasive_dwl_multi_param/run',
+        '/SIGC_PANAMA/pasive_dwl_multi_param/run',
         customParam,
         'sigc',
       );
@@ -1391,7 +1391,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/product_cancelation_pag_single_param/run',
+        '/SIGC_PANAMA/product_cancelation_pag_single_param/run',
         customParam,
         'sigc',
       );
@@ -1417,7 +1417,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/product_cancelation_pag_multi_param/run',
+        '/SIGC_PANAMA/product_cancelation_pag_multi_param/run',
         customParam,
         'sigc',
       );
@@ -1437,7 +1437,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/product_cancelation_dwl_single_param/run',
+        '/SIGC_PANAMA/product_cancelation_dwl_single_param/run',
         customParam,
         'sigc',
       );
@@ -1457,7 +1457,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/product_cancelation_dwl_multi_param/run',
+        '/SIGC_PANAMA/product_cancelation_dwl_multi_param/run',
         customParam,
         'sigc',
       );
@@ -1483,7 +1483,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/vinculations_pag_single_param/run',
+        '/SIGC_PANAMA/vinculations_pag_single_param/run',
         customParam,
         'sigc',
       );
@@ -1509,7 +1509,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/vinculations_pag_multi_param/run',
+        '/SIGC_PANAMA/vinculations_pag_multi_param/run',
         customParam,
         'sigc',
       );
@@ -1529,7 +1529,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/vinculations_dwl_single_param/run',
+        '/SIGC_PANAMA/vinculations_dwl_single_param/run',
         customParam,
         'sigc',
       );
@@ -1549,7 +1549,7 @@ export class SigcService {
     try {
       return await this.httpService.request(
         'post',
-        '/SIGC_Panama/vinculations_dwl_multi_param/run',
+        '/SIGC_PANAMA/vinculations_dwl_multi_param/run',
         customParam,
         'sigc',
       );
