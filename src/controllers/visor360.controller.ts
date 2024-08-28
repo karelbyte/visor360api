@@ -88,47 +88,6 @@ export class Visor360Controller {
     });
   }
 
-  /*
-  @Action('CONSULTA A API VISOR - 360')
-  @HttpCode(HttpStatus.OK)
-  @Get('/consolidate_position/:search')
-  @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Get consolidate position' })
-  async getConsolidatePosition(@Param('search') search: string): Promise<any> {
-    return await this.visor360Service.consolidatePosition(search);
-  }
-
-  @Action('CONSULTA A API VISOR - 360')
-  @HttpCode(HttpStatus.OK)
-  @Get('/pqr_petition_single_param/:search')
-  @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Get PQR petition with single code' })
-  async getPqrPetitionSingleParam(
-    @Param('search') search: string,
-  ): Promise<any> {
-    return await this.visor360Service.pqrPetitionSingleParam(search);
-  }
-
-  @Action('CONSULTA A API VISOR - 360')
-  @HttpCode(HttpStatus.OK)
-  @Get('/pqr_claim_single_param/:search')
-  @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Get PQR claim with single code' })
-  async getPqrClaimSingleParam(@Param('search') search: string): Promise<any> {
-    return await this.visor360Service.pqrClaimSingleParam(search);
-  }
-
-  @Action('CONSULTA A API VISOR - 360')
-  @HttpCode(HttpStatus.OK)
-  @Get('/pqr_complaint_single_param/:search')
-  @UseGuards(AuthGuard)
-  @ApiOperation({ summary: 'Get PQR complaint with single code' })
-  async getPqrComplaintSingleParam(
-    @Param('search') search: string,
-  ): Promise<any> {
-    return await this.visor360Service.pqrComplaintSingleParam(search);
-  }
-*/
   @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/pqr_by_client')
