@@ -26,7 +26,7 @@ export class SigcController {
     private readonly sigcService: SigcService,
     private readonly userService: UsersService,
     private readonly subordinateService: SubordinatesService,
-  ) {}
+  ) { }
 
   async getCodes(ids: string[]): Promise<string[]> {
     let codes: string[] = [];
@@ -90,20 +90,15 @@ export class SigcController {
   @Action('CONSULTA A API SIGC')
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
-  @Get('/deposits/:id')
+  @Post('/deposits')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get deposits by user id' })
-  async getDeposits(@Param('id') id: string): Promise<any> {
-    const user = await this.userService.findOneById(id);
-    if (user.rol.code === 'commercial') {
-      return await this.sigcService.depositsSingleParam(btoa(user.code));
-    } else {
-      const subordinatesCodes =
-        await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-      const params = JSON.stringify(subordinatesCodes);
-      return await this.sigcService.depositsMultiParam(btoa(params));
-    }
+  async getDeposits(@Body('ids') ids: string[]): Promise<any> {
+    const codes = await this.getCodes(ids);
+    const params = JSON.stringify(codes);
+    return await this.sigcService.depositsMultiParam(btoa(params));
   }
+
   @Action('CONSULTA A API SIGC')
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
