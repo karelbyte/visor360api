@@ -16,7 +16,7 @@ import { Action } from 'src/decorators/actions.decorator';
 @ApiTags('Visor360 service')
 @Controller('visor360')
 export class Visor360Controller {
-  constructor(private readonly visor360Service: Visor360Service) {}
+  constructor(private readonly visor360Service: Visor360Service) { }
 
   @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
@@ -197,6 +197,39 @@ export class Visor360Controller {
   ): Promise<any> {
     const { num_client } = params;
     return await this.visor360Service.stockholdersByClientId({
+      num_client,
+    });
+  }
+  @Action('CONSULTA A API VISOR - 360')
+  @HttpCode(HttpStatus.OK)
+  @Get('/signatories')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get signatories by client code' })
+  async getSignatories(
+    @Query()
+    params: {
+      num_client: string;
+    },
+  ): Promise<any> {
+    const { num_client } = params;
+    return await this.visor360Service.signatoriesByClientId({
+      num_client,
+    });
+  }
+
+  @Action('CONSULTA A API VISOR - 360')
+  @HttpCode(HttpStatus.OK)
+  @Get('/beneficiaries')
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: 'Get beneficiaries by client code' })
+  async getBeneficiaries(
+    @Query()
+    params: {
+      num_client: string;
+    },
+  ): Promise<any> {
+    const { num_client } = params;
+    return await this.visor360Service.beneficiariesByClientId({
       num_client,
     });
   }

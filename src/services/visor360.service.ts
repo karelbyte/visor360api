@@ -8,7 +8,7 @@ export interface IPaginateParams {
 }
 @Injectable()
 export class Visor360Service {
-  constructor(private httpService: HttpRequestService) {}
+  constructor(private httpService: HttpRequestService) { }
 
   async searchClient({ page, limit, search }: IPaginateParams) {
     const customParam = {
@@ -287,6 +287,46 @@ export class Visor360Service {
       return await this.httpService.request(
         'post',
         '/SIGC_PANAMA_VISOR360/visor360_accionistas_num_client/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async signatoriesByClientId({ num_client }: { num_client: string }) {
+    const customParam = {
+      num_client: num_client,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_PANAMA_VISOR360/visor360_firmantes_num_client/run',
+        customParam,
+        'sigc',
+      );
+    } catch (e) {
+      console.log(e);
+      return {
+        status: 'error',
+        code: e.code,
+      };
+    }
+  }
+
+  async beneficiariesByClientId({ num_client }: { num_client: string }) {
+    const customParam = {
+      num_client: num_client,
+    };
+    try {
+      return await this.httpService.request(
+        'post',
+        '/SIGC_PANAMA_VISOR360/visor360_beneficiarios_num_client/run',
         customParam,
         'sigc',
       );

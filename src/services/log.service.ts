@@ -19,7 +19,7 @@ export class LogService {
     @InjectRepository(Log)
     private logRepository: Repository<Log>,
     private http: HttpRequestService,
-  ) { }
+  ) {}
 
   async getAll({
     page = null,
@@ -51,15 +51,14 @@ export class LogService {
         },
       };
     }
-
+    console.log(dateStart, dateEnd);
     if (dateStart && dateEnd) {
-      const startOfDay = new Date(dateStart);
-      startOfDay.setHours(0, 0, 0, 0);
-      const endOfDay = new Date(dateEnd);
-      endOfDay.setHours(23, 59, 59, 999);
       options['where'] = {
         ...options['where'],
-        created_at: Between(startOfDay, endOfDay),
+        created_at: Between(
+          new Date(dateStart + 'T01:00:00.000Z'),
+          new Date(dateEnd + 'T23:50:00.000Z'),
+        ),
       };
     }
 
@@ -69,6 +68,8 @@ export class LogService {
         action: action,
       };
     }
+
+    console.log(options);
     return await this.logRepository.findAndCount(options);
   }
 
