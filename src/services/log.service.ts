@@ -51,7 +51,7 @@ export class LogService {
         },
       };
     }
-    console.log(dateStart, dateEnd);
+
     if (dateStart && dateEnd) {
       options['where'] = {
         ...options['where'],

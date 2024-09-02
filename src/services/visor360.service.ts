@@ -222,9 +222,19 @@ export class Visor360Service {
     }
   }
 
-  async signatoriesByClientId({ num_client }: { num_client: string }) {
+  async signatoriesByClientId({
+    page,
+    limit,
+    num_client,
+  }: {
+    page: number;
+    limit: number;
+    num_client: string;
+  }) {
     const customParam = {
       num_client: num_client,
+      page: Number(page),
+      limit: Number(limit),
     };
     try {
       return await this.httpService.request(
@@ -242,9 +252,19 @@ export class Visor360Service {
     }
   }
 
-  async beneficiariesByClientId({ num_client }: { num_client: string }) {
+  async beneficiariesByClientId({
+    page,
+    limit,
+    num_client,
+  }: {
+    page: number;
+    limit: number;
+    num_client: string;
+  }) {
     const customParam = {
       num_client: num_client,
+      page: Number(page),
+      limit: Number(limit),
     };
     try {
       return await this.httpService.request(

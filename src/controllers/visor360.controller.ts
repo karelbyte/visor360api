@@ -167,11 +167,15 @@ export class Visor360Controller {
   async getSignatories(
     @Query()
     params: {
+      page: number;
+      limit: number;
       num_client: string;
     },
   ): Promise<any> {
-    const { num_client } = params;
+    const { page, limit, num_client } = params;
     return await this.visor360Service.signatoriesByClientId({
+      page,
+      limit,
       num_client,
     });
   }
@@ -184,11 +188,15 @@ export class Visor360Controller {
   async getBeneficiaries(
     @Query()
     params: {
+      page: number;
+      limit: number;
       num_client: string;
     },
   ): Promise<any> {
-    const { num_client } = params;
+    const { page, limit, num_client } = params;
     return await this.visor360Service.beneficiariesByClientId({
+      page,
+      limit,
       num_client,
     });
   }
