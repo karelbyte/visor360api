@@ -9,6 +9,7 @@ import {
   Res,
   Body,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthGuard } from '../guards/auth.guard';
@@ -18,6 +19,7 @@ import { SubordinatesService } from '../services/subordinate.service';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Workbook } from 'exceljs';
 import { Action } from 'src/decorators/actions.decorator';
+import { CacheInterceptor } from 'src/interceptors/cache.interceptor';
 @ApiBearerAuth()
 @ApiTags('Sigc service')
 @Controller('sigc')
@@ -32,7 +34,7 @@ export class SigcController {
     let codes: string[] = [];
     for (const clientId of ids) {
       const user = await this.userService.findOneById(clientId);
-      if (user.rol.code === 'commercial') {
+      if (!user.rol || (user.rol && user.rol.code === 'commercial')) {
         codes.push(user.code);
       } else {
         const subordinatesCodes =
@@ -42,19 +44,16 @@ export class SigcController {
     }
     return codes;
   }
-
-  @Action('CONSULTA A API SIGC')
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/deposits/total')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get deposits total by user id' })
-  async getDepositsTotal(@Body('ids') ids: string[]): Promise<any> {
-    const codes = await this.getCodes(ids);
+  async getDepositsTotal(@Body('codes') codes: string[]): Promise<any> {
     const params = JSON.stringify(codes);
     return await this.sigcService.depositsTotalMultiParam(btoa(params));
   }
-  @Action('CONSULTA A API SIGC')
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/placements/total')
@@ -66,7 +65,6 @@ export class SigcController {
     return await this.sigcService.placementsTotalMultiParam(btoa(params));
   }
   @Action('CONSULTA A API SIGC')
-  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/placements')
   @UseGuards(AuthGuard)
@@ -77,7 +75,6 @@ export class SigcController {
     return await this.sigcService.placementsMultiParam(btoa(params));
   }
   @Action('CONSULTA A API SIGC')
-  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/captures')
   @UseGuards(AuthGuard)
@@ -87,7 +84,6 @@ export class SigcController {
     const params = JSON.stringify(codes);
     return await this.sigcService.capturesMultiParam(btoa(params));
   }
-  @Action('CONSULTA A API SIGC')
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/deposits')
@@ -100,7 +96,6 @@ export class SigcController {
   }
 
   @Action('CONSULTA A API SIGC')
-  @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/deposits-top-10')
   @UseGuards(AuthGuard)
@@ -110,7 +105,6 @@ export class SigcController {
     const params = JSON.stringify(codes);
     return await this.sigcService.depositsTop10MultiParam(btoa(params));
   }
-  @Action('CONSULTA A API SIGC')
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/vinculations-top-10')
