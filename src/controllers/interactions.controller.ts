@@ -6,6 +6,7 @@ import {
   Post,
   Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { InteractionsService } from '../services/interactions.service';
 import { AuthGuard } from '../guards/auth.guard';
@@ -14,6 +15,7 @@ import { UsersService } from 'src/services/users.service';
 import { SubordinatesService } from 'src/services/subordinate.service';
 import { User } from 'src/entities/user.entity';
 import { Action } from 'src/decorators/actions.decorator';
+import { CacheInterceptor } from 'src/interceptors/cache.interceptor';
 
 @ApiBearerAuth()
 @ApiTags('Interactions service')
@@ -25,21 +27,7 @@ export class InteractionsController {
     private readonly subordinateService: SubordinatesService,
   ) {}
 
-  async getCodes(ids: string[]): Promise<string[]> {
-    let codes: string[] = [];
-    for (const clientId of ids) {
-      const user = await this.userService.findOneById(clientId);
-      if (user.rol.code === 'commercial') {
-        codes.push(user.code);
-      } else {
-        const subordinatesCodes =
-          await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-        codes = codes.concat(subordinatesCodes);
-      }
-    }
-    return codes;
-  }
-
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API INTERACCIONES')
   @HttpCode(HttpStatus.OK)
   @Post('/pqr_details')
@@ -51,17 +39,18 @@ export class InteractionsController {
       page: number;
       limit: number;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit } = params;
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     return await this.interactionsService.pqrDetailsMultiParam({
       page,
       limit,
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API INTERACCIONES')
   @HttpCode(HttpStatus.OK)
   @Post('/pqr_grouped')
@@ -73,30 +62,33 @@ export class InteractionsController {
       page: number;
       limit: number;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit } = params;
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     return await this.interactionsService.pqrGroupedMultiParam({
       page,
       limit,
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API INTERACCIONES')
   @HttpCode(HttpStatus.OK)
   @Post('/grouped_information_header')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get grouped information header by user id' })
-  async getGroupedInformationHeader(@Body('ids') ids: string[]): Promise<any> {
-    const codes = await this.getCodes(ids);
-    const params = JSON.stringify(codes);
+  async getGroupedInformationHeader(
+    @Body('codes') codes: string[],
+  ): Promise<any> {
+    const codesOfficers = JSON.stringify(codes);
     return await this.interactionsService.groupedInformationHeaderMultiParam({
-      codes: btoa(params),
+      codes: btoa(codesOfficers),
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API INTERACCIONES')
   @HttpCode(HttpStatus.OK)
   @Post('/total_credits_requests')
@@ -108,10 +100,9 @@ export class InteractionsController {
       page: number;
       limit: number;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit } = params;
-    const codes = await this.getCodes(ids);
     const users = await this.userService.findUsersByCode(codes);
     const usersWithFilial = users.filter(
       (user: User) => user.filial_id !== null,
@@ -128,6 +119,7 @@ export class InteractionsController {
     }
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API INTERACCIONES')
   @HttpCode(HttpStatus.OK)
   @Post('/total_credits_group_requests')
@@ -139,10 +131,9 @@ export class InteractionsController {
       page: number;
       limit: number;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit } = params;
-    const codes = await this.getCodes(ids);
     const users = await this.userService.findUsersByCode(codes);
     const usersWithFilial = users.filter(
       (user: User) => user.filial_id !== null,

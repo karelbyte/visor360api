@@ -134,6 +134,7 @@ export class SubordinatesService {
     fieldToFilter: string | null = null,
     term: string | null = null,
   ): Promise<[any[], number]> {
+    console.time('aqui');
     const allData = await this.subordinateRepository.find({
       relations: {
         user: {
@@ -148,6 +149,7 @@ export class SubordinatesService {
         },
       },
     });
+    console.timeEnd('aqui');
     const subordinates = this.getSubordinateByTerm(
       id,
       (subordinate: Subordinate) => subordinate.user,

@@ -69,7 +69,6 @@ export class LogService {
       };
     }
 
-    console.log(options);
     return await this.logRepository.findAndCount(options);
   }
 

@@ -13,6 +13,7 @@ export default registerAs('database', () => ({
   options: {
     encrypt: false,
     trustServerCertificate: true,
+    requestTimeout: 20000,
   },
   entities: [`${__dirname}/../**/*.entity{.ts,.js}`],
   synchronize: false, // process.env.NODE_ENV === 'development',

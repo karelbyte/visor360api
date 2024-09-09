@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Log } from 'src/entities/log.entity';
 import { Reflector } from '@nestjs/core';
+import { jsonc } from 'jsonc';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -32,7 +33,7 @@ export class LoggingInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       tap(async (data) => {
-        const endPointResponse = JSON.stringify(data);
+        const endPointResponse = jsonc.stringify(data);
         const logData = {
           user_id: user ? user.userId : null,
           url: `${method} ${url}`,

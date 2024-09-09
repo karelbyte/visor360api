@@ -1,10 +1,8 @@
 import {
   Controller,
-  Get,
   Post,
   HttpCode,
   HttpStatus,
-  Param,
   Query,
   Res,
   Body,
@@ -14,8 +12,7 @@ import {
 import { Response } from 'express';
 import { AuthGuard } from '../guards/auth.guard';
 import { SigcService } from '../services/sigc.service';
-import { UsersService } from '../services/users.service';
-import { SubordinatesService } from '../services/subordinate.service';
+
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Workbook } from 'exceljs';
 import { Action } from 'src/decorators/actions.decorator';
@@ -24,26 +21,8 @@ import { CacheInterceptor } from 'src/interceptors/cache.interceptor';
 @ApiTags('Sigc service')
 @Controller('sigc')
 export class SigcController {
-  constructor(
-    private readonly sigcService: SigcService,
-    private readonly userService: UsersService,
-    private readonly subordinateService: SubordinatesService,
-  ) { }
+  constructor(private readonly sigcService: SigcService) {}
 
-  async getCodes(ids: string[]): Promise<string[]> {
-    let codes: string[] = [];
-    for (const clientId of ids) {
-      const user = await this.userService.findOneById(clientId);
-      if (!user.rol || (user.rol && user.rol.code === 'commercial')) {
-        codes.push(user.code);
-      } else {
-        const subordinatesCodes =
-          await this.subordinateService.getSubordinatesByBossOnlyCodes(user.id);
-        codes = codes.concat(subordinatesCodes);
-      }
-    }
-    return codes;
-  }
   @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
@@ -54,112 +33,108 @@ export class SigcController {
     const params = JSON.stringify(codes);
     return await this.sigcService.depositsTotalMultiParam(btoa(params));
   }
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/placements/total')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get placements total by user id' })
-  async getPlacementsTotal(@Body('ids') ids: string[]): Promise<any> {
-    const codes = await this.getCodes(ids);
+  async getPlacementsTotal(@Body('codes') codes: string[]): Promise<any> {
     const params = JSON.stringify(codes);
     return await this.sigcService.placementsTotalMultiParam(btoa(params));
   }
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/placements')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get placements by user id' })
-  async getPlacements(@Body('ids') ids: string[]): Promise<any> {
-    const codes = await this.getCodes(ids);
+  async getPlacements(@Body('codes') codes: string[]): Promise<any> {
     const params = JSON.stringify(codes);
     return await this.sigcService.placementsMultiParam(btoa(params));
   }
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/captures')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get captures by user id' })
-  async getCaptures(@Body('ids') ids: string[]): Promise<any> {
-    const codes = await this.getCodes(ids);
+  async getCaptures(@Body('codes') codes: string[]): Promise<any> {
     const params = JSON.stringify(codes);
     return await this.sigcService.capturesMultiParam(btoa(params));
   }
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/deposits')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get deposits by user id' })
-  async getDeposits(@Body('ids') ids: string[]): Promise<any> {
-    const codes = await this.getCodes(ids);
+  async getDeposits(@Body('codes') codes: string[]): Promise<any> {
     const params = JSON.stringify(codes);
     return await this.sigcService.depositsMultiParam(btoa(params));
   }
-
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/deposits-top-10')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get deposits top 10 by user id' })
-  async getDepositsTop10(@Body('ids') ids: string[]): Promise<any> {
-    const codes = await this.getCodes(ids);
+  async getDepositsTop10(@Body('codes') codes: string[]): Promise<any> {
     const params = JSON.stringify(codes);
     return await this.sigcService.depositsTop10MultiParam(btoa(params));
   }
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/vinculations-top-10')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get vinculations top 10 by user id' })
-  async getVinculationsTop10(@Body('ids') ids: string[]): Promise<any> {
-    const codes = await this.getCodes(ids);
+  async getVinculationsTop10(@Body('codes') codes: string[]): Promise<any> {
     const params = JSON.stringify(codes);
     return await this.sigcService.vinculationsTop10MultiParam(btoa(params));
   }
-
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/assets-top-10')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get assets top 10 by user id' })
-  async getAssetsTop10(@Body('ids') ids: string[]): Promise<any> {
-    const codes = await this.getCodes(ids);
+  async getAssetsTop10(@Body('codes') codes: string[]): Promise<any> {
     const params = JSON.stringify(codes);
     return await this.sigcService.assetsTop10MultiParam(btoa(params));
   }
-
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/all-expiration')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get all expiration by user id' })
-  async getExpirationAll(@Body('ids') ids: string[]): Promise<any> {
-    const codes = await this.getCodes(ids);
+  async getExpirationAll(@Body('codes') codes: string[]): Promise<any> {
     const params = JSON.stringify(codes);
     return await this.sigcService.expirationAllMultiParam(btoa(params));
   }
-
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/financial')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get financial by user id' })
-  async getFinancial(@Body('ids') ids: string[]): Promise<any> {
-    const codes = await this.getCodes(ids);
+  async getFinancial(@Body('codes') codes: string[]): Promise<any> {
     const params = JSON.stringify(codes);
     return await this.sigcService.financialMultiParam(btoa(params));
   }
-
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/product_cancelation')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get product cancelation by user id' })
-  async getProductCancelation(@Body('ids') ids: string[]): Promise<any> {
-    const codes = await this.getCodes(ids);
+  async getProductCancelation(@Body('codes') codes: string[]): Promise<any> {
     const params = JSON.stringify(codes);
     return await this.sigcService.cancelMultiParam(btoa(params));
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/expiration_dpf_month')
@@ -172,18 +147,19 @@ export class SigcController {
       limit: number;
       search: string;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit, search } = params;
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     return await this.sigcService.expirationDpfMonthMultiParam({
       page,
       limit,
       search,
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/expiration_dpf_year')
@@ -196,18 +172,19 @@ export class SigcController {
       limit: number;
       search: string;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit, search } = params;
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     return await this.sigcService.expirationDpfYearMultiParam({
       page,
       limit,
       search,
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/expiration_credit_line_month')
@@ -220,18 +197,19 @@ export class SigcController {
       limit: number;
       search: string;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit, search } = params;
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     return await this.sigcService.expirationCreditLineMonthMultiParam({
       page,
       limit,
       search,
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/expiration_credit_line_year')
@@ -244,18 +222,19 @@ export class SigcController {
       limit: number;
       search: string;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit, search } = params;
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     return await this.sigcService.expirationCreditLineYearMultiParam({
       page,
       limit,
       search,
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/expiration_client_month')
@@ -268,18 +247,19 @@ export class SigcController {
       limit: number;
       search: string;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit, search } = params;
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     return await this.sigcService.expirationClientMonthMultiParam({
       page,
       limit,
       search,
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/expiration_client_year')
@@ -292,18 +272,19 @@ export class SigcController {
       limit: number;
       search: string;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit, search } = params;
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     return await this.sigcService.expirationClientYearMultiParam({
       page,
       limit,
       search,
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/expiration_placements_month')
@@ -316,18 +297,19 @@ export class SigcController {
       limit: number;
       search: string;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit, search } = params;
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     return await this.sigcService.expirationPlacementsMonthMultiParam({
       page,
       limit,
       search,
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/expiration_placements_year')
@@ -340,30 +322,32 @@ export class SigcController {
       limit: number;
       search: string;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit, search } = params;
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     return await this.sigcService.expirationPlacementsYearMultiParam({
       page,
       limit,
       search,
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/assets_group')
   @ApiOperation({ summary: 'Get assets group by id' })
   @UseGuards(AuthGuard)
-  async getAssetsGroup(@Body('ids') ids: string[]): Promise<any> {
-    const codes = await this.getCodes(ids);
+  async getAssetsGroup(@Body('codes') codes: string[]): Promise<any> {
+    const codesOfficers = JSON.stringify(codes);
     return await this.sigcService.assetsGroupMultiParam({
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/assets_full')
@@ -375,28 +359,30 @@ export class SigcController {
       page: number;
       limit: number;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit } = params;
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     return await this.sigcService.assetsFullMultiParam({
       page,
       limit,
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
+
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/assets_full_xls')
   @ApiOperation({ summary: 'Get assets full report in xls by user id' })
   async getAssetsXls(
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
     @Res() res: Response,
   ): Promise<any> {
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
 
     const payload = await this.sigcService.assetsFullXlsMultiParam({
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
 
     const workbook = new Workbook();
@@ -450,18 +436,20 @@ export class SigcController {
       .send(buffer);
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/passives_group')
   @ApiOperation({ summary: 'Get passives group by id' })
   @UseGuards(AuthGuard)
-  async getPassivesGroup(@Body('ids') ids: string[]): Promise<any> {
-    const codes = await this.getCodes(ids);
+  async getPassivesGroup(@Body('codes') codes: string[]): Promise<any> {
+    const codesOfficers = JSON.stringify(codes);
     return await this.sigcService.passivesGroupMultiParam({
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/passives_full')
@@ -473,28 +461,29 @@ export class SigcController {
       page: number;
       limit: number;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit } = params;
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     return await this.sigcService.passivesFullMultiParam({
       page,
       limit,
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/passives_full_xls')
   @ApiOperation({ summary: 'Get passives full report in xls by user id' })
   async getPassivesXls(
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
     @Res() res: Response,
   ): Promise<any> {
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     const payload = await this.sigcService.passivesFullXlsMultiParam({
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
 
     const workbook = new Workbook();
@@ -552,6 +541,7 @@ export class SigcController {
       .send(buffer);
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/placements_full')
@@ -563,28 +553,29 @@ export class SigcController {
       page: number;
       limit: number;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit } = params;
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     return await this.sigcService.placementsFullMultiParam({
       page,
       limit,
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/placements_full_xls')
   @ApiOperation({ summary: 'Get placements full report in xls by user id' })
   async getPlacementsXls(
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
     @Res() res: Response,
   ): Promise<any> {
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     const payload = await this.sigcService.placementsFullXlsMultiParam({
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
 
     const workbook = new Workbook();
@@ -637,6 +628,7 @@ export class SigcController {
       .send(buffer);
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/catchments_full')
@@ -648,27 +640,29 @@ export class SigcController {
       page: number;
       limit: number;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit } = params;
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     return await this.sigcService.catchmentsFullMultiParam({
       page,
       limit,
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
+
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/catchments_full_xls')
   @ApiOperation({ summary: 'Get catchments full report in xls by user id' })
   async getCatchmentXls(
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
     @Res() res: Response,
   ): Promise<any> {
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     const payload = await this.sigcService.catchmentsFullXlsMultiParam({
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
 
     const workbook = new Workbook();
@@ -720,6 +714,7 @@ export class SigcController {
       .send(buffer);
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/cancels_full')
@@ -731,28 +726,29 @@ export class SigcController {
       page: number;
       limit: number;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit } = params;
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     return await this.sigcService.cancelsFullMultiParam({
       page,
       limit,
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/cancels_full_xls')
   @ApiOperation({ summary: 'Get catchments full report in xls by user id' })
   async getCancelstXls(
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
     @Res() res: Response,
   ): Promise<any> {
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     const payload = await this.sigcService.cancelsFullXlsMultiParam({
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('datos');
@@ -804,6 +800,7 @@ export class SigcController {
       .send(buffer);
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/entailments_full')
@@ -815,28 +812,29 @@ export class SigcController {
       page: number;
       limit: number;
     },
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
   ): Promise<any> {
     const { page, limit } = params;
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     return await this.sigcService.entailmentsFullMultiParam({
       page,
       limit,
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
   }
 
+  @UseInterceptors(CacheInterceptor)
   @Action('CONSULTA A API SIGC')
   @HttpCode(HttpStatus.OK)
   @Post('/entailments_full_xls')
   @ApiOperation({ summary: 'Get Entailmants full report in xls by user id' })
   async getEntailmantsXls(
-    @Body('ids') ids: string[],
+    @Body('codes') codes: string[],
     @Res() res: Response,
   ): Promise<any> {
-    const codes = await this.getCodes(ids);
+    const codesOfficers = JSON.stringify(codes);
     const payload = await this.sigcService.entailmentsFullXlsMultiParam({
-      codes: btoa(JSON.stringify(codes)),
+      codes: btoa(codesOfficers),
     });
 
     const workbook = new Workbook();

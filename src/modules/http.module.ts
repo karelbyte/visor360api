@@ -1,6 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
 import { HttpRequestService } from '../services/http.service';
+import { HttpOtpRequestService } from 'src/services/httpOTP.service';
 
 @Global()
 @Module({
@@ -10,7 +11,7 @@ import { HttpRequestService } from '../services/http.service';
       maxRedirects: 5,
     }),
   ],
-  providers: [HttpRequestService],
-  exports: [HttpModule, HttpRequestService],
+  providers: [HttpRequestService, HttpOtpRequestService],
+  exports: [HttpModule, HttpRequestService, HttpOtpRequestService],
 })
 export class GlobalHttpModule {}

@@ -27,6 +27,14 @@ export default class RoleSeeder implements Seeder {
         description: 'Comercial',
         code: 'commercial',
       },
+      {
+        description: 'Usuario OTP',
+        code: 'user_otp',
+      },
+      {
+        description: 'Admin OTP',
+        code: 'admin_otp',
+      },
     ];
 
     for (const dat of data) {

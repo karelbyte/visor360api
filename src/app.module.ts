@@ -25,6 +25,8 @@ import { CacheModule } from '@nestjs/cache-manager';
 import type { RedisClientOptions } from 'redis';
 import { redisStore } from 'cache-manager-redis-yet';
 import { Subordinate } from './entities/subordinate.entity';
+import { OtpModule } from './modules/otp.module';
+import { User } from './entities/user.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -53,7 +55,7 @@ import { Subordinate } from './entities/subordinate.entity';
       inject: [ConfigService],
       isGlobal: true,
     }),
-    TypeOrmModule.forFeature([Log, Subordinate]),
+    TypeOrmModule.forFeature([Log, Subordinate, User]),
     AppMailerModule,
     UsersModule,
     Visor360Module,
@@ -66,6 +68,7 @@ import { Subordinate } from './entities/subordinate.entity';
     InteractionsModule,
     BankModule,
     LogModule,
+    OtpModule,
   ],
   controllers: [AppController],
   providers: [
