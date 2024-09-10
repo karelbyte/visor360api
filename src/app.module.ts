@@ -47,8 +47,10 @@ import { User } from './entities/user.entity';
         const { host, port } = configService.get('redis');
         return {
           store: redisStore,
-          host,
-          port,
+          socket: {
+            host,
+            port,
+          },
           ttl: 25 * 24 * 60 * 60 * 1000,
         };
       },
