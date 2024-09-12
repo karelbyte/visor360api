@@ -1,17 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { HttpRequestService } from './http.service';
-import { Rol } from '../entities/rol.entity';
+import { HttpOtpRequestService } from './httpOTP.service';
+import { User } from '../entities/user.entity';
+import { SoapService } from './soap.service';
 @Injectable()
 export class OtpService {
   constructor(
-    @InjectRepository(Rol)
-    private rolRepository: Repository<Rol>,
-    private http: HttpRequestService,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    private http: HttpOtpRequestService,
+    private soap: SoapService,
   ) {}
 
   async getAll() {
-    return await this.rolRepository.find();
+    return await this.userRepository.find();
   }
 }

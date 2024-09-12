@@ -5,16 +5,18 @@ export interface IPaginateParams {
   page: number;
   limit: number;
   search: string;
+  codes?: string[];
 }
 @Injectable()
 export class Visor360Service {
   constructor(private httpService: HttpRequestService) { }
 
-  async searchClient({ page, limit, search }: IPaginateParams) {
+  async searchClient({ page, limit, search, codes }: IPaginateParams) {
     const customParam = {
       search_param: search,
       page: Number(page),
       limit: Number(limit),
+      list_of_officers: btoa(JSON.stringify(codes)),
     };
     try {
       return await this.httpService.request(

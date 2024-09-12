@@ -3,29 +3,53 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Inject,
   Param,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { IPaginateParams, Visor360Service } from '../services/visor360.service';
 import { AuthGuard } from '../guards/auth.guard';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Action } from 'src/decorators/actions.decorator';
+import { Request } from 'express';
+import { CodesService } from 'src/services/codes.services';
+import { Cache } from 'cache-manager';
 
 @ApiBearerAuth()
 @ApiTags('Visor360 service')
 @Controller('visor360')
 export class Visor360Controller {
-  constructor(private readonly visor360Service: Visor360Service) { }
+  constructor(
+    private readonly visor360Service: Visor360Service,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly codeService: CodesService,
+  ) {}
 
   @Action('CONSULTA A API VISOR - 360')
   @HttpCode(HttpStatus.OK)
   @Get('/clients')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get all clients' })
-  async getClients(@Query() params: IPaginateParams): Promise<any> {
+  async getClients(
+    @Query() params: IPaginateParams,
+    @Req() request: Request,
+  ): Promise<any> {
     const { page, limit, search } = params;
-    return await this.visor360Service.searchClient({ page, limit, search });
+    const user = request['user'];
+    const cacheKey = `codes-${user.userId}`;
+    const cacheCodes = await this.cacheManager.get<string>(cacheKey);
+    const codes = cacheCodes
+      ? cacheCodes.split(',')
+      : await this.codeService.getCodes(user.userId);
+    return await this.visor360Service.searchClient({
+      page,
+      limit,
+      search,
+      codes,
+    });
   }
 
   @Action('CONSULTA A API VISOR - 360')
