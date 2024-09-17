@@ -31,10 +31,10 @@ export class OtpController {
   // @UseGuards(AuthGuard)
   async getDatosPersonales(
     @Query('valNumeroIdentificacion') valNumeroIdentificacion: string,
-    @Query('userId') userId: string,
+    @Query('type') type: string,
   ) {
     const result = await this.soapService.getDatosPersonalesCliente({
-      type: 'CED',
+      type: type,
       valNumeroIdentificacion,
     });
     const data = {
@@ -51,8 +51,20 @@ export class OtpController {
 
   @Action('CONSULTA A API OTP')
   @HttpCode(HttpStatus.OK)
-  @Post('/send-otp')
-  async sendOtp(@Body() props: any) {
-    console.log(props);
+  @Get('/send-otp')
+  // @UseGuards(AuthGuard)
+  async sendOtp(@Query('phone') phone: string) {
+    const otp = await this.otpService.generateOtp();
+    console.log(phone, otp);
+    return { response: 'Otp enviado con exito!' };
+  }
+
+  @Action('CONSULTA A API OTP')
+  @HttpCode(HttpStatus.OK)
+  @Get('/validate-otp')
+  // @UseGuards(AuthGuard)
+  async validateOtp(@Query('otp') otp: string) {
+    const isValidOtp = await this.otpService.validateOtp(otp);
+    return { isValidOtp: isValidOtp };
   }
 }
