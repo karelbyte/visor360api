@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { CodesService } from 'src/services/codes.services';
+import { CodesService } from 'src/services/codes.service';
 
 @Injectable()
 export class CacheInterceptor implements NestInterceptor {

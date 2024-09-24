@@ -5,7 +5,7 @@ import { UsersModule } from './users.module';
 import { SubordinateModule } from './subordinate.module';
 import { CreditLog } from 'src/entities/creditlog.entity';
 import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
-import { CodesService } from 'src/services/codes.services';
+import { CodesService } from 'src/services/codes.service';
 
 @Module({
   imports: [

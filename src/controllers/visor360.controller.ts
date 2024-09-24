@@ -15,7 +15,7 @@ import { AuthGuard } from '../guards/auth.guard';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Action } from 'src/decorators/actions.decorator';
 import { Request } from 'express';
-import { CodesService } from 'src/services/codes.services';
+import { CodesService } from 'src/services/codes.service';
 import { Cache } from 'cache-manager';
 
 @ApiBearerAuth()

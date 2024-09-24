@@ -12,4 +12,5 @@ export default registerAs('config', () => ({
   soapUserDataUrl: process.env.SOAP_USER_DATA_URL,
   optKey: process.env.OTP_KEY,
   sendSmsLocalUrl: process.env.SEND_SMS_LOCAL_URL,
+  sendSmsInternationalUrl: process.env.SEND_SMS_INTERNATIONAL_URL,
 }));

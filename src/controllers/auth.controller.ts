@@ -17,7 +17,7 @@ import { Action } from 'src/decorators/actions.decorator';
 @ApiTags('Auth service')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Action('AUTENTICACION (API AUTH)')
   @ApiOperation({ summary: 'Authenticate user with email and password' })

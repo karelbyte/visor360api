@@ -3,7 +3,7 @@ import { SigcController } from '../controllers/sigc.controller';
 import { SigcService } from '../services/sigc.service';
 import { UsersModule } from './users.module';
 import { SubordinateModule } from './subordinate.module';
-import { CodesService } from 'src/services/codes.services';
+import { CodesService } from 'src/services/codes.service';
 
 @Module({
   imports: [UsersModule, SubordinateModule],

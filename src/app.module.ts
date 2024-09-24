@@ -27,7 +27,7 @@ import { redisStore } from 'cache-manager-redis-yet';
 import { Subordinate } from './entities/subordinate.entity';
 import { OtpModule } from './modules/otp.module';
 import { User } from './entities/user.entity';
-import { CodesService } from './services/codes.services';
+import { CodesService } from './services/codes.service';
 @Module({
   imports: [
     ConfigModule.forRoot({

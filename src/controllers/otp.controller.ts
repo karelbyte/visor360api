@@ -53,10 +53,16 @@ export class OtpController {
   @HttpCode(HttpStatus.OK)
   @Get('/send-otp')
   // @UseGuards(AuthGuard)
-  async sendOtp(@Query('phone') phone: string) {
+  async sendOtp(@Query('phone') phone: string, @Query('name') name: string) {
     const otp = await this.otpService.generateOtp();
-    console.log(phone, otp);
-    return { response: 'Otp enviado con exito!' };
+    try {
+      // crear logica para usar el servicio selecionado por el admin
+      // await this.otpService.sendNationalOtp(otp, phone, name);
+      await this.otpService.sendInternationalNationalOtp(otp, phone, name);
+      return { response: 'Otp enviado con exito!' };
+    } catch (e) {
+      return { response: e.response };
+    }
   }
 
   @Action('CONSULTA A API OTP')
