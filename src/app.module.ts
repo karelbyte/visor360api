@@ -28,6 +28,7 @@ import { Subordinate } from './entities/subordinate.entity';
 import { OtpModule } from './modules/otp.module';
 import { User } from './entities/user.entity';
 import { CodesService } from './services/codes.service';
+import { SmsServicesConfigModule } from './modules/smsServicesConfig.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -72,6 +73,7 @@ import { CodesService } from './services/codes.service';
     BankModule,
     LogModule,
     OtpModule,
+    SmsServicesConfigModule,
   ],
   controllers: [AppController],
   providers: [

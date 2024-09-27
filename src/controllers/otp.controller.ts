@@ -1,15 +1,13 @@
 import {
-  Body,
   Controller,
   Get,
   HttpCode,
   HttpStatus,
-  Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import { OtpService } from '../services/otp.service';
-import { Rol } from '../entities/rol.entity';
+
 import { AuthGuard } from '../guards/auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Action } from 'src/decorators/actions.decorator';
@@ -44,7 +42,8 @@ export class OtpController {
       valSegundoApellido: result.valSegundoApellido,
       valDireccionResidencia: result.valDireccionResidencia,
       valNumeroTelefono: result.valNumeroTelefono,
-      valNumeroTelefonoEmpresa: result.valNumeroTelefonoEmpresa,
+      valCelular: result.valCelular,
+      valCodigoPaisTelefonoEmpresa: result.valCodigoPaisTelefonoEmpresa,
     };
     return { response: btoa(jsonc.stringify(data)) };
   }
@@ -53,15 +52,18 @@ export class OtpController {
   @HttpCode(HttpStatus.OK)
   @Get('/send-otp')
   // @UseGuards(AuthGuard)
-  async sendOtp(@Query('phone') phone: string, @Query('name') name: string) {
+  async sendOtp(
+    @Query('lada') lada: string,
+    @Query('phone') phone: string,
+    @Query('name') name: string,
+  ) {
     const otp = await this.otpService.generateOtp();
     try {
-      // crear logica para usar el servicio selecionado por el admin
-      // await this.otpService.sendNationalOtp(otp, phone, name);
-      await this.otpService.sendInternationalNationalOtp(otp, phone, name);
-      return { response: 'Otp enviado con exito!' };
+      console.log(otp);
+      // await this.otpService.sendSMS(lada, otp, phone, name);
+      return { message: 'Otp enviado con exito!' };
     } catch (e) {
-      return { response: e.response };
+      return { message: e.response };
     }
   }
 
